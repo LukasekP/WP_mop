@@ -1,0 +1,10 @@
+# Application parameters and settings. See https://doc.nette.org/configuring
+
+parameters:
+
+
+application:
+	# Presenter mapping pattern
+	mapping: App\UI\*\**Presenter
+
+
