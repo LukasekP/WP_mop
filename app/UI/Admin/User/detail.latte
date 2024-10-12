@@ -1,0 +1,20 @@
+{block content}
+<h1>Detail uživatele</h1>
+
+<table border="1" style="border-collapse: collapse; width: 100%;">
+    <tr>
+        <th>Jméno</th>
+        <td>{$userData->username}</td>
+    </tr>
+    <tr>
+        <th>Email</th>
+        <td>{$userData->email}</td>
+    </tr>
+    <tr>
+        <th>Role</th>
+        <td>{$userData->role}</td>
+    </tr>
+</table>
+<h2>Upravit uživatele</h2>
+{control editForm}
+{/block}

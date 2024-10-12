@@ -1,0 +1,93 @@
+.top-menu {
+    background-color: #333;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.left-menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+
+.right-menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+
+.top-menu ul li {
+    margin: 0 15px;
+}
+
+.top-menu ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+
+.top-menu ul li a:hover {
+    text-decoration: underline;
+}
+
+.profile-image {
+    margin-left: 15px;
+}
+
+.profile-image img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.festival {
+    background-color: #fff; 
+    border-radius: 8px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    padding: 20px; 
+    margin-bottom: 20px; 
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    max-width: 600px; 
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.festival img {
+    max-width: 100%; 
+    border-radius: 8px; 
+    margin-top: 10px;
+}
+
+h2 {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #333;
+}
+
+p {
+    font-size: 1em;
+    color: #555;
+    margin-top: 10px;
+}
+
+.price {
+    color: red;
+    font-weight: bold;
+    font-size: 1.2em;
+    margin-top: 15px;
+}
+
+.festival:hover {
+    transform: scale(1.02); 
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); 
+    transition: all 0.3s ease; 
+}

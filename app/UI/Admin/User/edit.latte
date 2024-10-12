@@ -1,0 +1,7 @@
+{block content}
+<h1>Upravit vlastní uživatelská data</h1>
+
+{control editForm}
+    <img src="{$basePath}/{$user->identity->image}" alt="Profilový obrázek" class="img-thumbnail" style="width: 150px; height: 150px;">
+    <a n:href="deleteImage! $user->id" class="btn btn-danger">Smazat obrázek</a>
+

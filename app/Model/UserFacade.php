@@ -17,13 +17,20 @@ final class UserFacade implements Nette\Security\Authenticator
 	public const PasswordMinLength = 7;
 
 	// Database table and column names
-	private const
+	private const                    
 		TableName = 'users',
 		ColumnId = 'id',
 		ColumnName = 'username',
+		ColumnFirstname = 'firstname',
+		ColumnLastname = 'lastname',
 		ColumnPasswordHash = 'password',
 		ColumnEmail = 'email',
+		ColumnPhone = 'phone',
+		ColumnBirthdate = 'birthdate',
+		ColumnAddress = 'address',
+		ColumnCity = 'city',
 		ColumnRole = 'role';
+
 
 	// Dependency injection of database explorer and password utilities
 	public function __construct(
@@ -32,6 +39,77 @@ final class UserFacade implements Nette\Security\Authenticator
 	) {
 	}
 
+    // Metoda pro získání všech uživatelů
+    public function getUsers()
+    {
+        return $this->database->table('users');
+    }
+
+    // Metoda pro získání konkrétního uživatele podle ID
+    public function getUserById($id)
+    {
+        return $this->database->table('users')->get($id);
+    }
+	public function getUserByUsername(string $username)
+    {
+        return $this->database->table('users')->where('username', $username)->fetch();
+    }
+	public function delete(int $userId) {
+		$user = $this->database->table("users")->get($userId);
+		$user->delete();
+	}
+
+
+
+	public function editUser($userId, $username = null, $password = null)
+{
+    $user = $this->database->table('users')->get($userId);
+
+
+    $data = [];
+
+    if ($username !== null) {
+        $data['username'] = $username;
+    }
+
+    if ($password !== null) {
+        $data['password'] = password_hash($password, PASSWORD_DEFAULT);
+    }
+
+    if (!empty($data)) {
+        $user->update($data);
+    }
+}
+
+public function updateUserImage($userId, $imagePath)
+{
+	$user = $this->database->table('users')->get($userId);
+
+	if ($user === null) {
+		throw new \Exception("User with ID $userId not found.");
+	}
+
+	$user->update([
+		'image' => $imagePath,
+	]);
+}
+	public function updateUserPassword($userId, $password)
+    {
+        $user = $this->database->table('users')->get($userId);
+
+        $user->update([
+            'password' => password_hash($password, PASSWORD_DEFAULT),
+        ]);
+    }
+
+	public function updateUsername($userId, $username)
+    {
+        $user = $this->database->table('users')->get($userId);
+
+        $user->update([
+            'username' => $username,
+        ]);
+    }
 
 	/**
 	 * Authenticate a user based on provided credentials.
@@ -46,10 +124,10 @@ final class UserFacade implements Nette\Security\Authenticator
 
 		// Authentication checks
 		if (!$row) {
-			throw new Nette\Security\AuthenticationException('The username is incorrect.', self::IdentityNotFound);
+			throw new Nette\Security\AuthenticationException('Uživatelské jméno je nesprávné.', self::IdentityNotFound);
 
 		} elseif (!$this->passwords->verify($password, $row[self::ColumnPasswordHash])) {
-			throw new Nette\Security\AuthenticationException('The password is incorrect.', self::InvalidCredential);
+			throw new Nette\Security\AuthenticationException('Heslo je nesprávné.', self::InvalidCredential);
 
 		} elseif ($this->passwords->needsRehash($row[self::ColumnPasswordHash])) {
 			$row->update([
@@ -68,8 +146,9 @@ final class UserFacade implements Nette\Security\Authenticator
 	 * Add a new user to the database.
 	 * Throws a DuplicateNameException if the username is already taken.
 	 */
-	public function add(string $username, string $email, string $password): void
-	{
+	public function add(string $username, string $firstname, string $lastname, string $email, string $password, string $phone, int $birthdate_day,int $birthdate_month, int $birthdate_year, string $address, string $city): void 
+		
+	{$birthdate = sprintf('%04d-%02d-%02d', $birthdate_year, $birthdate_month, $birthdate_day);
 		// Validate the email format
 		Nette\Utils\Validators::assert($email, 'email');
 
@@ -77,15 +156,21 @@ final class UserFacade implements Nette\Security\Authenticator
 		try {
 			$this->database->table(self::TableName)->insert([
 				self::ColumnName => $username,
+				self::ColumnFirstname => $firstname,
+				self::ColumnLastname => $lastname,
 				self::ColumnPasswordHash => $this->passwords->hash($password),
 				self::ColumnEmail => $email,
+				self::ColumnPhone => $phone,
+        		self::ColumnBirthdate => $birthdate,
+        		self::ColumnAddress => $address,
+        		self::ColumnCity => $city,
 			]);
 		} catch (Nette\Database\UniqueConstraintViolationException $e) {
 			throw new DuplicateNameException;
 		}
 	}
-}
 
+}
 
 /**
  * Custom exception for duplicate usernames.

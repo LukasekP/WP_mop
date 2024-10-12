@@ -1,0 +1,25 @@
+{block content}
+<h1>Správa uživatelů</h1>
+
+<table border="1" style="border-collapse: collapse; width: 100%;">
+    <thead>
+        <tr>
+            <th>Jméno</th>
+            <th>Email</th>
+            <th>Role</th>
+        </tr>
+    </thead>
+    <tbody>
+        {foreach $users as $userData}
+            <tr>
+                <td><a href="{link User:detail, $userData->id}">{$userData->username}</a></td>
+                <td>{$userData->email}</td>
+                <td>{$userData->role}</td>
+            {if $user->getIdentity()->id !== $userData->id}
+                <td><a n:href="delete! $userData->id">Smazat</a></td>    
+            {/if}
+            </tr>
+        {/foreach}
+    </tbody>
+</table>
+{/block}
