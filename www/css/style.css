@@ -91,3 +91,47 @@ p {
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); 
     transition: all 0.3s ease; 
 }
+.festival-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+}
+
+.festival-table th, .festival-table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.festival-table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.festival-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.festival-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+.festival-table a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.festival-table a:hover {
+    text-decoration: underline;
+}.detail_img{
+    
+        max-width: 100%; 
+        
+        
+        border-radius: 8px; 
+        margin-top: 10px;
+    
+}

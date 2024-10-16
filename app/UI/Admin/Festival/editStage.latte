@@ -1,0 +1,28 @@
+{block content}
+
+<h2>Přidat kapelu</h2>
+{control addBandForm}
+
+<h2>Kapely na {$stage->name}</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Čas</th>
+            <th>Název kapely</th>
+            <th>Akce</th>
+        </tr>
+    </thead>
+    <tbody>
+        {foreach $bands as $band}
+            <tr>
+                <td>{$band->time}</td>
+                <td><b>{$band->name}</b></td>
+                <td>
+                    <a n:href="deleteBand! , $band->id" class="btn btn-danger btn-sm" onclick="return confirm('Opravdu chcete smazat tuto kapelu?')">Smazat</a>
+                </td>
+            </tr>
+        {/foreach}
+    </tbody>
+</table>
+
+{/block}

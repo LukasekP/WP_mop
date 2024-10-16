@@ -13,39 +13,122 @@ class FestivalPresenter extends Nette\Application\UI\Presenter
         $this->festivalFacade = $festivalFacade;
     }
 
+
+
+
+    // Rendery
+
+    public function renderDetail(int $id): void
+    {
+        $festival = $this->festivalFacade->getFestivalById($id);
+        if (!$festival) {
+            $this->error('Festival not found');
+        }
+        $this->template->festival = $festival;
+        $this->template->stages = $this->festivalFacade->getStagesWithBands($id);
+    }
+    public function renderAddStage(int $festivalId): void
+    {
+        $festival = $this->festivalFacade->getFestivalById($festivalId);
+      
+        $this->template->festival = $festival;
+    }
+    public function renderEditStage(int $festivalId, int $stageId): void
+    {
+        $festival = $this->festivalFacade->getFestivalById($festivalId);
+        $stage = $this->festivalFacade->getStageById($stageId);
+       
+        $this->template->stage = $stage;
+        $this->template->bands = $this->festivalFacade->getBandsByStage($stageId);
+      
+        $this->template->festival = $festival;
+    }
+
+
+
     protected function createComponentAddFestivalForm(): Form
     {
         $form = new Form;
         $form->addText('name', 'Název festivalu:')
-            ->setRequired('Prosím, zadejte název festivalu.');
-        $form->addTextArea('description', 'Popis:')
-            ->setRequired('Prosím, zadejte popis festivalu.');
-        $form->addUpload('image', 'Obrázek:')
-            ->setRequired('Prosím, nahrajte obrázek festivalu.');
-        $form->addText('price', 'Cena:')
-            ->setRequired('Prosím, zadejte cenu festivalu.')
-            ->addRule(Form::FLOAT, 'Cena musí být číslo.');
+            ->setRequired('Zadejte název festivalu');
+        $form->addTextArea('description', 'Popis festivalu:')
+            ->setRequired('Zadejte popis');
+        $form->addText('price', 'Cena vstupenky:')
+            ->setRequired('Zadejte cenu');
+        $form->addUpload('image', 'Obrázek festivalu:')
+            ->setRequired('Nahrajte obrázek');
         $form->addSubmit('submit', 'Přidat festival');
-        $form->onSuccess[] = [$this, 'addFestivalFormSucceeded'];
+
+        $form->onSuccess[] = [$this, 'addFestivalSucceeded'];
         return $form;
     }
 
-    public function addFestivalFormSucceeded(Form $form, \stdClass $values): void
+    public function addFestivalSucceeded(Form $form, $values): void
     {
-        // Handle file upload
         $image = $values->image;
         $imagePath = 'uploads/' . $image->getSanitizedName();
         $image->move($imagePath);
+        $this->festivalFacade->addFestival((array) $values);
+        $this->flashMessage('Festival byl přidán.', 'success');
+        $this->redirect('default');
+    }
 
-        // Use the facade to insert the festival into the database
-        $this->festivalFacade->addFestival(
-            $values->name,
-            $values->description,
-            $imagePath,
-            (float) $values->price
-        );
+    protected function createComponentAddStageForm(): Form
+    {
+        $form = new Form;
+        $form->addText('name', 'Název stage:')
+            ->setRequired('Prosím, zadejte název stage.');
+        $form->addHidden('festival_id', $this->getParameter('festivalId'));
+        $form->addSubmit('submit', 'Přidat stage');
+        $form->onSuccess[] = [$this, 'addStageFormSucceeded'];
+        return $form;
+    }
 
-        $this->flashMessage('Festival byl úspěšně přidán.', 'success');
+    public function addStageFormSucceeded(Form $form, \stdClass $values): void
+    {
+        $this->festivalFacade->addStage($values->festival_id, $values->name);
+        $this->flashMessage('Stage byla úspěšně přidána.', 'success');
+        $this->redirect('detail', $values->festival_id);
+    }
+
+    protected function createComponentAddBandForm(): Form
+    {
+        $form = new Form;
+        $form->addText('name', 'Název kapely:')
+            ->setRequired('Prosím, zadejte název kapely.');
+        $form->addText('time', 'Čas vystoupení:')
+            ->setRequired('Prosím, zadejte čas vystoupení.');
+        $form->addSelect('stage_id', 'Stage:', $this->getStages())
+            ->setRequired('Prosím, vyberte stage.');
+        $form->addSubmit('submit', 'Přidat kapelu');
+        $form->onSuccess[] = [$this, 'addBandFormSucceeded'];
+        return $form;
+    }
+
+    public function addBandFormSucceeded(Form $form, \stdClass $values): void
+    {
+        $this->festivalFacade->addBand($values->name, $values->time);
+        $this->festivalFacade->assignBandToStage((int)$values->stage_id, $this->festivalFacade->getLastInsertedBandId());
+        $this->flashMessage('Kapela byla úspěšně přidána.', 'success');
+        $this->redirect('detail', $this->getParameter('festivalId'));
+    }
+    private function getStages(): array
+    {
+        $festivalId = $this->getParameter('festivalId');
+        $stages = $this->festivalFacade->getStagesByFestival($festivalId);
+        $stageOptions = [];
+        foreach ($stages as $stage) {
+            $stageOptions[$stage->id] = $stage->name;
+        }
+        return $stageOptions;
+    }
+
+
+    public function handleDeleteBand(int $bandId): void
+    {
+        $this->festivalFacade->deleteBand($bandId);
+        $this->flashMessage('Kapela byla úspěšně smazána.', 'success');
         $this->redirect('this');
     }
 }
+    

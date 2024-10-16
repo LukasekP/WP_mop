@@ -1,6 +1,26 @@
 {block content}
 <h1>Admin page</h1>
 
+<h2>Seznam festivalů</h2>
 
-
-
+<table class="festival-table">
+    <thead>
+        <tr>
+            <th>Název</th>
+            <th>Popis</th>
+            <th>Cena</th>
+            <th>Detail</th>
+        </tr>
+    </thead>
+    <tbody>
+        {foreach $festivals as $festival}
+            <tr>
+                <td>{$festival->name}</td>
+                <td>{$festival->description}</td>
+                <td>{$festival->price} Kč</td>
+                <td><a href="{link Festival:detail, $festival->id}">Detail</a></td>
+            </tr>
+        {/foreach}
+    </tbody>
+</table>
+{/block}
