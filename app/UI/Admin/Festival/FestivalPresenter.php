@@ -21,9 +21,7 @@ class FestivalPresenter extends Nette\Application\UI\Presenter
     public function renderDetail(int $id): void
     {
         $festival = $this->festivalFacade->getFestivalById($id);
-        if (!$festival) {
-            $this->error('Festival not found');
-        }
+        
         $this->template->festival = $festival;
         $this->template->stages = $this->festivalFacade->getStagesWithBands($id);
     }
@@ -42,6 +40,11 @@ class FestivalPresenter extends Nette\Application\UI\Presenter
         $this->template->bands = $this->festivalFacade->getBandsByStage($stageId);
       
         $this->template->festival = $festival;
+    }
+    public function actionEditBand(int $bandId,int $festivalId, int $stageId): void
+    {
+        $band = $this->festivalFacade->getBandById($bandId);
+        $this->getComponent('editBandForm')->setDefaults($band->toArray());
     }
 
 
@@ -70,7 +73,7 @@ class FestivalPresenter extends Nette\Application\UI\Presenter
         $image->move($imagePath);
         $this->festivalFacade->addFestival((array) $values);
         $this->flashMessage('Festival byl přidán.', 'success');
-        $this->redirect('default');
+        $this->redirect('Dashboard:default');
     }
 
     protected function createComponentAddStageForm(): Form
@@ -110,7 +113,7 @@ class FestivalPresenter extends Nette\Application\UI\Presenter
         $this->festivalFacade->addBand($values->name, $values->time);
         $this->festivalFacade->assignBandToStage((int)$values->stage_id, $this->festivalFacade->getLastInsertedBandId());
         $this->flashMessage('Kapela byla úspěšně přidána.', 'success');
-        $this->redirect('detail', $this->getParameter('festivalId'));
+        $this->redirect('this', $this->getParameter('festivalId'));
     }
     private function getStages(): array
     {
@@ -122,7 +125,23 @@ class FestivalPresenter extends Nette\Application\UI\Presenter
         }
         return $stageOptions;
     }
-
+    public function createComponentEditBandForm(){
+        $form = new Form;
+        $form->addText('name', 'Název kapely:')
+            ->setRequired('Prosím, zadejte název kapely.');
+        $form->addText('time', 'Čas vystoupení:')
+            ->setRequired('Prosím, zadejte čas vystoupení.');
+        $form->addSubmit('submit', 'Uložit');
+        $form->onSuccess[] = [$this, 'editBandFormSucceeded'];
+        return $form;
+    }    public function editBandFormSucceeded(Form $form, \stdClass $values): void
+    {
+        $bandId = $this->getParameter('bandId');
+        $this->festivalFacade->editBand($bandId, (array)$values);
+        $this->flashMessage('Kapela byla úspěšně upravena.', 'success');
+        $this->redirect('editStage' , $this->getParameter('festivalId'), $this->getParameter('stageId'));
+    }
+    
 
     public function handleDeleteBand(int $bandId): void
     {

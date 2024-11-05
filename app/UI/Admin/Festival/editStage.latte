@@ -19,6 +19,7 @@
                 <td><b>{$band->name}</b></td>
                 <td>
                     <a n:href="deleteBand! , $band->id" class="btn btn-danger btn-sm" onclick="return confirm('Opravdu chcete smazat tuto kapelu?')">Smazat</a>
+                    <a n:href="editBand , $band->id , $stage->id , $festival->id" class="btn btn-primary btn-sm">Upravit</a>
                 </td>
             </tr>
         {/foreach}

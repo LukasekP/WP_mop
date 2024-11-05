@@ -18,7 +18,9 @@
                 <td>{$festival->name}</td>
                 <td>{$festival->description}</td>
                 <td>{$festival->price} Kč</td>
-                <td><a href="{link Festival:detail, $festival->id}">Detail</a></td>
+                <td><a href="{link Festival:detail, $festival->id}">Detail</a>
+                <a n:href="deleteFestival! , $festival->id" class="btn btn-danger btn-sm" onclick="return confirm('Opravdu chcete smazat festival?')">Smazat</a></td>
+
             </tr>
         {/foreach}
     </tbody>

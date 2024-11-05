@@ -25,6 +25,12 @@ final class DashboardPresenter extends Nette\Application\UI\Presenter
     {
         $this->template->festivals = $this->festivalFacade->getFestivals();
     }
+    public function handleDeleteFestival(int $festivalId): void
+    {
+        $this->festivalFacade->deleteFestival($festivalId);
+        $this->flashMessage('Festival úspěšně smazán.', 'success');
+        $this->redirect('this');
+    }
 	
 	// Incorporates methods to check user login status
 	use RequireLoggedUser;

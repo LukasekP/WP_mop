@@ -39,13 +39,11 @@ final class UserFacade implements Nette\Security\Authenticator
 	) {
 	}
 
-    // Metoda pro získání všech uživatelů
     public function getUsers()
     {
         return $this->database->table('users');
     }
 
-    // Metoda pro získání konkrétního uživatele podle ID
     public function getUserById($id)
     {
         return $this->database->table('users')->get($id);
@@ -61,25 +59,16 @@ final class UserFacade implements Nette\Security\Authenticator
 
 
 
-	public function editUser($userId, $username = null, $password = null)
-{
-    $user = $this->database->table('users')->get($userId);
+    public function updateUser($userId, $values)
+    {
+        $user = $this->database->table('users')->get($userId);
 
+        if (isset($values['password'])) {
+            $values['password'] = $this->passwords->hash($values['password']);
+        }
 
-    $data = [];
-
-    if ($username !== null) {
-        $data['username'] = $username;
+        $user->update($values);
     }
-
-    if ($password !== null) {
-        $data['password'] = password_hash($password, PASSWORD_DEFAULT);
-    }
-
-    if (!empty($data)) {
-        $user->update($data);
-    }
-}
 
 public function updateUserImage($userId, $imagePath)
 {
@@ -93,23 +82,7 @@ public function updateUserImage($userId, $imagePath)
 		'image' => $imagePath,
 	]);
 }
-	public function updateUserPassword($userId, $password)
-    {
-        $user = $this->database->table('users')->get($userId);
-
-        $user->update([
-            'password' => password_hash($password, PASSWORD_DEFAULT),
-        ]);
-    }
-
-	public function updateUsername($userId, $username)
-    {
-        $user = $this->database->table('users')->get($userId);
-
-        $user->update([
-            'username' => $username,
-        ]);
-    }
+	
 
 	/**
 	 * Authenticate a user based on provided credentials.

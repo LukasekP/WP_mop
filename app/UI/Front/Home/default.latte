@@ -2,6 +2,8 @@
 <h1>Front page</h1>
 
 {foreach $festivals as $festival}
+    <a href="{link Detail:Detail, $festival->id}" class="festival-link">
+
     <div class="festival">
         <h2>{$festival->name}</h2>
         <p>{$festival->description}</p>

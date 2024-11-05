@@ -24,6 +24,10 @@ class FestivalFacade
     {
         return $this->database->table('festivals')->get($id);
     }
+    public function getBandById(int $id): ?ActiveRow
+    {
+        return $this->database->table('bands')->get($id);
+    }
 
     
     public function addFestival(array $data): ActiveRow
@@ -115,5 +119,49 @@ class FestivalFacade
         $this->database->table('stage_bands')->where('band_id', $bandId)->delete();
 
         $this->database->table('bands')->where('id', $bandId)->delete();
+    }
+    public function editBand(int $bandId, array $values): void
+    {
+        $this->database->table('bands')->get($bandId)->update($values);
+    }
+    public function deleteFestival(int $festivalId): void
+    {
+        $this->database->table('festivals')->where('id', $festivalId)->delete();
+       
+    }
+ 
+    public function getStagesByBand(int $bandId): array
+    {
+        $band = $this->database->table('bands')->get($bandId);
+    
+        $bands = $this->database->table('bands')
+            ->where('name', $band->name)
+            ->fetchAll();
+    
+        $result = [];
+        foreach ($bands as $bandEntry) {
+            $stages = $this->database->table('stage_bands')
+                ->where('band_id', $bandEntry->id)
+                ->fetchAll();
+    
+            foreach ($stages as $stageBand) {
+                $stage = $this->database->table('stages')->get($stageBand->stage_id);
+    
+                if ($stage) {
+                    $festival = $this->database->table('festivals')->get($stage->festival_id);
+    
+                    if ($festival) {
+                        $result[] = (object)[
+                            'stage_name' => $stage->name,
+                            'festival_id' => $festival->id,
+                            'festival_name' => $festival->name,
+                            'time' => $bandEntry->time
+                        ];
+                    }
+                }
+            }
+        }
+    
+        return $result;
     }
 }

@@ -1,0 +1,32 @@
+{block content}
+<h1>{$festival->name}</h1>
+
+<p>{$festival->description}</p>
+
+<img src="{$basePath}/{$festival->image}" class="detail_img" alt="{$festival->name}">
+<p class="price">Cena: {$festival->price} Kč</p>
+<a href="" class="btn btn-success">Koupit vstupenku</a>
+<table>
+    <thead>
+        <tr>
+            <th>Stage</th>
+            <th>Kapely</th>
+        </tr>
+    </thead>
+    <tbody>
+        {foreach $stages as $stage}
+            <tr>
+                <td>{$stage->name}</td>
+                <td>
+                    <ul>
+                        {foreach $stage->bands as $band}
+                        
+                            <li>{$band->time} <b><a n:href="Band:band , $band->id">{$band->name}</a></b></li>
+                        {/foreach}
+                    </ul>
+                </td>
+            </tr>
+        {/foreach}
+    </tbody>
+</table>
+{/block}

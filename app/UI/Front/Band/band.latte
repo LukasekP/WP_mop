@@ -1,0 +1,14 @@
+{block content}
+<h1>{$band->name}</h1>
+
+<p>{$band->description}</p>
+
+<h2>Hraje na:</h2>
+<ul>
+    {foreach $stages as $stage}
+        <li>{$stage->stage_name} na festivalu 
+            <a href="{link 'Detail:detail', $stage->festival_id}">{$stage->festival_name}</a> v {$stage->time}
+        </li>
+    {/foreach}
+</ul>
+{/block}

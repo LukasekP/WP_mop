@@ -24,11 +24,19 @@ final class UserPresenter extends Nette\Application\UI\Presenter
     }
     public function renderDetail($id)
     {
+        $user = $this->userFacade->getUserById($id); 
+
         $this->template->userData = $this->userFacade->getUserById($id);
+        $this->getComponent('editForm')
+        ->setDefaults($user->toArray()); 
     }
     public function renderEdit($id)
     {
-        $this->template->userData = $this->userFacade->getUserById($id);
+        $user = $this->userFacade->getUserById($id); 
+       
+    
+        $this->getComponent('editForm')
+             ->setDefaults($user->toArray()); 
     }
 
 
@@ -56,45 +64,14 @@ final class UserPresenter extends Nette\Application\UI\Presenter
     {
         $userId = $this->getParameter('id'); 
 
-       
-    
-        $usernameChanged = false;
-        $passwordChanged = false;
-    
-        
-            // Aktualizujte uživatelské jméno, pokud bylo zadáno
-            if (!empty($values->username)) {
-                $this->userFacade->updateUsername($userId, $values->username);
-                $usernameChanged = true;
-            }
-    
-            // Aktualizujte heslo, pokud bylo zadáno
-            if (!empty($values->password)) {
-                $this->userFacade->updateUserPassword($userId, $values->password);
-                $passwordChanged = true;
-            }
-            if (!empty($values->image)) {
+        if ($values->image->isOk()) {
+            $values->image->move("upload/" . $values->image->getSanitizedName());
+            $this->userFacade->updateUserImage($userId, "upload/" . $values->image->getSanitizedName());
+            $imageChanged = true;
+        }
+        $this->userFacade->updateUser($userId, (array)$values);
 
-            if ($values->image->isOk()) {
-                $values->image->move("upload/" . $values->image->getSanitizedName());
-                $this->userFacade->updateUserImage($userId, "upload/" . $values->image->getSanitizedName());
-                $imageChanged = true;
-            }}
-
-            if ($usernameChanged && $passwordChanged) {
-                $this->flashMessage('Uživatelské jméno a heslo byly úspěšně změněny.', 'success');
-            } elseif ($usernameChanged) {
-                $this->flashMessage('Uživatelské jméno bylo úspěšně změněno.', 'success');
-            } elseif ($passwordChanged) {
-                $this->flashMessage('Heslo bylo úspěšně změněno.', 'success');
-            } elseif ($imageChanged) {
-                $this->flashMessage('Profilový obrázek byl úspěšně přidán.', 'success');
-            }
-             else {
-                $this->flashMessage('Prosím, zadejte nové uživatelské jméno nebo heslo.', 'error');
-            }
-        
-    
+        $this->flashMessage('Údaje změněny', 'success');
         $this->redirect(':Front:Home:default');
     }
     public function handleDelete(int $userId) {
