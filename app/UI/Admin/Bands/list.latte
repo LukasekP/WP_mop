@@ -1,0 +1,23 @@
+{block content}
+
+<h1>Seznam kapel</h1>
+{control addBandForm}
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Název kapely</th>
+            <th>Popis</th>
+        </tr>
+    </thead>
+    <tbody>
+        {foreach $bands as $band}
+            <tr>
+                <td>{$band->name}</td>
+                <td>{$band->description}</td>
+            </tr>
+        {/foreach}
+    </tbody>
+</table>
+
+{/block}

@@ -7,7 +7,7 @@
 	<meta name="viewport" content="width=device-width">
 
 	{* Page title with optional prefix from the child template *}
-	<title>{ifset title}{include title|stripHtml} | {/ifset}User Login Example</title>
+	<title>{ifset title}{include title|stripHtml} | {/ifset}FestZone</title>
 	<link rel="stylesheet" href="{$basePath}/css/style.css">
 
 	{* Link to the Bootstrap stylesheet for styling *}
@@ -29,6 +29,9 @@
 		</li>
 		<li>
 			<a n:href="Festival:add">Přidat festival</a>
+		<li>
+		<li>
+			<a n:href="Bands:list">Seznam Kapel</a>
 		<li>
 
         

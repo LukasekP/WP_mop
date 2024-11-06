@@ -30,6 +30,8 @@ class FestivalFacade
     }
 
     
+ 
+
     public function addFestival(array $data): ActiveRow
     {
         return $this->database->table('festivals')->insert($data);
@@ -43,13 +45,7 @@ class FestivalFacade
         ]);
     }
 
-    public function addBand(string $name, $time): void
-    {
-        $this->database->table('bands')->insert([
-            'name' => $name,
-            'time' => $time
-        ]);
-    }
+   
 
     public function assignBandToStage(int $stageId, int $bandId): void
     {

@@ -21,7 +21,7 @@
                     <ul>
                         {foreach $stage->bands as $band}
                         
-                            <li>{$band->time} <b>{$band->name}</b></li>
+                            <li>{$band->time} <b><a n:href=":Front:Band:band , $band->id">{$band->name}</a></b></li>
                         {/foreach}
                     </ul>
                 </td>
