@@ -18,6 +18,10 @@ class BandsFacade
     {
     return $this->database->table('bands')->fetchAll();
     }
+       public function getBandById(int $id): ?ActiveRow
+    {
+        return $this->database->table('bands')->get($id);
+    }
     public function addBand(string $name, $description): void
     {
         $this->database->table('bands')->insert(
@@ -52,4 +56,67 @@ class BandsFacade
             ];
         }, $stageBands);
     }
+    public function getBandsByFestivalWithTimes(int $festivalId): array
+    {
+        $stages = $this->database->table('stages')
+            ->where('festival_id', $festivalId)
+            ->fetchAll();
+    
+        $result = [];
+        foreach ($stages as $stage) {
+            $stageBands = $this->database->table('stage_bands')
+                ->where('stage_id', $stage->id)
+                ->fetchAll();
+    
+            foreach ($stageBands as $stageBand) {
+                $band = $stageBand->ref('bands', 'band_id');
+                $result[] = (object)[
+                    'stage_name' => $stage->name,
+                    'time' => $stageBand->time,
+                    'band_name' => $band->name,
+                    'band_description' => $band->description,
+                    'band_id' => $band->id
+                ];
+            }
+        }
+    
+        return $result;
+    }
+    public function getStageBand(int $stageId, int $bandId)
+{
+    return $this->database->table('stage_bands')
+        ->where('stage_id', $stageId)
+        ->where('band_id', $bandId)
+        ->fetch();
+}
+
+public function updateStageBand(int $stageId, int $bandId, array $data): void
+{
+    $this->database->table('stage_bands')
+        ->where('stage_id', $stageId)
+        ->where('band_id', $bandId)
+        ->update($data);
+}
+public function deleteBand(int $bandId): void
+{
+    $this->database->table('stage_bands')->where('band_id', $bandId)->delete();
+
+    $this->database->table('bands')->where('id', $bandId)->delete();
+}
+
+public function editBand(int $bandId, int $stageId, array $values): void
+{
+    $bandData = [
+        'name' => $values['name']
+    ];
+    $this->database->table('bands')->get($bandId)->update($bandData);
+
+    $stageBandData = [
+        'time' => $values['time']
+    ];
+    $this->database->table('stage_bands')
+        ->where('stage_id', $stageId)
+        ->where('band_id', $bandId)
+        ->update($stageBandData);
+}
 }

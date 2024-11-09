@@ -24,14 +24,7 @@ class FestivalFacade
     {
         return $this->database->table('festivals')->get($id);
     }
-    public function getBandById(int $id): ?ActiveRow
-    {
-        return $this->database->table('bands')->get($id);
-    }
-
-    
  
-
     public function addFestival(array $data): ActiveRow
     {
         return $this->database->table('festivals')->insert($data);
@@ -46,19 +39,29 @@ class FestivalFacade
     }
 
    
+    
 
-    public function assignBandToStage(int $stageId, int $bandId): void
-    {
-        $this->database->table('stage_bands')->insert([
-            'stage_id' => $stageId,
-            'band_id' => $bandId
-        ]);
-    }
+
+   // public function assignBandToStage(int $stageId, int $bandId): void
+   // {
+   //    $this->database->table('stage_bands')->insert([
+   //         'stage_id' => $stageId,
+   //         'band_id' => $bandId
+   //     ]);
+   // }
+
+   //  public function getLastInsertedBandId(): int
+   // {
+   //   return $this->database->table('bands')->max('id');
+   //}
+   
     public function getStagesWithBands(int $festivalId): array
     {
-        $stages = $this->database->table('stages')->where('festival_id', $festivalId)->fetchAll();
-        $result = [];
+        $stages = $this->database->table('stages')
+            ->where('festival_id', $festivalId)
+            ->fetchAll();
     
+        $result = [];
         foreach ($stages as $stage) {
             $bands = $this->database->table('stage_bands')
                 ->where('stage_id', $stage->id)
@@ -66,7 +69,13 @@ class FestivalFacade
     
             $stageBands = [];
             foreach ($bands as $band) {
-                $stageBands[] = $this->database->table('bands')->get($band->band_id);
+                $bandInfo = $band->ref('bands', 'band_id');
+                $stageBands[] = (object)[
+                    'id' => $bandInfo->id,
+                    'name' => $bandInfo->name,
+                    'description' => $bandInfo->description,
+                    'time' => $band->time,
+                ];
             }
     
             $result[] = (object)[
@@ -80,10 +89,6 @@ class FestivalFacade
     }
     
 
-    public function getLastInsertedBandId(): int
-    {
-        return $this->database->table('bands')->max('id');
-    }
     public function getStagesByFestival(int $festivalId): array
     {
         return $this->database->table('stages')->where('festival_id', $festivalId)->fetchAll();
@@ -110,16 +115,7 @@ class FestivalFacade
 
     return $result;
     }
-    public function deleteBand(int $bandId): void
-    {
-        $this->database->table('stage_bands')->where('band_id', $bandId)->delete();
 
-        $this->database->table('bands')->where('id', $bandId)->delete();
-    }
-    public function editBand(int $bandId, array $values): void
-    {
-        $this->database->table('bands')->get($bandId)->update($values);
-    }
     public function deleteFestival(int $festivalId): void
     {
         $this->database->table('festivals')->where('id', $festivalId)->delete();

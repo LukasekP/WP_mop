@@ -24,10 +24,12 @@ class FestivalPresenter extends Nette\Application\UI\Presenter
     public function renderDetail(int $id): void
     {
         $festival = $this->festivalFacade->getFestivalById($id);
-        
+    
         $this->template->festival = $festival;
         $this->template->stages = $this->festivalFacade->getStagesWithBands($id);
+        $this->template->bands = $this->BandsFacade->getBandsByFestivalWithTimes($id); // bands already has 'time'
     }
+    
     
     public function renderAddStage(int $festivalId): void
     {
@@ -45,11 +47,6 @@ class FestivalPresenter extends Nette\Application\UI\Presenter
         $this->template->bands = $this->festivalFacade->getBandsByStage($stageId);
         $this->template->bands = $this->BandsFacade->getBandsByStageWithTimes($stageId);
         $this->template->festival = $festival;
-    }
-    public function actionEditBand(int $bandId,int $festivalId, int $stageId): void
-    {
-        $band = $this->festivalFacade->getBandById($bandId);
-        $this->getComponent('editBandForm')->setDefaults($band->toArray());
     }
 
 
@@ -110,23 +107,6 @@ class FestivalPresenter extends Nette\Application\UI\Presenter
         }
         return $stageOptions;
     }
-    public function createComponentEditBandForm(){
-        $form = new Form;
-        $form->addText('name', 'Název kapely:')
-            ->setRequired('Prosím, zadejte název kapely.');
-        $form->addText('time', 'Čas vystoupení:')
-            ->setRequired('Prosím, zadejte čas vystoupení.');
-        $form->addSubmit('submit', 'Uložit');
-        $form->onSuccess[] = [$this, 'editBandFormSucceeded'];
-        return $form;
-    }    public function editBandFormSucceeded(Form $form, \stdClass $values): void
-    {
-        $bandId = $this->getParameter('bandId');
-        $this->festivalFacade->editBand($bandId, (array)$values);
-        $this->flashMessage('Kapela byla úspěšně upravena.', 'success');
-        $this->redirect('editStage' , $this->getParameter('festivalId'), $this->getParameter('stageId'));
-    }
-    
 
     public function handleDeleteBand(int $bandId): void
     {
@@ -134,5 +114,6 @@ class FestivalPresenter extends Nette\Application\UI\Presenter
         $this->flashMessage('Kapela byla úspěšně smazána.', 'success');
         $this->redirect('this');
     }
+
 }
     

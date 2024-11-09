@@ -16,11 +16,10 @@
     <tbody>
         {foreach $stages as $stage}
             <tr>
-                <td><a href="{link 'editStage', $festival->id, $stage->id}">{$stage->name}<a></td>
+                <td><a href="{link 'editStage', $festival->id, $stage->id}">{$stage->name}</a></td>
                 <td>
                     <ul>
                         {foreach $stage->bands as $band}
-                        
                             <li>{$band->time} <b><a n:href=":Front:Band:band , $band->id">{$band->name}</a></b></li>
                         {/foreach}
                     </ul>
@@ -29,4 +28,6 @@
         {/foreach}
     </tbody>
 </table>
+
+
 {/block}
