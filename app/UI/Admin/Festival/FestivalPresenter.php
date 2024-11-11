@@ -27,7 +27,7 @@ class FestivalPresenter extends Nette\Application\UI\Presenter
     
         $this->template->festival = $festival;
         $this->template->stages = $this->festivalFacade->getStagesWithBands($id);
-        $this->template->bands = $this->BandsFacade->getBandsByFestivalWithTimes($id); // bands already has 'time'
+        $this->template->bands = $this->BandsFacade->getBandsByFestivalWithTimes($id); 
     }
     
     
@@ -97,16 +97,7 @@ class FestivalPresenter extends Nette\Application\UI\Presenter
     }
 
    
-    private function getStages(): array
-    {
-        $festivalId = $this->getParameter('festivalId');
-        $stages = $this->festivalFacade->getStagesByFestival($festivalId);
-        $stageOptions = [];
-        foreach ($stages as $stage) {
-            $stageOptions[$stage->id] = $stage->name;
-        }
-        return $stageOptions;
-    }
+
 
     public function handleDeleteBand(int $bandId): void
     {

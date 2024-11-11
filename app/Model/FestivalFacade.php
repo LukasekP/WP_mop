@@ -37,72 +37,53 @@ class FestivalFacade
             'name' => $name
         ]);
     }
-
-   
-    
-
-
-   // public function assignBandToStage(int $stageId, int $bandId): void
-   // {
-   //    $this->database->table('stage_bands')->insert([
-   //         'stage_id' => $stageId,
-   //         'band_id' => $bandId
-   //     ]);
-   // }
-
-   //  public function getLastInsertedBandId(): int
-   // {
-   //   return $this->database->table('bands')->max('id');
-   //}
-   
-    public function getStagesWithBands(int $festivalId): array
+    public function getFestivalNameById(int $festivalId): string
     {
-        $stages = $this->database->table('stages')
-            ->where('festival_id', $festivalId)
-            ->fetchAll();
-    
-        $result = [];
-        foreach ($stages as $stage) {
-            $bands = $this->database->table('stage_bands')
-                ->where('stage_id', $stage->id)
-                ->fetchAll();
-    
-            $stageBands = [];
-            foreach ($bands as $band) {
-                $bandInfo = $band->ref('bands', 'band_id');
-                $stageBands[] = (object)[
-                    'id' => $bandInfo->id,
-                    'name' => $bandInfo->name,
-                    'description' => $bandInfo->description,
-                    'time' => $band->time,
-                ];
-            }
-    
-            $result[] = (object)[
-                'id' => $stage->id,
-                'name' => $stage->name,
-                'bands' => $stageBands
-            ];
-        }
-    
-        return $result;
+        $festival = $this->database->table('festivals')->get($festivalId);
+        return $festival ? $festival->name : '';
     }
+   
+
+   public function getStagesWithBands(int $festivalId): array // FestivalPresenter - renderDetail
+   {
+       $stages = $this->database->table('stages')
+           ->where('festival_id', $festivalId)
+           ->fetchAll();
+   
+       $result = [];
+       foreach ($stages as $stage) {
+           $bands = $this->database->table('stage_bands')
+               ->where('stage_id', $stage->id)
+               ->fetchAll();
+   
+           $stageBands = [];
+           foreach ($bands as $band) {
+               $bandInfo = $band->ref('bands', 'band_id');
+               $stageBands[] = (object)[
+                   'id' => $bandInfo->id,
+                   'name' => $bandInfo->name,
+                   'description' => $bandInfo->description,
+                   'time' => $band->time,
+               ];
+           }
+   
+           $result[] = (object)[
+               'id' => $stage->id,
+               'name' => $stage->name,
+               'bands' => $stageBands
+           ];
+       }
+   
+       return $result;
+   }
     
-
-    public function getStagesByFestival(int $festivalId): array
-    {
-        return $this->database->table('stages')->where('festival_id', $festivalId)->fetchAll();
-    }
-
-
-
     public function getStageById(int $stageId)
 {
     return $this->database->table('stages')
         ->get($stageId);
 }
 
-    public function getBandsByStage(int $stageId): array
+    public function getBandsByStage(int $stageId): array // FestivalPresenter - renderEditStage
     {
     $bands = $this->database->table('stage_bands')
         ->where('stage_id', $stageId)
@@ -121,39 +102,13 @@ class FestivalFacade
         $this->database->table('festivals')->where('id', $festivalId)->delete();
        
     }
- 
-    public function getStagesByBand(int $bandId): array
+
+    public function getStagesByFestival(int $festivalId): array
     {
-        $band = $this->database->table('bands')->get($bandId);
-    
-        $bands = $this->database->table('bands')
-            ->where('name', $band->name)
-            ->fetchAll();
-    
-        $result = [];
-        foreach ($bands as $bandEntry) {
-            $stages = $this->database->table('stage_bands')
-                ->where('band_id', $bandEntry->id)
-                ->fetchAll();
-    
-            foreach ($stages as $stageBand) {
-                $stage = $this->database->table('stages')->get($stageBand->stage_id);
-    
-                if ($stage) {
-                    $festival = $this->database->table('festivals')->get($stage->festival_id);
-    
-                    if ($festival) {
-                        $result[] = (object)[
-                            'stage_name' => $stage->name,
-                            'festival_id' => $festival->id,
-                            'festival_name' => $festival->name,
-                            'time' => $bandEntry->time
-                        ];
-                    }
-                }
-            }
-        }
-    
-        return $result;
+        return $this->database->table('stages')
+            ->where('festival_id', $festivalId)
+            ->fetchAll(); 
     }
+
+ 
 }

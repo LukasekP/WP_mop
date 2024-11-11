@@ -59,7 +59,9 @@ class BandsPresenter extends Nette\Application\UI\Presenter
         $form->addSubmit('submit', 'Uložit');
         $form->onSuccess[] = [$this, 'editBandFormSucceeded'];
         return $form;
-    }      public function editBandFormSucceeded(Form $form, \stdClass $values): void
+    }      
+    
+    public function editBandFormSucceeded(Form $form, \stdClass $values): void
     {
         $bandId = $this->getParameter('bandId');
         $stageId = $this->getParameter('stageId');

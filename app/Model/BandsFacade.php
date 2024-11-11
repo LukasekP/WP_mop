@@ -62,6 +62,9 @@ class BandsFacade
             ->where('festival_id', $festivalId)
             ->fetchAll();
     
+        $festival = $this->database->table('festivals')
+            ->get($festivalId);
+    
         $result = [];
         foreach ($stages as $stage) {
             $stageBands = $this->database->table('stage_bands')
@@ -75,7 +78,9 @@ class BandsFacade
                     'time' => $stageBand->time,
                     'band_name' => $band->name,
                     'band_description' => $band->description,
-                    'band_id' => $band->id
+                    'band_id' => $band->id,
+                    'festival_id' => $festivalId,
+                    'festival_name' => $festival->name // Přidání festival_name
                 ];
             }
         }
@@ -118,5 +123,35 @@ public function editBand(int $bandId, int $stageId, array $values): void
         ->where('stage_id', $stageId)
         ->where('band_id', $bandId)
         ->update($stageBandData);
+}
+
+
+public function getFestivalsByBand(int $bandId): array
+{
+    $stages = $this->database->table('stage_bands')
+        ->where('band_id', $bandId)
+        ->fetchAll();
+
+    $festivals = [];
+    foreach ($stages as $stage) {
+        // Ensure stage is being properly accessed
+        $stageRecord = $this->database->table('stages')->get($stage->stage_id);
+        if ($stageRecord) {
+            $festival = $this->database->table('festivals')->get($stageRecord->festival_id);
+                $festivals[] = $festival;
+            
+        }
+    }
+
+    return $festivals;
+}
+public function getPerformanceTimes(int $bandId, int $stageId): ?string
+{
+    $stageBand = $this->database->table('stage_bands')
+        ->where('band_id', $bandId)
+        ->where('stage_id', $stageId)
+        ->fetch();
+
+    return $stageBand ? $stageBand->time : null;
 }
 }
