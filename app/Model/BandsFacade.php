@@ -154,4 +154,18 @@ public function getPerformanceTimes(int $bandId, int $stageId): ?string
 
     return $stageBand ? $stageBand->time : null;
 }
+public function getBandsList(): array
+    {
+        // Fetch the list of bands from the 'bands' table
+        $bands = $this->database->table('bands') // Replace 'bands' with your actual table name
+            ->fetchAll();
+
+        // Prepare the list for the select dropdown
+        $bandList = [];
+        foreach ($bands as $band) {
+            $bandList[$band->id] = $band->name; // Replace 'id' and 'name' with the correct column names
+        }
+
+        return $bandList;
+    }
 }

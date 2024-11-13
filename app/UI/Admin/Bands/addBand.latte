@@ -1,0 +1,25 @@
+{block content}
+<h1>Přidat kapelu na stage</h1>
+<form n:name="addBandToStageForm">
+    <div class="form-group">
+        <label for="band">Vyberte kapelu:</label>
+        <select n:name="band" id="band" class="form-control" required>
+            {foreach $bands as $band}
+                <option value="{$band->id}">{$band->name}</option>
+            {/foreach}
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="time_from">Čas od:</label>
+        <input type="time" n:name="time_from" id="time_from" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+        <label for="time_to">Čas do:</label>
+        <input type="time" n:name="time_to" id="time_to" class="form-control" required>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Přidat kapelu</button>
+</form>
+{/block}
