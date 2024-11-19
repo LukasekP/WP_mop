@@ -104,35 +104,32 @@ class BandsPresenter extends Nette\Application\UI\Presenter
         
             $form->addSubmit('submit', 'Přidat kapelu');
         
-            $form->onSuccess[] = [$this, 'addBandFormSucceeded'];
+            $form->onSuccess[] = [$this, 'addBandToStageFormSucceeded'];
         
             return $form;
         }
         public function addBandToStageFormSucceeded(Nette\Application\UI\Form $form, \stdClass $values): void
-{
-    $stageId = $this->getParameter('stageId');
-    $festivalId = $this->getParameter('festivalId');
+        {
+            $bandId = $values->band;
+            $stageId = $this->getParameter('stageId');
+            $time = $values->time_from . ' - ' . $values->time_to;
+        
+            $this->bandsFacade->addBandToStage($bandId, $stageId, $time);
+            $this->flashMessage('Kapela byla úspěšně přidána.', 'success');
+            $this->redirect('Festival:editStage', $this->getParameter('festivalId'), $stageId);
+        }
 
-    // Combine the time input into a single string
-    $time = $values->time_from . ' - ' . $values->time_to;
 
-    // Add the band to the stage
-    $this->bandsFacade->addBandToStage($values->band, $stageId, $time);
-
-    $this->flashMessage('Kapela byla úspěšně přidána.', 'success');
-    $this->redirect('Festival:editStage', $festivalId, $stageId);
-}
-protected function getBandsList(): array
-{
-    // Use BandsFacade to get the list of bands
-    $bands = $this->bandsFacade->getBandsList(); 
-
-    // You can modify the format of the list if needed
-    $bandList = [];
-    foreach ($bands as $band) {
-        $bandList[$band->id] = $band->name; // Replace 'id' and 'name' if necessary
-    }
-
-    return $bandList;
-}
+        protected function getBandsList(): array
+        {
+            $bands = $this->bandsFacade->getBandsList();
+        
+            $bandList = [];
+            foreach ($bands as $band) {
+                $bandList[$band->id] = $band->name;
+            }
+        
+            return $bandList;
+        }
 }        
+
