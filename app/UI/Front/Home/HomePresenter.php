@@ -15,5 +15,7 @@ final class HomePresenter extends Nette\Application\UI\Presenter
     public function renderDefault(): void
     {
         $this->template->festivals = $this->festivalFacade->getFestivals();
+        $this->template->festivals = $this->festivalFacade->getFestivalsWithImages();
+
     }
 }

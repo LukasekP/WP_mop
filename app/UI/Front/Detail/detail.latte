@@ -3,9 +3,29 @@
 
 <p>{$festival->description}</p>
 
-<img src="{$basePath}/{$festival->image}" class="detail_img" alt="{$festival->name}">
+<div id="festivalCarousel" class="carousel slide" data-ride="carousel">
+    <div class="carousel-inner">
+        {var $first = true}
+        {foreach $images as $image}
+            <div class="carousel-item{if $first} active{/if}">
+                <img src="{$basePath}/{$image->image_path}" class="d-block w-100 festival-img" alt="Obrázek festivalu {$festival->name}">
+                {var $first = false}
+            </div>
+        {/foreach}
+    </div>
+    <a class="carousel-control-prev" href="#festivalCarousel" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#festivalCarousel" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
+</div>
+
 <p class="price">Cena: {$festival->price} Kč</p>
-<a href="" class="btn btn-success">Koupit vstupenku</a>
+<a href="#" class="btn btn-success">Koupit vstupenku</a>
+
 <table>
     <thead>
         <tr>
@@ -20,7 +40,6 @@
                 <td>
                     <ul>
                         {foreach $stage->bands as $band}
-                        
                             <li>{$band->time} <b><a n:href="Band:band , $band->id">{$band->name}</a></b></li>
                         {/foreach}
                     </ul>

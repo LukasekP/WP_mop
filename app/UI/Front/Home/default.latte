@@ -1,15 +1,28 @@
 {block content}
 <h1>Front page</h1>
 
-{foreach $festivals as $festival}
-    <a href="{link Detail:Detail, $festival->id}" class="festival-link">
+<div class="festivals">
+    {foreach $festivals as $item}
+                <a href="{link Detail:Detail, $item['festival']->id}" class="festival-link">
 
-    <div class="festival">
-        <h2>{$festival->name}</h2>
-        <p>{$festival->description}</p>
-        <img src="{$basePath}/{$festival->image}" alt="{$festival->name}">
-        <p class="price">Cena: {$festival->price} Kč</p>
-    </div>
-{/foreach}
+        <div class="festival">
+            <h2>
+                    {$item['festival']->name}
+            </h2>
+
+            <p>{$item['festival']->description}</p>
+            <p>Cena vstupenky: {$item['festival']->price} Kč</p>
+
+            {if $item['images']->count() > 0}
+                <div class="festival-images">
+                    {foreach $item['images'] as $image}
+                        <img src="{$basePath}/{$image->image_path}" alt="Obrázek festivalu {$item['festival']->name}" class="festival-img">
+                    {/foreach}
+                </div>
+            {else}
+                <p>Žádné obrázky</p>
+            {/if}
+        </div></a>
+    {/foreach}
 
 {/block}
