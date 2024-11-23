@@ -15,7 +15,7 @@
     <tbody>
         {foreach $bands as $band}
             <tr>
-                <td>{$band->time}</td>
+                <td>{$band->start_time} - {$band->end_time}</td>
                 <td><b>{$band->name}</b></td>
                 <td>
                     <a n:href="deleteBand! , $band->id" class="btn btn-danger btn-sm" onclick="return confirm('Opravdu chcete smazat tuto kapelu?')">Smazat</a>

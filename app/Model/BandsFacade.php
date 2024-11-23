@@ -49,7 +49,8 @@ class BandsFacade
         return array_map(function ($stageBand) {
             $band = $stageBand->ref('bands', 'band_id');
             return (object)[
-                'time' => $stageBand->time,
+                'start_time' => $stageBand->start_time,
+                'end_time' => $stageBand->end_time,
                 'name' => $band->name,
                 'description' => $band->description,
                 'id' => $band->id
@@ -75,7 +76,8 @@ class BandsFacade
                 $band = $stageBand->ref('bands', 'band_id');
                 $result[] = (object)[
                     'stage_name' => $stage->name,
-                    'time' => $stageBand->time,
+                    'start_time' => $stageBand->start_time,
+                    'end_time' => $stageBand->end_time,
                     'band_name' => $band->name,
                     'band_description' => $band->description,
                     'band_id' => $band->id,
@@ -111,14 +113,11 @@ public function deleteBand(int $bandId): void
 
 public function editBand(int $bandId, int $stageId, array $values): void
 {
-    $bandData = [
-        'name' => $values['name']
-    ];
-    $this->database->table('bands')->get($bandId)->update($bandData);
-
     $stageBandData = [
-        'time' => $values['time']
+        'start_time' => $values['start_time'],
+        'end_time' => $values['end_time']
     ];
+
     $this->database->table('stage_bands')
         ->where('stage_id', $stageId)
         ->where('band_id', $bandId)
@@ -147,12 +146,17 @@ public function getFestivalsByBand(int $bandId): array
 }
 public function getPerformanceTimes(int $bandId, int $stageId): ?string
 {
-    $stageBand = $this->database->table('stage_bands')
+    $stageBands = $this->database->table('stage_bands')
         ->where('band_id', $bandId)
         ->where('stage_id', $stageId)
-        ->fetch();
+        ->fetchAll();
 
-    return $stageBand ? $stageBand->time : null;
+    if (!empty($stageBands)) {
+        $stageBand = reset($stageBands); // Získáme první záznam
+        return $stageBand->start_time . ' - ' . $stageBand->end_time;
+    }
+
+    return null;
 }
 public function getBandsList(): array
 {
@@ -160,12 +164,13 @@ public function getBandsList(): array
         ->select('id, name') 
         ->fetchAll(); 
 }
-    public function addBandToStage(int $bandId, int $stageId, string $time): void
+public function addBandToStage(int $bandId, int $stageId, array $values): void
 {
     $this->database->table('stage_bands')->insert([
         'band_id' => $bandId,
         'stage_id' => $stageId,
-        'time' => $time,
+        'start_time' => $values['start_time'],
+        'end_time' => $values['end_time'],
     ]);
 }
 }

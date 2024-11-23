@@ -68,7 +68,8 @@ class FestivalFacade
                    'id' => $bandInfo->id,
                    'name' => $bandInfo->name,
                    'description' => $bandInfo->description,
-                   'time' => $band->time,
+                   'start_time' => $band->start_time,
+                   'end_time' => $band->end_time,
                ];
            }
    
