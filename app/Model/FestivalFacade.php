@@ -19,40 +19,21 @@ class FestivalFacade
     {
         return $this->database->table('festivals')->fetchAll();
     }
-    public function getFestivalById(int $id): ?ActiveRow
-    {
+    public function getFestivalById(int $id){
         return $this->database->table('festivals')->get($id);
     }
  
-    public function addFestival(array $data): ActiveRow
+    public function addFestival(array $values): ActiveRow
     {
-        return $this->database->table('festivals')->insert($data);
+        return $this->database->table('festivals')->insert($values);
     }
-    public function getFestivalsWithImages(): array
-{
-    $festivals = $this->database->table('festivals');
-    $result = [];
-
-    foreach ($festivals as $festival) {
-        $result[] = [
-            'festival' => $festival,
-            'images' => $this->getFestivalImages($festival->id), // Použijeme existující metodu
-        ];
+    public function updateFestival($id, array $values): void
+    {
+    
+        $this->database->table('festivals')->where('id', $id)->update($values);
     }
 
-    return $result;
-}
-    public function addFestivalImage(int $festivalId, string $imagePath): void
-{
-    $this->database->table('festival_images')->insert([
-        'festival_id' => $festivalId,
-        'image_path' => $imagePath,
-    ]);
-}
-public function getFestivalImages(int $festivalId): Selection
-{
-    return $this->database->table('festival_images')->where('festival_id', $festivalId);
-}
+
 
     public function addStage(int $festivalId, string $name): void
     {

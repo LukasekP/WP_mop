@@ -17,4 +17,6 @@
 </table>
 <h2>Upravit uživatele</h2>
 {control editForm}
+ <img src="{$basePath}/{$u->image}" alt="Profilový obrázek" class="img-thumbnail" style="width: 150px; height: 150px;">
+    <a n:href="deleteImage! $u->id" class="btn btn-danger">Smazat obrázek</a>
 {/block}

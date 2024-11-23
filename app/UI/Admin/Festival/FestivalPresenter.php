@@ -23,15 +23,10 @@ class FestivalPresenter extends Nette\Application\UI\Presenter
 
     public function renderDetail(int $id): void
     {
-        // Získání festivalu
         $festival = $this->festivalFacade->getFestivalById($id);
     
-        // Získání obrázků pro tento festival
-        $images = $this->festivalFacade->getFestivalImages($id);
     
-        // Předání dat do šablony
         $this->template->festival = $festival;
-        $this->template->images = $images; // Předání obrázků jako samostatné proměnné
         $this->template->stages = $this->festivalFacade->getStagesWithBands($id);
         $this->template->bands = $this->BandsFacade->getBandsByFestivalWithTimes($id);
     }
@@ -57,64 +52,78 @@ class FestivalPresenter extends Nette\Application\UI\Presenter
     }
 
 
+    public function renderEditFestival($id): void
+    {
+        $festival = $this->festivalFacade->getFestivalById($id);
+    
+        $this->getComponent('addFestivalForm')
+            ->setDefaults($festival->toArray());
+    }
+ 
+
 
     protected function createComponentAddFestivalForm(): Form
     {
         $form = new Form;
     
-        // Název festivalu
         $form->addText('name', 'Název festivalu:')
             ->setRequired('Zadejte název festivalu')
             ->setHtmlAttribute('class', 'form-control');
     
-        // Popis festivalu
         $form->addTextArea('description', 'Popis festivalu:')
             ->setRequired('Zadejte popis festivalu')
             ->setHtmlAttribute('class', 'form-control');
+        
+            $form->addText('start_date', 'Od kdy:')
+            ->setRequired('Zadejte počáteční datum')
+            ->addRule($form::PATTERN, 'Zadejte platné datum ve formátu YYYY-MM-DD', '\d{4}-\d{2}-\d{2}')
+            ->setHtmlAttribute('type', 'date')
+            ->setHtmlAttribute('class', 'form-control');
     
-        // Cena vstupenky
+        $form->addText('end_date', 'Do kdy:')
+            ->setRequired('Zadejte koncové datum')
+            ->addRule($form::PATTERN, 'Zadejte platné datum ve formátu YYYY-MM-DD', '\d{4}-\d{2}-\d{2}')
+            ->setHtmlAttribute('type', 'date')
+            ->setHtmlAttribute('class', 'form-control');
+    
         $form->addText('price', 'Cena vstupenky:')
             ->setRequired('Zadejte cenu vstupenky')
             ->addRule($form::FLOAT, 'Cena musí být číslo')
             ->setHtmlAttribute('class', 'form-control');
     
-        // Obrázky festivalu
-        $form->addMultiUpload('images', 'Obrázky festivalu:')
-            ->setRequired('Vyberte alespoň jeden obrázek')
+        $form->addUpload('image', 'Obrázek k festivalu:')
+            
             ->setHtmlAttribute('class', 'form-control');
     
-        // Tlačítko odeslat
-        $form->addSubmit('submit', 'Přidat festival')
+        $form->addSubmit('submit', 'Odeslat')
             ->setHtmlAttribute('class', 'btn btn-primary mt-3');
     
-        $form->onSuccess[] = [$this, 'addFestivalSucceeded'];
+        $form->onSuccess[] = [$this, 'addFestivalFormSucceeded'];
         return $form;
     }
     
 
-    public function addFestivalSucceeded(Form $form, $values): void
+    public function addFestivalFormSucceeded(Form $form, \stdClass $values): void
     {
-        // Přidání festivalu
-        $festival = $this->festivalFacade->addFestival([
-            'name' => $values->name,
-            'description' => $values->description,
-            'price' => $values->price,
-        ]);
-        
-        // Pokud existují obrázky
-        if (!empty($values->images)) {
-            foreach ($values->images as $image) {
-                if ($image->isOk()) {
-                    $imagePath = 'uploads/' . $image->getSanitizedName();
-                    $image->move($imagePath);
+       $id = $this->getParameter('id');
     
-                    // Přidání obrázku do databáze
-                    $this->festivalFacade->addFestivalImage($festival->id, $imagePath);
-                }
+        if ($values->image->isOk()) {
+            $values->image->move("upload/" . $values->image->getSanitizedName());
+            $values->image = "upload/" . $values->image->getSanitizedName();
+        }  else {
+                $this->flashMessage("Obrázek nebyl přidán", "failed");
+                $this->redirect('this');
             }
+        
+    
+        if ($id) {
+            $this->festivalFacade->updateFestival($id,(array)$values);
+            $this->flashMessage('Festival byl úspěšně aktualizován.', 'success');
+        } else {
+            $this->festivalFacade->addFestival((array)$values);
+            $this->flashMessage('Festival byl úspěšně přidán.', 'success');
         }
     
-        $this->flashMessage('Festival byl přidán včetně obrázků.', 'success');
         $this->redirect('Dashboard:default');
     }
     

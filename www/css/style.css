@@ -48,25 +48,7 @@
     border-radius: 50%;
     object-fit: cover;
 }
-.festival {
-    background-color: #fff; 
-    border-radius: 8px; 
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
-    padding: 20px; 
-    margin-bottom: 20px; 
-    display: flex;
-    flex-direction: column;
-    align-items: center; 
-    max-width: 600px; 
-    margin-left: auto;
-    margin-right: auto;
-}
 
-.festival img {
-    max-width: 100%; 
-    border-radius: 8px; 
-    margin-top: 10px;
-}
 
 h2 {
     font-size: 1.8em;
@@ -87,47 +69,12 @@ p {
     margin-top: 15px;
 }
 
-.festival:hover {
-    transform: scale(1.02); 
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); 
-    transition: all 0.3s ease; 
-}
-.festival-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-}
 
-.festival-table th, .festival-table td {
-    padding: 12px;
-    border: 1px solid #ddd;
-    text-align: left;
-}
 
-.festival-table th {
-    background-color: #f4f4f4;
-    font-weight: bold;
-    text-transform: uppercase;
-}
 
-.festival-table tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
 
-.festival-table tr:hover {
-    background-color: #f1f1f1;
-}
 
-.festival-table a {
-    color: #007bff;
-    text-decoration: none;
-}
-
-.festival-table a:hover {
-    text-decoration: underline;
-}.detail_img{
+.detail_img{
     
         max-width: 100%; 
         
@@ -136,29 +83,15 @@ p {
         margin-top: 10px;
     
 }
-#suggestions {
-    border: 1px solid #ccc;
-    max-height: 150px;
-    overflow-y: auto;
-    background-color: #fff;
-    position: absolute;
-    z-index: 1000;
+
+.cards-container {
+    display: flex;
+    gap: 25px; /* Mezera mezi kartami */
 }
 
-#suggestions div {
-    padding: 8px;
-    cursor: pointer;
+.card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Přidá stín pro lepší vzhled */
+    border-radius: 8px; /* Zakulatí rohy */
+    overflow: hidden; /* Skryje obsah přesahující kartu */
 }
-
-#suggestions div:hover {
-    background-color: #f0f0f0;
-}
-.carousel-inner img {
-    width: 100%;
-    height: 600px; /* Nastavte požadovanou výšku */
-    object-fit: contain; /* Přizpůsobí obrázek tak, aby se vešel celý */
-    background-color: #c8b7b7; /* Přidá černé pozadí pro lepší viditelnost */
-}
-
-
 

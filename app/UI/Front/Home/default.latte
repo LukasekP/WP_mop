@@ -1,28 +1,24 @@
 {block content}
 <h1>Front page</h1>
 
-<div class="festivals">
-    {foreach $festivals as $item}
-                <a href="{link Detail:Detail, $item['festival']->id}" class="festival-link">
-
-        <div class="festival">
-            <h2>
-                    {$item['festival']->name}
-            </h2>
-
-            <p>{$item['festival']->description}</p>
-            <p>Cena vstupenky: {$item['festival']->price} Kč</p>
-
-            {if $item['images']->count() > 0}
-                <div class="festival-images">
-                    {foreach $item['images'] as $image}
-                        <img src="{$basePath}/{$image->image_path}" alt="Obrázek festivalu {$item['festival']->name}" class="festival-img">
-                    {/foreach}
-                </div>
-            {else}
-                <p>Žádné obrázky</p>
-            {/if}
-        </div></a>
+<div class="cards-container">
+    {foreach $festivals as $festival}
+        <div class="card" style="width: 18rem;">
+            <img src="{$basePath}/{$festival->image}" class="card-img-top" alt="{$festival->name}">
+            <div class="card-body">
+                <h5 class="card-title"><a n:href="Detail:detail , $festival->id">{$festival->name}</a></h5>
+                <p class="card-text">{$festival->description}</p>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">Od: {$festival->start_date}</li>
+                <li class="list-group-item">Do: {$festival->end_date}</li>
+                <li class="list-group-item"><p class="price">Cena: {$festival->price} Kč</p></li>
+            </ul>
+            <div class="card-body">
+                <a href="#" class="btn btn-primary">Koupit vstupenku</a>
+            </div>
+        </div>
     {/foreach}
+</div>
 
 {/block}

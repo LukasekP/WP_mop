@@ -25,7 +25,7 @@ final class UserPresenter extends Nette\Application\UI\Presenter
     public function renderDetail($id)
     {
         $user = $this->userFacade->getUserById($id); 
-
+        $this->template->u = $this->userFacade->getUserById($id);
         $this->template->userData = $this->userFacade->getUserById($id);
         $this->getComponent('editForm')
         ->setDefaults($user->toArray()); 

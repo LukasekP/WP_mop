@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 namespace App\UI\Admin\Dashboard;
+use Ublaboo\DataGrid\DataGrid;
 
 use App\UI\Accessory\RequireLoggedUser;
 use Nette;
@@ -25,13 +26,47 @@ final class DashboardPresenter extends Nette\Application\UI\Presenter
     {
         $this->template->festivals = $this->festivalFacade->getFestivals();
     }
-    public function handleDeleteFestival(int $festivalId): void
+   
+    public function createComponentGrid()
+	{
+        $grid = new DataGrid();
+
+        $grid->setDataSource($this->festivalFacade->getFestivals());
+
+        $grid->addColumnNumber('id', 'id')
+             ->setSortable();
+
+        $grid->addColumnText('name', 'Jméno');
+
+        $grid->addColumnText('description', 'Popisek');
+
+        $grid->addColumnText('start_date', 'Od kdy');
+
+        $grid->addColumnText('end_date', 'Do kdy');
+
+        $grid->addColumnText('price', 'Role')
+             ->setSortable();
+
+        $grid->addAction('edit', 'Edit', 'edit!')
+             ->setIcon('pencil-alt')
+             ->setClass('btn btn-xs btn-primary ajax');  
+
+        $grid->addAction('deleteFestival', 'Smazat', 'deleteFestival!')
+             ->setClass('btn btn-xs btn-danger ajax');
+             
+
+        return $grid;
+	}
+    public function handleDeleteFestival(int $id): void
     {
-        $this->festivalFacade->deleteFestival($festivalId);
+        $this->festivalFacade->deleteFestival($id);
         $this->flashMessage('Festival úspěšně smazán.', 'success');
         $this->redirect('this');
     }
-	
+    public function handleEdit($id)
+    {
+        $this->redirect('Festival:editFestival', $id);
+    }
 	// Incorporates methods to check user login status
 	use RequireLoggedUser;
 }
