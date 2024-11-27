@@ -53,7 +53,14 @@ final class SignPresenter extends Nette\Application\UI\Presenter
 				// Attempt to login user
 				$this->getUser()->login($data->username, $data->password);
 				$this->restoreRequest($this->backlink);
-				$this->redirect('Home:');
+				
+				if ($this->getUser()->isInRole('admin')) {
+					$this->redirect(':Admin:Dashboard:default');
+
+				} elseif ($this->getUser()->isInRole('user')) {
+					$this->redirect('Home:default');
+				}
+				
 			} catch (Nette\Security\AuthenticationException) {
 				$form->addError('Zadané uživatelské jméno nebo heslo je nesprávné.');
 			}

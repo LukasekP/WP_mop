@@ -9,26 +9,29 @@
 <p class="price">Cena: {$festival->price} Kč</p>
 <a href="#" class="btn btn-success">Koupit vstupenku</a>
 
-<table>
-    <thead>
-        <tr>
-            <th>Stage</th>
-            <th>Kapely</th>
-        </tr>
-    </thead>
-    <tbody>
-        {foreach $stages as $stage}
+<div class="table-responsive">
+    <table class="table table-bordered text-center">
+        <thead>
             <tr>
-                <td>{$stage->name}</td>
-                <td>
-                    <ul>
-                        {foreach $stage->bands as $band}
-                            <li>{$band->time} <b><a n:href="Band:band , $band->id">{$band->name}</a></b></li>
-                        {/foreach}
-                    </ul>
-                </td>
+                {foreach $stages as $stage}
+                    <th>{$stage->name}</th>
+                {/foreach}
             </tr>
-        {/foreach}
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            <tr>
+                {foreach $stages as $stage}
+                    <td>
+                        {foreach $stage->bands as $band}
+                            <div class="band-info">
+                                <span>{$band->start_time} - {$band->end_time}</span> 
+                                <b><a n:href="Band:band , $band->id">{$band->name}</a></b>
+                            </div>
+                        {/foreach}
+                    </td>
+                {/foreach}
+            </tr>
+        </tbody>
+    </table>
+</div>
 {/block}

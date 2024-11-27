@@ -1,5 +1,5 @@
 {block content}
-<a n:href="detail , $festival->id" class="btn btn-primary">Zpět na festival</a>
+<a n:href="Festival:detail , $festival->id" class="btn btn-primary">Zpět na festival</a>
 <h2>Přidat kapelu</h2>
 
 <a n:href="Bands:addBand , $festival->id, $stage->id" class="btn btn-primary">Přidat kapelu</a>
@@ -18,7 +18,7 @@
                 <td>{$band->start_time} - {$band->end_time}</td>
                 <td><b>{$band->name}</b></td>
                 <td>
-                    <a n:href="deleteBand! , $band->id" class="btn btn-danger btn-sm" onclick="return confirm('Opravdu chcete smazat tuto kapelu?')">Smazat</a>
+                    <a n:href="deleteBand! , $stage->id , $band->id" class="btn btn-danger btn-sm" onclick="return confirm('Opravdu chcete smazat tuto kapelu?')">Smazat</a>
                     <a n:href="Bands:editBand , $festival->id, $stage->id , $band->id " class="btn btn-primary btn-sm">Upravit</a>
                 </td>
             </tr>

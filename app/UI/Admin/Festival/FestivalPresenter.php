@@ -30,28 +30,6 @@ class FestivalPresenter extends Nette\Application\UI\Presenter
         $this->template->stages = $this->festivalFacade->getStagesWithBands($id);
         $this->template->bands = $this->BandsFacade->getBandsByFestivalWithTimes($id);
     }
-    
-    
-    
-    public function renderAddStage(int $festivalId): void
-    {
-        $festival = $this->festivalFacade->getFestivalById($festivalId);
-      
-        $this->template->festival = $festival;
-    }
-
-    public function renderEditStage(int $festivalId, int $stageId): void
-    {
-        $festival = $this->festivalFacade->getFestivalById($festivalId);
-        $stage = $this->festivalFacade->getStageById($stageId);
-
-        $this->template->stage = $stage;
-        $this->template->bands = $this->festivalFacade->getBandsByStage($stageId);
-        $this->template->bands = $this->BandsFacade->getBandsByStageWithTimes($stageId);
-        $this->template->festival = $festival;
-    }
-
-
     public function renderEditFestival($id): void
     {
         $festival = $this->festivalFacade->getFestivalById($id);
@@ -127,31 +105,9 @@ class FestivalPresenter extends Nette\Application\UI\Presenter
         $this->redirect('Dashboard:default');
     }
     
-
-    protected function createComponentAddStageForm(): Form
+    public function handleDeleteBand(int $stageId, int $bandId): void
     {
-        $form = new Form;
-        $form->addText('name', 'Název stage:')
-            ->setRequired('Prosím, zadejte název stage.');
-        $form->addHidden('festival_id', $this->getParameter('festivalId'));
-        $form->addSubmit('submit', 'Přidat stage');
-        $form->onSuccess[] = [$this, 'addStageFormSucceeded'];
-        return $form;
-    }
-
-    public function addStageFormSucceeded(Form $form, \stdClass $values): void
-    {
-        $this->festivalFacade->addStage($values->festival_id, $values->name);
-        $this->flashMessage('Stage byla úspěšně přidána.', 'success');
-        $this->redirect('detail', $values->festival_id);
-    }
-
-   
-
-
-    public function handleDeleteBand(int $bandId): void
-    {
-        $this->festivalFacade->deleteBand($bandId);
+        $this->BandsFacade->deleteBand($stageId, $bandId);
         $this->flashMessage('Kapela byla úspěšně smazána.', 'success');
         $this->redirect('this');
     }

@@ -1,9 +1,11 @@
 {block content}
 <h1>Front page</h1>
-
+<div class="d-flex overflow-auto">
 <div class="cards-container">
     {foreach $festivals as $festival}
-        <div class="card" style="width: 18rem;">
+       <div class="p-3 border bg-light mx-2">    
+
+       <div class="card" style="width: 18rem;">
             <img src="{$basePath}/{$festival->image}" class="card-img-top" alt="{$festival->name}">
             <div class="card-body">
                 <h5 class="card-title"><a n:href="Detail:detail , $festival->id">{$festival->name}</a></h5>
@@ -18,7 +20,8 @@
                 <a href="#" class="btn btn-primary">Koupit vstupenku</a>
             </div>
         </div>
+        </div>
     {/foreach}
 </div>
-
+</div>
 {/block}

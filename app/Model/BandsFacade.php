@@ -97,31 +97,26 @@ class BandsFacade
         ->fetch();
 }
 
-public function updateStageBand(int $stageId, int $bandId, array $data): void
+
+public function deleteBand($stageId, $bandId): void
 {
     $this->database->table('stage_bands')
         ->where('stage_id', $stageId)
         ->where('band_id', $bandId)
-        ->update($data);
-}
-public function deleteBand(int $bandId): void
-{
-    $this->database->table('stage_bands')->where('band_id', $bandId)->delete();
+        ->delete();
 
-    $this->database->table('bands')->where('id', $bandId)->delete();
 }
 
-public function editBand(int $bandId, int $stageId, array $values): void
+public function editBand(int $stageId, int $originalBandId, array $data): void
 {
-    $stageBandData = [
-        'start_time' => $values['start_time'],
-        'end_time' => $values['end_time']
-    ];
-
     $this->database->table('stage_bands')
         ->where('stage_id', $stageId)
-        ->where('band_id', $bandId)
-        ->update($stageBandData);
+        ->where('band_id', $originalBandId)
+        ->update([
+            'band_id' => $data['band'],
+            'start_time' => $data['start_time'],
+            'end_time' => $data['end_time'],
+        ]);
 }
 
 
