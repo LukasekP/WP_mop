@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\UI\Front\Sign;
 
+use App\MailSender\MailSender;
+use Latte\Engine;
+
 use App\Model\DuplicateNameException;
 use App\Model\UserFacade;
 use App\UI\Accessory\FormFactory;
@@ -28,9 +31,9 @@ final class SignPresenter extends Nette\Application\UI\Presenter
 	public function __construct(
 		private UserFacade $userFacade,
 		private FormFactory $formFactory,
+		private MailSender $mailSender,
 	) {
 	}
-
 
 	/**
 	 * Create a sign-in form with fields for username and password.
@@ -97,23 +100,10 @@ final class SignPresenter extends Nette\Application\UI\Presenter
 		$form->addText('phone', 'Telefonní číslo:')
 			->setRequired('Prosím, zadejte telefonní číslo.');
 
-		$form->addText('birthdate_day', 'Datum narození:')
-			->setRequired('Prosím, zadejte den narození.')
-			->addRule($form::INTEGER, 'Den musí být číslo.')
-			->addRule($form::RANGE, 'Den musí být v rozmezí 1 až 31.', [1, 31])
-			->setHtmlAttribute('placeholder', 'Den');
-		
-		$form->addText('birthdate_month', '')
-			->setRequired('Prosím, zadejte měsíc narození.')
-			->addRule($form::INTEGER, 'Měsíc musí být číslo.')
-			->addRule($form::RANGE, 'Měsíc musí být v rozmezí 1 až 12.', [1, 12])
-			->setHtmlAttribute('placeholder', 'Měsíc');
-		
-		$form->addText('birthdate_year', '')
+		$form->addText('birthdate', 'Rok narození:')
 			->setRequired('Prosím, zadejte rok narození.')
-			->addRule($form::INTEGER, 'Rok musí být číslo.')
-			->addRule($form::RANGE, 'Rok musí být v rozmezí 1900 až ' . date('Y') . '.', [1900, date('Y')])
-			->setHtmlAttribute('placeholder', 'Rok');
+            ->setHtmlAttribute('type', 'date');
+
 
 		$form->addText('address', 'Adresa (ulice a číslo popisné):')
 			->setRequired('Prosím, zadejte adresu.');
@@ -123,13 +113,19 @@ final class SignPresenter extends Nette\Application\UI\Presenter
 	
 
 		$form->addSubmit('send', 'Sign up');
-
+			
+		
 		// Handle form submission
 		$form->onSuccess[] = function (Form $form, \stdClass $data): void {
+			$mail = $this->mailSender->createNotificationEmail("Lukáš", "Pražák");
 			try {
 				// Attempt to register a new user
-				$this->userFacade->add($data->username, $data->firstname, $data->lastname, $data->email, $data->password, $data->phone, $data->birthdate_day, $data->birthdate_month, $data->birthdate_year, $data->address, $data->city);
-				$this->redirect('Home:');
+				$this->userFacade->add($data->username, $data->firstname, $data->lastname, $data->email, $data->password, $data->phone, $data->birthdate, $data->address, $data->city);
+				
+				$this->mailSender->sendEmail($mail);
+				$this->flashMessage('Registrace byla úspěšná. Na váš e-mail byla odeslána potvrzovací zpráva.', 'success');
+        		$this->redirect('Sign:in');
+				
 			} catch (DuplicateNameException) {
 				// Handle the case where the username is already taken
 				$form['username']->addError('Uživatelské jméno je zabrané.');

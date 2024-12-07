@@ -119,9 +119,9 @@ public function updateUserImage($userId, $imagePath)
 	 * Add a new user to the database.
 	 * Throws a DuplicateNameException if the username is already taken.
 	 */
-	public function add(string $username, string $firstname, string $lastname, string $email, string $password, string $phone, int $birthdate_day,int $birthdate_month, int $birthdate_year, string $address, string $city): void 
+	public function add(string $username, string $firstname, string $lastname, string $email, string $password, string $phone, string $birthdate, string $address, string $city): void 
 		
-	{$birthdate = sprintf('%04d-%02d-%02d', $birthdate_year, $birthdate_month, $birthdate_day);
+	{
 		// Validate the email format
 		Nette\Utils\Validators::assert($email, 'email');
 
@@ -137,12 +137,12 @@ public function updateUserImage($userId, $imagePath)
         		self::ColumnBirthdate => $birthdate,
         		self::ColumnAddress => $address,
         		self::ColumnCity => $city,
+				
 			]);
 		} catch (Nette\Database\UniqueConstraintViolationException $e) {
 			throw new DuplicateNameException;
-		}
+		} 
 	}
-
 }
 
 /**

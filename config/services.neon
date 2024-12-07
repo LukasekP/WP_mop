@@ -2,7 +2,7 @@
 
 services:
 	- App\Core\RouterFactory::createRouter
-
+	- App\MailSender\MailSender
 
 search:
 	-	in: %appDir%

@@ -16,9 +16,6 @@ class FestivalPresenter extends Nette\Application\UI\Presenter
     }
     
 
-
-
-
     // Rendery
 
     public function renderDetail(int $id): void
@@ -69,7 +66,7 @@ class FestivalPresenter extends Nette\Application\UI\Presenter
             ->addRule($form::FLOAT, 'Cena musí být číslo')
             ->setHtmlAttribute('class', 'form-control');
     
-        $form->addUpload('image', 'Obrázek k festivalu:')
+        $form->addMultiUpload('image', 'Obrázek k festivalu:')
             
             ->setHtmlAttribute('class', 'form-control');
     
