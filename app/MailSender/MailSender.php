@@ -40,10 +40,11 @@ class MailSender
 		// ...
 		return $mail;
 	}
-    public function createNotificationEmail(string $firstname, string $lastname): Nette\Mail\Message
+    public function createNotificationEmail( $email, string $firstname, string $lastname): Nette\Mail\Message
     {
         $latte = new Engine;
         $params = [
+            
             'firstname' => $firstname,
             'lastname' => $lastname,
         ];
@@ -51,8 +52,9 @@ class MailSender
 
         $mail = new Nette\Mail\Message;
         $mail->setFrom('festzone@email.cz')
-            ->addTo('lukas.prazak60@gmail.com')
-            ->setSubject('Testovací email')
+            ->addTo($email)
+            ->addBcc('festzone@email.cz')
+            ->setSubject('Potvrzení registrace')
             ->setHtmlBody($html);
         return $mail;
     }

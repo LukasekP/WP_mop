@@ -117,8 +117,9 @@ final class SignPresenter extends Nette\Application\UI\Presenter
 		
 		// Handle form submission
 		$form->onSuccess[] = function (Form $form, \stdClass $data): void {
-			$mail = $this->mailSender->createNotificationEmail("Lukáš", "Pražák");
+		$mail = $this->mailSender->createNotificationEmail($data->email, $data->firstname, $data->lastname);
 			try {
+				
 				// Attempt to register a new user
 				$this->userFacade->add($data->username, $data->firstname, $data->lastname, $data->email, $data->password, $data->phone, $data->birthdate, $data->address, $data->city);
 				
