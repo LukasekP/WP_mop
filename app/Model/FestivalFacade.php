@@ -115,7 +115,13 @@ class FestivalFacade
             ->where('festival_id', $festivalId)
             ->fetchAll(); 
     }
-  
+    public function addImage($festivalId, $imagePath)
+    {
+        $this->database->table('festival_images')->insert([
+            'festival_id' => $festivalId,
+            'file_path' => $imagePath,
+        ]);
+    }
     
  
 }

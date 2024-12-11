@@ -34,11 +34,13 @@ class FestivalPresenter extends Nette\Application\UI\Presenter
         $this->getComponent('addFestivalForm')
             ->setDefaults($festival->toArray());
     }
- 
+    public function renderMainImage(){
+        
+    }
 
 
     protected function createComponentAddFestivalForm(): Form
-    {
+    {   
         $form = new Form;
     
         $form->addText('name', 'Název festivalu:')
@@ -66,7 +68,7 @@ class FestivalPresenter extends Nette\Application\UI\Presenter
             ->addRule($form::FLOAT, 'Cena musí být číslo')
             ->setHtmlAttribute('class', 'form-control');
     
-        $form->addMultiUpload('image', 'Obrázek k festivalu:')
+        $form->addMultiUpload('images', 'Obrázek k festivalu:')
             
             ->setHtmlAttribute('class', 'form-control');
     
@@ -80,23 +82,37 @@ class FestivalPresenter extends Nette\Application\UI\Presenter
 
     public function addFestivalFormSucceeded(Form $form, \stdClass $values): void
     {
-       $id = $this->getParameter('id');
-    
-        if ($values->image->isOk()) {
-            $values->image->move("upload/" . $values->image->getSanitizedName());
-            $values->image = "upload/" . $values->image->getSanitizedName();
-        }  else {
-                $this->flashMessage("Obrázek nebyl přidán", "failed");
-                $this->redirect('this');
-            }
-        
+        $id = $this->getParameter('id');
     
         if ($id) {
-            $this->festivalFacade->updateFestival($id,(array)$values);
+            $this->festivalFacade->updateFestival($id, (array)$values);
             $this->flashMessage('Festival byl úspěšně aktualizován.', 'success');
+            $festivalId = $id;
         } else {
-            $this->festivalFacade->addFestival((array)$values);
+            // Odstranění obrázků z $values
+            $images = $values->images;
+            unset($values->images);
+    
+            // Uložení základních informací o festivalu a získání ID
+            $festivalId = $this->festivalFacade->addFestival((array)$values);
             $this->flashMessage('Festival byl úspěšně přidán.', 'success');
+        }
+    
+        // Uložení obrázků s nově získaným festivalId
+        if (!empty($images)) {
+            foreach ($images as $image) {
+                if ($image->isOk()) {
+                    $image->move("upload/" . $image->getSanitizedName());
+                    $imagePath = "upload/" . $image->getSanitizedName();
+                    
+                    // Uložení cesty k obrázku do databáze
+                    $this->festivalFacade->addImage($festivalId, $imagePath);
+                } else {
+                    $this->flashMessage("Obrázek {$image->getName()} nebyl přidán", "failed");
+                }
+            }
+        } else {
+            $this->flashMessage("Žádné obrázky nebyly nahrány", "failed");
         }
     
         $this->redirect('Dashboard:default');
@@ -110,4 +126,4 @@ class FestivalPresenter extends Nette\Application\UI\Presenter
     }
 
 }
-    
+?>
