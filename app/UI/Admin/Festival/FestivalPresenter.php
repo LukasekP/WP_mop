@@ -4,6 +4,7 @@ namespace App\UI\Admin\Festival;
 use Nette\Application\UI\Form;
 use App\Model\FestivalFacade;
 use App\Model\BandsFacade;
+use Tracy\Debugger;
 
 use Nette;
 class FestivalPresenter extends Nette\Application\UI\Presenter
@@ -34,9 +35,16 @@ class FestivalPresenter extends Nette\Application\UI\Presenter
         $this->getComponent('addFestivalForm')
             ->setDefaults($festival->toArray());
     }
-    public function renderMainImage(){
-        
-    }
+    public function renderMainImage(int $id): void
+{
+    $festivalImages = $this->festivalFacade->getFestivalImages($id);
+
+    Debugger::log("Festival Images: " . json_encode($festivalImages->fetchAll()), 'info');
+    Debugger::log("Festival ID: $id", 'info');
+
+    $this->template->images = $festivalImages;
+    $this->template->festivalId = $id;
+}
 
 
     protected function createComponentAddFestivalForm(): Form
@@ -44,6 +52,7 @@ class FestivalPresenter extends Nette\Application\UI\Presenter
         $form = new Form;
     
         $form->addText('name', 'Název festivalu:')
+            ->setHtmlAttribute('autocomplete', 'off')
             ->setRequired('Zadejte název festivalu')
             ->setHtmlAttribute('class', 'form-control');
     
@@ -64,6 +73,7 @@ class FestivalPresenter extends Nette\Application\UI\Presenter
             ->setHtmlAttribute('class', 'form-control');
     
         $form->addText('price', 'Cena vstupenky:')
+            ->setHtmlAttribute('autocomplete', 'off')
             ->setRequired('Zadejte cenu vstupenky')
             ->addRule($form::FLOAT, 'Cena musí být číslo')
             ->setHtmlAttribute('class', 'form-control');
@@ -115,7 +125,7 @@ class FestivalPresenter extends Nette\Application\UI\Presenter
             $this->flashMessage("Žádné obrázky nebyly nahrány", "failed");
         }
     
-        $this->redirect('Dashboard:default');
+        $this->redirect('Festival:mainImage', $festivalId->id);
     }
     
     public function handleDeleteBand(int $stageId, int $bandId): void
@@ -125,5 +135,42 @@ class FestivalPresenter extends Nette\Application\UI\Presenter
         $this->redirect('this');
     }
 
+
+    protected function createComponentSetMainImageForm(): Form 
+    {
+        $form = new Form;
+    
+        $festivalId = $this->getParameter('id');
+        $images = $this->festivalFacade->getFestivalImages($festivalId);
+    
+        // Naplňte radio list ID obrázků a jejich cesty
+        $imageOptions = [];
+        foreach ($images as $image) {
+            $imageOptions[$image->id] = $image->file_path; // Nebo jiný popis obrázku
+        }
+    
+        $form->addHidden('festivalId', $festivalId)
+            ->setRequired();
+    
+        $form->addRadioList('mainImage', 'Hlavní obrázek', $imageOptions)
+            ->setRequired('Vyberte hlavní obrázek');
+    
+        $form->addSubmit('submit', 'Uložit')
+            ->setHtmlAttribute('class', 'btn btn-primary mt-3');
+    
+        $form->onSuccess[] = [$this, 'setMainImageFormSucceeded'];
+        return $form;
+    }
+
+    public function setMainImageFormSucceeded(Form $form, \stdClass $values): void
+    {
+        $festivalId = $values->festivalId;
+        $mainImageId = $values->mainImage;
+    
+        $this->festivalFacade->setMainImage($festivalId, $mainImageId);
+    
+        $this->flashMessage('Hlavní obrázek byl nastaven.', 'success');
+        $this->redirect('Dashboard:default');
+    }
 }
 ?>

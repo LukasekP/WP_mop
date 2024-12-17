@@ -1,5 +1,19 @@
 {block content}
-<h1>Thumbnail na domovskou stránku</h1>
+<h2>Thumbnail na domovskou stránku</h2>
 
+<div>
+    {form setMainImageForm}
+        <div class="images">
+            <div n:foreach="$images as $image">
+                <label>
+                    <input n:name="mainImage" type="radio" value="{$image->id}">
+                    <input type="hidden" name="festivalId" value="{$festivalId}">
 
+                    <img src="{$basePath}/{$image->file_path}" alt="{$image->file_path}" style="max-width: 200px;">
+                </label>
+            </div>
+        </div>
+        <button n:name="submit" >Uložit</button>
+    {/form}
+</div>
 {/block}

@@ -4,6 +4,7 @@ namespace App\Model;
 use Nette\Database\Context;
 use Nette\Database\Table\Selection;
 use Nette\Database\Table\ActiveRow;
+use Tracy\Debugger;
 
 
 class FestivalFacade
@@ -122,6 +123,23 @@ class FestivalFacade
             'file_path' => $imagePath,
         ]);
     }
+
+    public function setMainImage(int $festivalId, int $imageId): void
+    {
+        Debugger::log("Setting main image for festival $festivalId to image $imageId", 'info');
+
+        $this->database->table('festival_images')
+            ->where('festival_id', $festivalId)
+            ->update(['is_main' => 0]); // Zruší hlavní označení u všech obrázků daného festivalu
     
+        $this->database->table('festival_images')
+            ->where('id', $imageId)
+            ->update(['is_main' => 1]); // Nastaví nový hlavní obrázek
+    }
+
+    public function getFestivalImages(int $festivalId): Selection
+    {
+    return $this->database->table('festival_images')->where('festival_id', $festivalId);
+    }
  
 }
