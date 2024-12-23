@@ -6,7 +6,7 @@
 <ul>
     {foreach $performances as $performance}
         <li>{$performance['stage']} na festivalu 
-            <a href="{link 'Detail:detail', $performance['festival_id']}">{$performance['festival_name']}</a> v {$performance['time']}</li>
+            <a href="{link 'Detail:default', $performance['festival_id']}">{$performance['festival_name']}</a> v {$performance['time']}</li>
     {/foreach}
 </ul>
 {/block}

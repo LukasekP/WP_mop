@@ -138,8 +138,37 @@ class FestivalFacade
     }
 
     public function getFestivalImages(int $festivalId): Selection
-    {
-    return $this->database->table('festival_images')->where('festival_id', $festivalId);
+{
+    return $this->database->table('festival_images')
+        ->where('festival_id', $festivalId);
+}
+    public function getFestivalsWithMainImage(): array
+{
+    $festivals = $this->database->table('festivals');
+    $result = [];
+
+    foreach ($festivals as $festival) {
+        // Najít hlavní obrázek pro tento festival
+        $mainImage = $festival->related('festival_images')
+            ->where('is_main', 1)
+            ->fetch();
+
+        // Přidat data do výsledného pole
+        $result[] = [
+            'id' => $festival->id,
+            'name' => $festival->name,
+            'description' => $festival->description,
+            'price' => $festival->price,
+            'start_date' => $festival->start_date,
+            'end_date' => $festival->end_date,
+            'main_image' => $mainImage ? $mainImage->file_path : 'no_image.jpg', // Výchozí obrázek
+        ];
     }
- 
+
+    return $result;
+}
+
+    
+    
+
 }

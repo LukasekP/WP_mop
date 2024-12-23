@@ -2,28 +2,24 @@
 <h1>Front page</h1>
 <div class="d-flex overflow-auto">
 <div class="cards-container">
-<a n:href="sendEmail!">Poslat email</a>
 
-    {foreach $festivals as $festival}
-       <div class="p-3 border bg-light mx-2">    
-
-       <div class="card" style="width: 18rem;">
-            <img src="{$basePath}/{$festival->image}" class="card-img-top" alt="{$festival->name}">
-            <div class="card-body">
-                <h5 class="card-title"><a n:href="Detail:detail , $festival->id">{$festival->name}</a></h5>
-                <p class="card-text">{$festival->description}</p>
-            </div>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">Od: {$festival->start_date}</li>
-                <li class="list-group-item">Do: {$festival->end_date}</li>
-                <li class="list-group-item"><p class="price">Cena: {$festival->price} Kč</p></li>
-            </ul>
-            <div class="card-body">
-                <a href="#" class="btn btn-primary">Koupit vstupenku</a>
-            </div>
+  {foreach $festivals as $festival}
+    <div class="card" style="width: 18rem;">
+    <img src="{$basePath}/{$festival['main_image']}" alt="Main image of {$festival['name']}">
+        <div class="card-body">
+            <h5 class="card-title"><a n:href="Detail:default , $festival['id']">{$festival['name']}</a></h5>
+            <p class="card-text">{$festival['description']}</p>
         </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">Od: {$festival['start_date']}</li>
+            <li class="list-group-item">Do: {$festival['end_date']}</li>
+            <li class="list-group-item"><p class="price">Cena: {$festival['price']} Kč</p></li>
+        </ul>
+        <div class="card-body">
+            <a href="#" class="btn btn-primary">Koupit vstupenku</a>
         </div>
-    {/foreach}
+    </div>
+{/foreach}
 </div>
 </div>
 {/block}

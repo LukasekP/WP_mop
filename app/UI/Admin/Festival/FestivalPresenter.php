@@ -22,8 +22,9 @@ class FestivalPresenter extends Nette\Application\UI\Presenter
     public function renderDetail(int $id): void
     {
         $festival = $this->festivalFacade->getFestivalById($id);
-    
-    
+        $images = $this->festivalFacade->getFestivalImages($id);
+
+        $this->template->images = $images;
         $this->template->festival = $festival;
         $this->template->stages = $this->festivalFacade->getStagesWithBands($id);
         $this->template->bands = $this->BandsFacade->getBandsByFestivalWithTimes($id);

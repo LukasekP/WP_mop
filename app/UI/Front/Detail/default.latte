@@ -1,0 +1,64 @@
+{block content}
+<div class="container my-5 p-4" style="background-color: #f9f9f9; border-radius: 10px;">
+    <h1 class="text-center mb-4" style="color: #2c3e50;">{$festival->name}</h1>
+    <p class="text-center" style="color: #34495e; font-size: 1.2em;">{$festival->description}</p>
+
+    <!-- Carousel -->
+<div id="festivalCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
+    
+    <!-- Obrázky Carouselu -->
+<div class="carousel-inner">
+        {var $first = true}
+
+         {foreach $images as $image}
+            <div class="carousel-item{if $first} active{/if}">
+                <img src="{$basePath}/{$image->file_path}" class="d-block w-100 festival-img" alt="Obrázek festivalu {$festival->name}">
+                {var $first = false}
+            </div>
+        {/foreach}
+</div>
+
+    <!-- Ovládací tlačítka -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#festivalCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Předchozí</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#festivalCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Další</span>
+    </button>
+</div>
+
+    <p class="text-center price" style="color: #e74c3c; font-size: 1.5em; font-weight: bold;">Cena: {$festival->price} Kč</p>
+    <div class="text-center mb-4">
+        <a href="#" class="btn btn-success btn-lg">Koupit vstupenku</a>
+    </div>
+
+    <!-- Stages Table -->
+    <div class="table-responsive">
+        <table class="table table-bordered text-center">
+            <thead>
+                <tr class="table-primary">
+                    {foreach $stages as $stage}
+                        <th>{$stage->name}</th>
+                    {/foreach}
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    {foreach $stages as $stage}
+                        <td>
+                            {foreach $stage->bands as $band}
+                                <div class="band-info">
+                                    <span>{$band->start_time} - {$band->end_time}</span>
+                                    <b><a n:href="Band:default , $band->id" style="color: #2980b9;">{$band->name}</a></b>
+                                </div>
+                            {/foreach}
+                        </td>
+                    {/foreach}
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{/block}

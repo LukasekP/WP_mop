@@ -16,12 +16,17 @@ class DetailPresenter extends Nette\Application\UI\Presenter
 
     
 
-    public function renderDetail(int $id): void
-    {
-        $festival = $this->festivalFacade->getFestivalById($id);
+    public function renderDefault(int $id): void
+{
+    $festival = $this->festivalFacade->getFestivalById($id);
+    $images = $this->festivalFacade->getFestivalImages($id);
+
     
-        $this->template->festival = $festival;
-        $this->template->stages = $this->festivalFacade->getStagesWithBands($id);
-    }
+    $this->template->festival = $festival;
+    $this->template->images = $images;
+    $this->template->stages = $this->festivalFacade->getStagesWithBands($id);
+}
+
+    
     
 }

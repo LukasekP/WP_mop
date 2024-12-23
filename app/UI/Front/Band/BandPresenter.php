@@ -13,7 +13,7 @@ class BandPresenter extends Nette\Application\UI\Presenter
         $this->bandsFacade = $bandsFacade;
         $this->festivalFacade = $festivalFacade;
     }
-    public function renderBand(int $bandId): void
+    public function renderDefault(int $bandId): void
     {
         // Fetch band details and associated festivals
         $band = $this->bandsFacade->getBandById($bandId);
