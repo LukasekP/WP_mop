@@ -99,7 +99,7 @@ class BandsPresenter extends Nette\Application\UI\Presenter
   
             $this->bandsFacade->addBandToStage($bandId, $stageId, (array)$values);
             $this->flashMessage('Kapela byla úspěšně přidána.', 'success');
-            $this->redirect('Festival:editStage', $festivalId, $stageId);
+            $this->redirect('Stage:editStage', $festivalId, $stageId);
         }
 
 
@@ -138,7 +138,7 @@ class BandsPresenter extends Nette\Application\UI\Presenter
             ]);
 
             $this->flashMessage('Kapela byla úspěšně upravena.', 'success');
-            $this->redirect('Festival:editStage', $festivalId, $stageId);
+            $this->redirect('Stage:editStage', $festivalId, $stageId);
         }
 
 

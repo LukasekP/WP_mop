@@ -33,13 +33,22 @@
 </div>    
 
 
+
 <div class="table-responsive">
     <table class="table table-bordered text-center">
         <thead>
             <tr>
                 {foreach $stages as $stage}
-                    
-                        <th><a href="{link 'Stage:editStage', $festival->id, $stage->id}">{$stage->name}</a></th>
+                    <th>
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton-{$stage->id}" data-bs-toggle="dropdown" aria-expanded="false">
+                            {$stage->name}
+                        </button>
+                        <ul class="dropdown-menu dropup" aria-labelledby="dropdownMenuButton-{$stage->id}">
+                            <li><a class="dropdown-item" href="{link 'Stage:editStage', $festival->id, $stage->id}">Přidat kapely</a></li>
+                            <li><a class="dropdown-item" href="{link Stage:edit}">Editovat</a></li>
+                            <li><a class="dropdown-item" href="{}">Smazat</a></li>
+                        </ul>
+                    </th>
                 {/foreach}
             </tr>
         </thead>
@@ -50,7 +59,7 @@
                         {foreach $stage->bands as $band}
                             <div class="band-info">
                                 <span>{$band->start_time} - {$band->end_time}</span> 
-                                <b><a n:href=":Front:Band:band , $band->id">{$band->name}</a></b>
+                                <b><a n:href=":Front:Band:default , $band->id">{$band->name}</a></b>
                             </div>
                         {/foreach}
                     </td>
@@ -59,6 +68,8 @@
         </tbody>
     </table>
 </div>
+
+
 
 
 {/block}

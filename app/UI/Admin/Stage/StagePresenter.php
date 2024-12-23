@@ -47,7 +47,7 @@ class StagePresenter extends Nette\Application\UI\Presenter
     {
         $this->festivalFacade->addStage($values->festival_id, $values->name);
         $this->flashMessage('Stage byla úspěšně přidána.', 'success');
-        $this->redirect('detail', $values->festival_id);
+        $this->redirect('Festival:detail', $values->festival_id);
     }
 
     public function handleDeleteBand(int $stageId, int $bandId): void
