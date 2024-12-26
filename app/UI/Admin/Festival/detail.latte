@@ -1,7 +1,7 @@
 {block content}
 <h1>{$festival->name}</h1>
 
-<p>{$festival->description}</p>
+
 <p class="price">Cena: {$festival->price} Kč</p>
 <div><a href="{link 'Stage:addStage', $festival->id}" class="btn btn-primary">Přidat stage</a></div>
 
@@ -32,6 +32,7 @@
     </button>
 </div>    
 
+<div>{$festival->description|noescape}</div>
 
 
 <div class="table-responsive">

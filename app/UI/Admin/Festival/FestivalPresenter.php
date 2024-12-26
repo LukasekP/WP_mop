@@ -32,7 +32,8 @@ class FestivalPresenter extends Nette\Application\UI\Presenter
     public function renderEditFestival($id): void
     {
         $festival = $this->festivalFacade->getFestivalById($id);
-    
+        
+        $this->template->festival = $festival;
         $this->getComponent('addFestivalForm')
             ->setDefaults($festival->toArray());
     }

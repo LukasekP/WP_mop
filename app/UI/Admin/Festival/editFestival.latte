@@ -1,5 +1,78 @@
 {block content}
+<h1>Přidat festival</h1>
 
+<!-- Vložení Quill stylů a skriptů -->
+<link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
+<script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
 
-{control addFestivalForm}
+<!-- Formulář -->
+<form n:name="addFestivalForm" method="post" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label for="name" class="form-label">Název festivalu:</label>
+        <input type="text" name="name" class="form-control" value="{$festival->name}">
+    </div>
+
+<div class="mb-3">
+    <label for="description" class="form-label">Popis festivalu:</label>
+    <!-- Quill kontejner -->
+    <div id="toolbar">
+        <button class="ql-bold"></button>
+        <button class="ql-italic"></button>
+        <button class="ql-underline"></button>
+        <select class="ql-header">
+            <option selected></option>
+            <option value="1">Nadpis 1</option>
+            <option value="2">Nadpis 2</option>
+        </select>
+    </div>
+    <div id="editor-container" style="height: 200px; border: 1px solid #ccc;"></div>
+    <!-- Skrytý input pro uložení obsahu Quill -->
+    <textarea id="description" name="description" style="visibility: hidden; height: 0;">{$festival->description}</textarea>
+</div>
+
+    <!-- Další pole -->
+    <div class="mb-3">
+        <label for="start_date" class="form-label">Od kdy:</label>
+        <input type="date" name="start_date" class="form-control" required value="{$festival->start_date}">
+    </div>
+
+    <div class="mb-3">
+        <label for="end_date" class="form-label">Do kdy:</label>
+        <input type="date" name="end_date" class="form-control" required value="{$festival->end_date}">
+    </div>
+
+    <div class="mb-3">
+        <label for="price" class="form-label">Cena vstupenky:</label>
+        <input type="text" name="price" class="form-control" required autocomplete="off" value="{$festival->price}">
+    </div>
+
+    <div class="mb-3">
+        <label for="images" class="form-label">Obrázek k festivalu:</label>
+        <input type="file" name="images[]" class="form-control" multiple>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Odeslat</button>
+</form>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var quill = new Quill('#editor-container', {
+            theme: 'snow', // Styl editoru
+            modules: {
+                toolbar: '#toolbar' // Nástroje
+            }
+        });
+
+        // Předvyplnění editoru Quill s HTML obsahem
+        var description = `{$festival->description|escapeJs}`;
+        quill.clipboard.dangerouslyPasteHTML(description.replace(/\\\//g, '/'));
+
+        // Synchronizace obsahu Quill s textarea při odeslání formuláře
+        document.querySelector('form').addEventListener('submit', function (e) {
+            // Najde textarea a vloží do ní obsah z Quill editoru
+            const descriptionInput = document.getElementById('description');
+            descriptionInput.value = quill.root.innerHTML;
+        });
+    });
+</script>
 {/block}

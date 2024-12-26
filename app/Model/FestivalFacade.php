@@ -20,9 +20,14 @@ class FestivalFacade
     {
         return $this->database->table('festivals')->fetchAll();
     }
-    public function getFestivalById(int $id){
-        return $this->database->table('festivals')->get($id);
-    }
+    public function getFestivalById(int $id)
+{
+    $festival = $this->database->table('festivals')->get($id);
+
+   
+
+    return $festival;
+}
  
     public function addFestival(array $values): ActiveRow
     {
