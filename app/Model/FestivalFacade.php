@@ -172,8 +172,34 @@ class FestivalFacade
 
     return $result;
 }
+public function deleteImage(int $imageId): void
+{
+    // Zjistíme, zda je obrázek hlavní
+    $image = $this->database->table('festival_images')
+        ->get($imageId);
 
-    
-    
+    if ($image && $image->is_main) {
+        // Smažeme obrázek
+        $this->database->table('festival_images')
+            ->where('id', $imageId)
+            ->delete();
+
+        // Najdeme náhodný obrázek spojený s festivalem
+        $randomImage = $this->database->table('festival_images')
+            ->where('festival_id', $image->festival_id)
+            ->order('RAND()')
+            ->fetch();
+
+        // Pokud existuje náhodný obrázek, nastavíme ho jako hlavní
+        if ($randomImage) {
+            $this->setMainImage($image->festival_id, $randomImage->id);
+        }
+    } else {
+        // Smažeme obrázek
+        $this->database->table('festival_images')
+            ->where('id', $imageId)
+            ->delete();
+    }
+}
 
 }

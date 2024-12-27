@@ -54,6 +54,23 @@
     <button type="submit" class="btn btn-primary">Odeslat</button>
 </form>
 
+{ifset $images}
+    <div class="mb-3">
+        <label class="form-label">Existující obrázky:</label>
+        {foreach $images as $image}
+            <div class="mb-2">
+                <img src="{$basePath}/{$image->file_path}" class="img-fluid img-thumbnail" style="max-width: 200px;">
+                {if $image->is_main}
+                    <span class="badge bg-primary">Thumbnail</span>
+                {/if}
+                <a n:href="deleteImage! $image->id" class="btn btn-danger btn-sm mt-2">Smazat</a>
+                {if !$image->is_main}
+                    <a n:href="mainImage! $image->id" class="btn btn-primary btn-sm mt-2">Nastavit jako thumbnail</a>
+                {/if}
+            </div>
+        {/foreach}
+    </div>
+{/ifset}
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         var quill = new Quill('#editor-container', {
@@ -65,7 +82,10 @@
 
         // Předvyplnění editoru Quill s HTML obsahem
         var description = `{$festival->description|escapeJs}`;
-        quill.clipboard.dangerouslyPasteHTML(description.replace(/\\\//g, '/'));
+        description = description.replace(/^"|"$/g, ''); // Odstranění uvozovek na začátku a na konci
+        description = description.replace(/\\\//g, '/'); // Odstranění zpětných lomítek
+        description = description.replace(/^"|"$/g, ''); // Odstranění uvozovek na začátku a na konci znovu pro jistotu
+        quill.clipboard.dangerouslyPasteHTML(description);
 
         // Synchronizace obsahu Quill s textarea při odeslání formuláře
         document.querySelector('form').addEventListener('submit', function (e) {
