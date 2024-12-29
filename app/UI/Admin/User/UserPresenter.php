@@ -12,7 +12,7 @@ final class UserPresenter extends Nette\Application\UI\Presenter
         $this->userFacade = $userFacade;
      
     }
-    public function renderDefault(string $role = 'users')
+    public function renderDefault(string $role = 'user')
     {
         $user = $this->getUser();
     
