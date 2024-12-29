@@ -200,6 +200,11 @@ public function deleteImage(int $imageId): void
             ->where('id', $imageId)
             ->delete();
     }
+}public function deleteStage(int $stageId): void
+{
+    $this->database->table('stages')
+        ->where('id', $stageId)
+        ->delete();
 }
 
 }

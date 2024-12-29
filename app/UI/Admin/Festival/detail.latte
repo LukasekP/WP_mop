@@ -46,8 +46,7 @@
                         </button>
                         <ul class="dropdown-menu dropup" aria-labelledby="dropdownMenuButton-{$stage->id}">
                             <li><a class="dropdown-item" href="{link 'Stage:editStage', $festival->id, $stage->id}">Přidat kapely</a></li>
-                            <li><a class="dropdown-item" href="{link Stage:edit}">Editovat</a></li>
-                            <li><a class="dropdown-item" href="{}">Smazat</a></li>
+                            <li><a class="dropdown-item" href="{link deleteStage! $stage->id}">Smazat</a></li>
                         </ul>
                     </th>
                 {/foreach}

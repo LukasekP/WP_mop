@@ -1,5 +1,6 @@
 <?php
 namespace App\UI\Admin\Bands;
+use Ublaboo\DataGrid\DataGrid;
 
 use Nette\Application\UI\Form;
 use App\Model\BandsFacade;
@@ -18,6 +19,11 @@ class BandsPresenter extends Nette\Application\UI\Presenter
     {
         $this->template->bands = $this->bandsFacade->getAllBands();
     }
+
+    public function renderAddBand(): void
+    {
+    }
+
     protected function createComponentAddBandForm(): Form
     {
         $form = new Form;
@@ -25,19 +31,26 @@ class BandsPresenter extends Nette\Application\UI\Presenter
             ->setRequired('Prosím, zadejte název kapely.');
         $form->addText('description', 'Popis kapely:')
             ->setRequired('Prosím, zadejte popis kapely.');
-        $form->addSubmit('submit', 'Přidat kapelu');
+        $form->addSubmit('submit', 'Odeslat');
         $form->onSuccess[] = [$this, 'addBandFormSucceeded'];
         return $form;
     }
 
     public function addBandFormSucceeded(Form $form, \stdClass $values): void
     {
-        $this->bandsFacade->addBand($values->name, $values->description);
-        $this->flashMessage('Kapela byla úspěšně přidána.', 'success');
-        $this->redirect('this');
+        $id = $this->getParameter('id');
+        if ($id) {
+            $this->bandsFacade->editBandList($id, (array)$values);
+            $this->flashMessage('Kapela byla úspěšně upravena.', 'success');
+            $this->redirect('list');
+        }else{
+            $this->bandsFacade->addBand($values->name, $values->description);
+            $this->flashMessage('Kapela byla úspěšně přidána.', 'success');
+            $this->redirect('list');
+        }
     }
 
-    public function renderEditBand(int $festivalId, int $stageId, int $bandId): void
+    public function renderEditBandOnStage(int $festivalId, int $stageId, int $bandId): void
     {
         $band = $this->bandsFacade->getBandById($bandId);
         $stageBand = $this->bandsFacade->getStageBand($stageId, $bandId);
@@ -53,7 +66,7 @@ class BandsPresenter extends Nette\Application\UI\Presenter
         $this->template->bandId = $bandId;
     }
 
-    public function renderAddBand(int $festivalId, int $stageId): void
+    public function renderAddBandToStage(int $festivalId, int $stageId): void
 {
     $stage = $this->festivalFacade->getStageById($stageId);
     $this->template->stage = $stage;
@@ -152,6 +165,51 @@ class BandsPresenter extends Nette\Application\UI\Presenter
             }
         
             return $bandList;
+        }
+
+        protected function createComponentBandsGrid() 
+        {
+            $grid = new DataGrid();
+            $grid->setDataSource($this->bandsFacade->getAllBands());
+    
+            $grid->addColumnText('name', 'Název kapely')
+            ->setTemplateEscaping(false)
+            ->setRenderer(function($item) {
+                $link = $this->link(':Front:Band:default', ['bandId' => $item->id]);
+                return '<a href="' . $link . '">' . htmlspecialchars($item->name) . '</a>';
+            });
+    
+            $grid->addColumnText('description', 'Popis')
+                 ->setRenderer(function($item) {
+                    return strip_tags((string) $item->description);
+                });
+            $grid->addAction('edit', 'Edit', 'edit!')
+                ->setIcon('pencil-alt')
+                ->setClass('btn btn-xs btn-primary ajax');  
+
+            $grid->addAction('deleteBand', 'Smazat', 'deleteBand!')
+                ->setClass('btn btn-xs btn-danger ajax');
+    
+            return $grid;
+        }
+        public function handleEdit(int $id): void
+        {
+            $this->redirect('editBand', $id);
+        }
+        public function handleDeleteBand(int $id): void
+        {
+            $this->bandsFacade->deleteBandList($id);
+            $this->flashMessage('Kapela byla úspěšně smazána.', 'success');
+            $this->redirect('this');
+        }
+
+        public function renderEditBand(int $id): void
+        {
+            $band = $this->bandsFacade->getBandById($id);
+            $this->getComponent('addBandForm')
+                 ->setDefaults($band->toArray());
+
+            $this->template->band = $band;
         }
 }        
 

@@ -106,6 +106,12 @@ public function deleteBand($stageId, $bandId): void
         ->delete();
 
 }
+public function deleteBandList($id): void
+{
+    $this->database->table('bands')
+        ->where('id', $id)
+        ->delete();
+}
 
 public function editBand(int $stageId, int $originalBandId, array $data): void
 {
@@ -117,6 +123,12 @@ public function editBand(int $stageId, int $originalBandId, array $data): void
             'start_time' => $data['start_time'],
             'end_time' => $data['end_time'],
         ]);
+}
+public function editBandList($id, $values){
+
+    $this->database->table('bands')
+         ->where('id', $id)
+         ->update((array)$values);
 }
 
 

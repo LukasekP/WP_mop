@@ -1,23 +1,9 @@
 {block content}
 
 <h1>Seznam kapel</h1>
-{control addBandForm}
+<a href="{link addBand}" class="btn btn-primary mb-3">Přidat kapelu</a>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Název kapely</th>
-            <th>Popis</th>
-        </tr>
-    </thead>
-    <tbody>
-        {foreach $bands as $band}
-            <tr>
-                <td>{$band->name}</td>
-                <td>{$band->description}</td>
-            </tr>
-        {/foreach}
-    </tbody>
-</table>
+
+{control bandsGrid}
 
 {/block}

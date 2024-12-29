@@ -2,7 +2,7 @@
 <a n:href="Festival:detail , $festival->id" class="btn btn-primary">Zpět na festival</a>
 <h2>Přidat kapelu</h2>
 
-<a n:href="Bands:addBand , $festival->id, $stage->id" class="btn btn-primary">Přidat kapelu</a>
+<a n:href="Bands:addBandToStage , $festival->id, $stage->id" class="btn btn-primary">Přidat kapelu</a>
 <h2>Kapely na {$stage->name}</h2>
 <table class="table table-striped">
     <thead>
@@ -19,7 +19,7 @@
                 <td><b>{$band->name}</b></td>
                 <td>
                     <a n:href="deleteBand! , $stage->id , $band->id" class="btn btn-danger btn-sm" onclick="return confirm('Opravdu chcete smazat tuto kapelu?')">Smazat</a>
-                    <a n:href="Bands:editBand , $festival->id, $stage->id , $band->id " class="btn btn-primary btn-sm">Upravit</a>
+                    <a n:href="Bands:editBandOnStage , $festival->id, $stage->id , $band->id " class="btn btn-primary btn-sm">Upravit</a>
                 </td>
             </tr>
         {/foreach}

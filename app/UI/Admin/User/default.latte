@@ -1,25 +1,26 @@
 {block content}
 <h1>Správa uživatelů</h1>
 
-<table border="1" style="border-collapse: collapse; width: 100%;">
-    <thead>
-        <tr>
-            <th>Jméno</th>
-            <th>Email</th>
-            <th>Role</th>
-        </tr>
-    </thead>
-    <tbody>
-        {foreach $users as $userData}
-            <tr>
-                <td><a href="{link User:detail, $userData->id}">{$userData->username}</a></td>
-                <td>{$userData->email}</td>
-                <td>{$userData->role}</td>
-            {if $user->getIdentity()->id !== $userData->id}
-                <td><a n:href="delete! $userData->id">Smazat</a></td>    
-            {/if}
-            </tr>
-        {/foreach}
-    </tbody>
-</table>
+<div class="dropdown mb-3">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="roleDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+        Vyberte roli
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="roleDropdown">
+        <li><a class="dropdown-item" href="{link :default, 'user'}">Uživatelé</a></li>
+        <li><a class="dropdown-item" href="{link :default, 'bandManager'}">Správce kapel</a></li>
+        <li><a class="dropdown-item" href="{link :default, 'festivalManager'}">Manažer festivalů</a></li>
+        <li><a class="dropdown-item" href="{link :default, 'accountant'}">Účetní</a></li>
+    </ul>
+</div>
+
+{if $role === 'user'}
+    {control usersGrid}
+{elseif $role === 'bandManager'}
+    {control bandManagersGrid}
+{elseif $role === 'festivalManager'}
+    {control festivalManagersGrid}
+{elseif $role === 'accountant'}
+    {control accountantsGrid}
+{/if}
+
 {/block}

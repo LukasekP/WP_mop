@@ -43,9 +43,12 @@ final class DashboardPresenter extends Nette\Application\UI\Presenter
                  return '<a href="' . $link . '">' . htmlspecialchars($item->name) . '</a>';
              });
              
-        $grid->addColumnText('description', 'Popisek');
+        $grid->addColumnText('description', 'Popisek')
+             ->setRenderer(function($item) {
+                return strip_tags((string) $item->description);
+             });
 
-        $grid->addColumnText('start_date', 'Od kdy');
+        $grid->addColumnText('start_date', 'Od kdy'); 
 
         $grid->addColumnText('end_date', 'Do kdy');
 

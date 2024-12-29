@@ -1,6 +1,7 @@
 <?php
 namespace App\UI\Admin\User;
 
+use Ublaboo\DataGrid\DataGrid;
 use App\Model\UserFacade;
 use Nette\Application\UI\Form;
 use Nette;
@@ -11,7 +12,7 @@ final class UserPresenter extends Nette\Application\UI\Presenter
         $this->userFacade = $userFacade;
      
     }
-    public function renderDefault()
+    public function renderDefault(string $role = 'users')
     {
         $user = $this->getUser();
     
@@ -21,6 +22,8 @@ final class UserPresenter extends Nette\Application\UI\Presenter
         }
         
         $this->template->users = $this->userFacade->getUsers();
+        $this->template->role = $role;
+
     }
     public function renderDetail($id)
     {
@@ -38,6 +41,7 @@ final class UserPresenter extends Nette\Application\UI\Presenter
         $this->getComponent('editForm')
              ->setDefaults($user->toArray()); 
     }
+
 
 
     public function createComponentEditForm(): Form
@@ -74,8 +78,8 @@ final class UserPresenter extends Nette\Application\UI\Presenter
         $this->flashMessage('Údaje změněny', 'success');
         $this->redirect(':Front:Home:default');
     }
-    public function handleDelete(int $userId) {
-        $this->userFacade->delete($userId);
+    public function handleDelete(int $id) {
+        $this->userFacade->delete($id);
         $this->redirect('User:default');
     }
 
@@ -94,5 +98,54 @@ final class UserPresenter extends Nette\Application\UI\Presenter
         } 
     
         $this->redirect('this');
+    }
+
+
+    protected function createComponentUsersGrid(): DataGrid
+    {
+        return $this->createRoleGrid('user');
+    }
+    
+    protected function createComponentBandManagersGrid(): DataGrid
+    {
+        return $this->createRoleGrid('bandManager');
+    }
+    
+    protected function createComponentFestivalManagersGrid(): DataGrid
+    {
+        return $this->createRoleGrid('festivalManager');
+    }
+    
+    protected function createComponentAccountantsGrid(): DataGrid
+    {
+        return $this->createRoleGrid('accountant');
+    }
+    
+    private function createRoleGrid(string $role): DataGrid
+    {
+        $grid = new DataGrid();
+        $dataSource = $this->userFacade->getUsers()->where('role', $role);
+        $grid->setDataSource($dataSource);
+    
+        $grid->addColumnNumber('id', 'id')
+             ->setSortable();
+    
+        $grid->addColumnText('username', 'už. jméno')
+             ->setTemplateEscaping(false)
+             ->setRenderer(function($item) {
+                 $link = $this->link('User:detail', ['id' => $item->id]);
+                 return '<a href="' . $link . '">' . htmlspecialchars($item->username) . '</a>';
+             });
+    
+        $grid->addColumnText('firstname', 'jméno');
+        $grid->addColumnText('lastname', 'Přijmení');
+        $grid->addColumnText('email', 'E-mail');
+        $grid->addColumnText('phone', 'Telefon');
+        $grid->addColumnText('role', 'Role')->setSortable();
+    
+        $grid->addAction('delete', 'Smazat', 'delete!')
+             ->setClass('btn btn-xs btn-danger ajax');
+    
+        return $grid;
     }
 }

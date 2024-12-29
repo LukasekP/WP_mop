@@ -186,5 +186,11 @@ public function handleMainImage($imageId): void
     $this->flashMessage('Hlavní obrázek byl úspěšně nastaven.', 'success');
     $this->redirect('this');
 }
+public function handleDeleteStage(int $stageId): void
+{
+    $this->festivalFacade->deleteStage($stageId);
+    $this->flashMessage('Stage byla úspěšně smazána.', 'success');
+    $this->redirect('this');
+}
 }
 ?>

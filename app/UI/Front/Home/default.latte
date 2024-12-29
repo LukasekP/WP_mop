@@ -8,7 +8,7 @@
     <img src="{$basePath}/{$festival['main_image']}" alt="Main image of {$festival['name']}">
         <div class="card-body">
             <h5 class="card-title"><a n:href="Detail:default , $festival['id']">{$festival['name']}</a></h5>
-            <p class="card-text">{$festival['description']}</p>
+            <p class="card-text">{$festival['description']|stripTags}</p>
         </div>
         <ul class="list-group list-group-flush">
             <li class="list-group-item">Od: {$festival['start_date']}</li>
