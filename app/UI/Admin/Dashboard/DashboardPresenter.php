@@ -37,17 +37,14 @@ final class DashboardPresenter extends Nette\Application\UI\Presenter
         $grid->addColumnNumber('id', 'id')
              ->setSortable();
     
-        $grid->addColumnText('name', 'Jméno')
-             ->setSortable()
-             ->setFilterText()
-             ->setAttribute('placeholder', 'Vyhledat nazev');
-    
-        $grid->addColumnText('name_link', 'Jméno s odkazem')
+        $grid->addColumnText('name', 'Název')
              ->setTemplateEscaping(false)
              ->setRenderer(function($item) {
                  $link = $this->link('Festival:detail', ['id' => $item->id]);
                  return '<a href="' . $link . '">' . htmlspecialchars($item->name) . '</a>';
-             });
+             })
+             ->setFilterText()
+             ->setAttribute('placeholder', 'Vyhledat název');
     
         $grid->addColumnText('description', 'Popisek')
              ->setRenderer(function($item) {

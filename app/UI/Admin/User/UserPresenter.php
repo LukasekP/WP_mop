@@ -153,8 +153,7 @@ final class UserPresenter extends Nette\Application\UI\Presenter
     
         $grid->addColumnText('phone', 'Telefon');
     
-        $grid->addColumnText('role', 'Role')
-             ->setSortable();
+        $grid->addColumnText('role', 'Role');
     
         $grid->addAction('delete', 'Smazat', 'delete!')
              ->setClass('btn btn-xs btn-danger ajax');
