@@ -76,7 +76,12 @@ class FestivalPresenter extends Nette\Application\UI\Presenter
             ->addRule($form::PATTERN, 'Zadejte platné datum ve formátu YYYY-MM-DD', '\d{4}-\d{2}-\d{2}')
             ->setHtmlAttribute('type', 'date')
             ->setHtmlAttribute('class', 'form-control');
-    
+        
+        $form->addText('location', 'Místo konání:')
+            ->setHtmlAttribute('autocomplete', 'off')
+            ->setRequired('Zadejte místo konání')
+            ->setHtmlAttribute('class', 'form-control');
+
         $form->addText('price', 'Cena vstupenky:')
             ->setHtmlAttribute('autocomplete', 'off')
             ->setRequired('Zadejte cenu vstupenky')
@@ -106,9 +111,12 @@ class FestivalPresenter extends Nette\Application\UI\Presenter
             $festivalId = $id;
         } else {
             // Uložení základních informací o festivalu a získání ID
-            $festivalId = $this->festivalFacade->addFestival((array)$values);
+            $festival = $this->festivalFacade->addFestival((array)$values);
             $this->flashMessage('Festival byl úspěšně přidán.', 'success');
+            $festivalId = $festival->id; // Ujistěte se, že $festivalId je integer
         }
+    
+        $hasImages = false;
     
         // Uložení obrázků s nově získaným festivalId
         if (!empty($images) && $images[0]->isOk()) {
@@ -119,10 +127,14 @@ class FestivalPresenter extends Nette\Application\UI\Presenter
                     
                     // Uložení cesty k obrázku do databáze
                     $this->festivalFacade->addImage($festivalId, $imagePath);
+                    $hasImages = true;
                 } else {
                     $this->flashMessage("Obrázek {$image->getName()} nebyl přidán", "failed");
                 }
             }
+        }
+    
+        if ($hasImages) {
             $this->redirect('Festival:mainImage', $festivalId);
         } else {
             $this->redirect('Dashboard:default');

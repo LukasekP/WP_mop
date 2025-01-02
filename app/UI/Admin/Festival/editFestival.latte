@@ -42,6 +42,11 @@
     </div>
 
     <div class="mb-3">
+        <label for="location" class="form-label">Místo konání:</label>
+        <input type="text" name="location" class="form-control" autocomplete="off" required value="{$festival->location}">
+    </div>
+
+    <div class="mb-3">
         <label for="price" class="form-label">Cena vstupenky:</label>
         <input type="text" name="price" class="form-control" required autocomplete="off" value="{$festival->price}">
     </div>

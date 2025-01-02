@@ -20,8 +20,8 @@ class DetailPresenter extends Nette\Application\UI\Presenter
 {
     $festival = $this->festivalFacade->getFestivalById($id);
     $images = $this->festivalFacade->getFestivalImages($id);
-
     
+    $this->festivalFacade->addView($id);
     $this->template->festival = $festival;
     $this->template->images = $images;
     $this->template->stages = $this->festivalFacade->getStagesWithBands($id);

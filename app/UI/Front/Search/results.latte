@@ -1,0 +1,31 @@
+{block content}
+<h2>Výsledky pro "{$keywords}"</h2>
+    {if $results}
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    {foreach $results as $festival}
+       <div class="col">
+            <div class="card h-100">
+                <img src="{$basePath}/{$festival['main_image']}" class="card-img-top" alt="{$festival['name']}">
+                <div class="card-body">
+                    <h5 class="card-title"><a n:href="Detail:default , $festival['id']">{$festival['name']}</a></h5>
+                    <p class="card-text">
+                        {$festival['start_date']|date:'j. n.'} - {$festival['end_date']|date:'j. n. Y'}<br>
+                        {$festival['location']}<br>
+                    </p>
+                    <p class="card-text">
+                        {$festival['description']|stripTags}
+                    </p>
+                </div>
+                <div class="card-footer d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center">
+                    </div>
+                    <a href="#" class="btn btn-primary">Vstupenky</a>
+                </div>
+            </div>
+        </div>
+    {/foreach}
+</div>
+{else}
+       <br> <p>Nebyly nalezeny žádné výsledky.</p>
+    {/if}
+{/block}

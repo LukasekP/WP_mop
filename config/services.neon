@@ -1,5 +1,6 @@
 # Service registrations. See https://doc.nette.org/dependency-injection/services
-
+session:
+    autoStart: smart
 services:
 	- App\Core\RouterFactory::createRouter
 	- App\MailSender\MailSender

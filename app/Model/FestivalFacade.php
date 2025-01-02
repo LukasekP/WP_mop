@@ -16,6 +16,18 @@ class FestivalFacade
         $this->database = $database;
     }
 
+    public function addView(int $festivalId): void
+    {
+      
+
+            $festival = $this->database
+            ->table('festivals')
+            ->get($festivalId);
+    
+            $festival->update(['views' => $festival->views + 1]);
+    }
+
+
     public function getFestivals()
     {
         return $this->database->table('festivals')->fetchAll();
@@ -166,6 +178,36 @@ class FestivalFacade
             'price' => $festival->price,
             'start_date' => $festival->start_date,
             'end_date' => $festival->end_date,
+            'location' => $festival->location,
+            'main_image' => $mainImage ? $mainImage->file_path : 'no_image.jpg', // Výchozí obrázek
+        ];
+    }
+
+    return $result;
+}
+public function getTopTrendingFestivals(int $limit = 8): array
+{
+    $festivals = $this->database->table('festivals')
+        ->order('views DESC')
+        ->limit($limit);
+
+    $result = [];
+
+    foreach ($festivals as $festival) {
+        // Najít hlavní obrázek pro tento festival
+        $mainImage = $festival->related('festival_images')
+            ->where('is_main', 1)
+            ->fetch();
+
+        // Přidat data do výsledného pole
+        $result[] = [
+            'id' => $festival->id,
+            'name' => $festival->name,
+            'description' => $festival->description,
+            'price' => $festival->price,
+            'start_date' => $festival->start_date,
+            'end_date' => $festival->end_date,
+            'location' => $festival->location,
             'main_image' => $mainImage ? $mainImage->file_path : 'no_image.jpg', // Výchozí obrázek
         ];
     }
@@ -206,5 +248,30 @@ public function deleteImage(int $imageId): void
         ->where('id', $stageId)
         ->delete();
 }
+public function search(string $keyword): array
+{
+    $festivals = $this->database->table('festivals')
+        ->where('name LIKE ?', '%' . $keyword . '%');
 
+    $result = [];
+
+    foreach ($festivals as $festival) {
+        $mainImage = $festival->related('festival_images')
+            ->where('is_main', 1)
+            ->fetch();
+
+        $result[] = [
+            'id' => $festival->id,
+            'name' => $festival->name,
+            'description' => $festival->description,
+            'price' => $festival->price,
+            'start_date' => $festival->start_date,
+            'end_date' => $festival->end_date,
+            'location' => $festival->location,
+            'main_image' => $mainImage ? $mainImage->file_path : 'no_image.jpg', 
+        ];
+    }
+
+    return $result;
+}
 }

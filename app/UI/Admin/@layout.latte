@@ -47,9 +47,9 @@
         <li n:if="$user->isLoggedIn()">
             <a n:href=":Front:Sign:out">Odhlásit se</a>
         </li>
-		<li>
-		<a style="color: white ">{$user->getIdentity()->firstname . " " . $user->getIdentity()->lastname}</a>
-		 </li>
+		<li class="user-info">
+            <a>{$user->getIdentity()->firstname} {$user->getIdentity()->lastname}</a>
+        </li>
       
 
         {if $user->isLoggedIn() }

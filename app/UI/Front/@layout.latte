@@ -19,11 +19,10 @@
 <nav class="top-menu">
     <ul class="left-menu">
         <li><a n:href="Home:">Domů</a></li>
-
         <li n:if="$user->isInRole('admin')">
             <a n:href=":Admin:Dashboard:default">Admin</a>
         </li>
-		  <li n:if="$user->isLoggedIn()">
+        <li n:if="$user->isLoggedIn()">
             <a href="{link :Admin:User:edit, $user->id}">Změnit přihlašovací údaje</a>
         </li>
     </ul>
@@ -32,20 +31,16 @@
         <li n:if="!$user->isLoggedIn()">
             <a n:href="Sign:in">Přihlásit se</a>
         </li>
-
         <li n:if="$user->isLoggedIn()">
             <a n:href="Sign:out">Odhlásit se</a>
         </li>
-		{if $user->isLoggedIn()}
-		<li>
-		<a style="color: white">{$user->getIdentity()->firstname . " " . $user->getIdentity()->lastname}</a>
-		 </li>
-	  	{/if}	
-
         {if $user->isLoggedIn()}
-            <li class="profile-image">
-                <img src="{$basePath}/{$user->identity->image}" alt="Profilový obrázek">
-            </li>
+        <li class="user-info">
+            <a>{$user->getIdentity()->firstname} {$user->getIdentity()->lastname}</a>
+        </li>
+        <li class="profile-image">
+            <img src="{$basePath}/{$user->identity->image}" alt="Profilový obrázek">
+        </li>
         {/if}
     </ul>
 </nav>
