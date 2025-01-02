@@ -135,13 +135,26 @@ final class UserPresenter extends Nette\Application\UI\Presenter
              ->setRenderer(function($item) {
                  $link = $this->link('User:detail', ['id' => $item->id]);
                  return '<a href="' . $link . '">' . htmlspecialchars($item->username) . '</a>';
-             });
+             })
+             ->setFilterText()
+             ->setAttribute('placeholder', 'Vyhledat už. jméno');
     
-        $grid->addColumnText('firstname', 'jméno');
-        $grid->addColumnText('lastname', 'Přijmení');
-        $grid->addColumnText('email', 'E-mail');
+        $grid->addColumnText('firstname', 'jméno')
+             ->setFilterText()
+             ->setAttribute('placeholder', 'Vyhledat jméno');
+    
+        $grid->addColumnText('lastname', 'Přijmení')
+             ->setFilterText()
+             ->setAttribute('placeholder', 'Vyhledat přijmení');
+    
+        $grid->addColumnText('email', 'E-mail')
+             ->setFilterText()
+             ->setAttribute('placeholder', 'Vyhledat e-mail');
+    
         $grid->addColumnText('phone', 'Telefon');
-        $grid->addColumnText('role', 'Role')->setSortable();
+    
+        $grid->addColumnText('role', 'Role')
+             ->setSortable();
     
         $grid->addAction('delete', 'Smazat', 'delete!')
              ->setClass('btn btn-xs btn-danger ajax');

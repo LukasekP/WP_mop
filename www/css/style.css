@@ -298,4 +298,15 @@ p {
 
     border: 1px solid #ddd;
     border-radius: 8px;
-    overflow: hidden;}
+    overflow: hidden;
+}
+.search-form-container .form-control {
+    margin-right: 0.5rem; /* Přidání mezery mezi vyhledávacím polem a tlačítkem */
+    border: 2px solid #000; /* Přidání černého obrysu okolo vyhledávacího pole */
+    padding: 0.5rem; /* Přidání paddingu uvnitř vyhledávacího pole */
+    height: auto; /* Zajištění, že výška bude automatická */
+}
+
+.search-form-container .form-control::placeholder {
+    color: #999; /* Barva placeholder textu */
+}

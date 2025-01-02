@@ -27,44 +27,65 @@ final class DashboardPresenter extends Nette\Application\UI\Presenter
         $this->template->festivals = $this->festivalFacade->getFestivals();
     }
    
+  
     public function createComponentGrid()
-	{
+    {
         $grid = new DataGrid();
-
+    
         $grid->setDataSource($this->festivalFacade->getFestivals());
-
+    
         $grid->addColumnNumber('id', 'id')
              ->setSortable();
-
+    
         $grid->addColumnText('name', 'Jméno')
+             ->setSortable()
+             ->setFilterText()
+             ->setAttribute('placeholder', 'Vyhledat nazev');
+    
+        $grid->addColumnText('name_link', 'Jméno s odkazem')
              ->setTemplateEscaping(false)
              ->setRenderer(function($item) {
                  $link = $this->link('Festival:detail', ['id' => $item->id]);
                  return '<a href="' . $link . '">' . htmlspecialchars($item->name) . '</a>';
              });
-             
+    
         $grid->addColumnText('description', 'Popisek')
              ->setRenderer(function($item) {
                 return strip_tags((string) $item->description);
-             });
+             })
+             
 
-        $grid->addColumnText('start_date', 'Od kdy'); 
+             ->setFilterText()
+             ->setAttribute('placeholder', 'Vyhledat popisek'); 
 
-        $grid->addColumnText('end_date', 'Do kdy');
+    
+        $grid->addColumnText('start_date', 'Od kdy')
+             ->setSortable()
+             
+             ->setFilterText()
+             ->setAttribute('placeholder', 'Vyhledat od kdy'); 
+    
+        $grid->addColumnText('end_date', 'Do kdy')
+             ->setSortable()
+             ->setFilterText()
+             ->setAttribute('placeholder', 'Vyhledat do kdy');
+             
+    
+        $grid->addColumnText('price', 'Cena')
+             ->setSortable()
+             ->setFilterText()
+             ->setAttribute('placeholder', 'Vyhledat cenu');
 
-        $grid->addColumnText('price', 'Role')
-             ->setSortable();
-
+    
         $grid->addAction('edit', 'Edit', 'edit!')
              ->setIcon('pencil-alt')
              ->setClass('btn btn-xs btn-primary ajax');  
-
+    
         $grid->addAction('deleteFestival', 'Smazat', 'deleteFestival!')
              ->setClass('btn btn-xs btn-danger ajax');
-             
-
+    
         return $grid;
-	}
+    }
     public function handleDeleteFestival(int $id): void
     {
         $this->festivalFacade->deleteFestival($id);
@@ -75,6 +96,7 @@ final class DashboardPresenter extends Nette\Application\UI\Presenter
     {
         $this->redirect('Festival:editFestival', $id);
     }
+
 	// Incorporates methods to check user login status
 	use RequireLoggedUser;
 }
