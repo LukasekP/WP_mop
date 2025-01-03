@@ -17,8 +17,14 @@
 
 <body>
 <nav class="top-menu">
+  <a n:href="Home:">
+    <div class="logo-container">
+         <a n:href="Home:">
+            <img src="{$basePath}/logo-festzone.png" alt="Logo" class="logo">
+         </a>
+    </div>
     <ul class="left-menu">
-        <li><a n:href="Home:">Domů</a></li>
+        
         <li n:if="$user->isInRole('admin')">
             <a n:href=":Admin:Dashboard:default">Admin</a>
         </li>
@@ -26,7 +32,6 @@
             <a href="{link :Admin:User:edit, $user->id}">Změnit přihlašovací údaje</a>
         </li>
     </ul>
-
     <ul class="right-menu">
         <li n:if="!$user->isLoggedIn()">
             <a n:href="Sign:in">Přihlásit se</a>

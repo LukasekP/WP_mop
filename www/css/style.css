@@ -5,17 +5,54 @@
     margin-right: auto; /* Vycentrování obsahu */
     max-width: 1200px; /* Maximální šířka obsahu */
 }
+body {
+    margin: 0; /* Odstraní případné mezery kolem stránky */
+    padding-top: 60px; /* Rezerva, aby obsah nezačínal pod fixním menu */
+}
 .top-menu {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #e6e4e4;
+    background-color: #e6e4e4; /* Barva pozadí menu */
     padding: 10px 20px;
     font-family: Arial, sans-serif;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Stín pod menu */
+    position: fixed; /* Fixace na vrcholu stránky */
+    top: 0; /* Vzdálenost od vrcholu */
+    left: 0;
+    width: 100%; /* Šířka menu, aby pokrylo celou obrazovku */
+    z-index: 1000; /* Zajistí, že menu bude nad ostatními prvky */
+}
+.logo-container {
+    position: absolute;
+    top: 0px; /* Přizpůsobte podle potřeby */
+    left: 20px;
+    z-index: 10;
+
+}
+.logo-container img {
+    display: block;
+    height: 50px; /* Nastavte výšku loga */
+}
+.logo-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -20px;
+    width: 150px; /* Šířka modrého tvaru */
+    height: 121%;
+    background-color: #0095c3;
+    clip-path: polygon(0 0, 100% 0, 85% 90%, 0 90%); /* Vytvoří modrý šikmý tvar */
+    z-index: -1;
+}
+.logo {
+    width: 55px;
+    height: 40px;
+    object-fit: contain;
 }
 
 .top-menu ul {
+    
     list-style: none;
     margin: 0;
     padding: 0;
@@ -35,9 +72,15 @@
 }
 
 .top-menu a:hover {
-    color: #47ccfc;
+    color: #0095c3;
 }
+.left-menu {
+    position: absolute; /* Nebo absolute, pokud to kontext vyžaduje */
+    left: 10%;
+    font-weight: bold;
 
+
+}
 .top-menu .right-menu .user-info a {
     color:  #0095c3;
     font-weight: bold;
