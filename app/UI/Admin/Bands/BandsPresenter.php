@@ -177,7 +177,9 @@ class BandsPresenter extends Nette\Application\UI\Presenter
             ->setRenderer(function($item) {
                 $link = $this->link(':Front:Band:default', ['bandId' => $item->id]);
                 return '<a href="' . $link . '">' . htmlspecialchars($item->name) . '</a>';
-            });
+            })
+            ->setFilterText()
+            ->setAttribute('placeholder', 'Vyhledat název');
     
             $grid->addColumnText('description', 'Popis')
                  ->setRenderer(function($item) {

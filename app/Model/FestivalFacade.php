@@ -159,18 +159,24 @@ class FestivalFacade
     return $this->database->table('festival_images')
         ->where('festival_id', $festivalId);
 }
-    public function getFestivalsWithMainImage(): array
+public function getFestivalsWithMainImage(string $order = 'created_at'): array
 {
-    $festivals = $this->database->table('festivals');
-    $result = [];
+    $validOrders = ['created_at', 'start_date'];
+    if (!in_array($order, $validOrders, true)) {
+        $order = 'created_at';
+    }
 
+    // Pokud je požadováno řazení podle start_date, převeďte hodnotu na DATE
+    $order = $order === 'start_date' ? "CAST(start_date AS DATE)" : $order;
+
+    $festivals = $this->database->table('festivals')->order("$order ASC");
+
+    $result = [];
     foreach ($festivals as $festival) {
-        // Najít hlavní obrázek pro tento festival
         $mainImage = $festival->related('festival_images')
             ->where('is_main', 1)
             ->fetch();
 
-        // Přidat data do výsledného pole
         $result[] = [
             'id' => $festival->id,
             'name' => $festival->name,
@@ -179,12 +185,13 @@ class FestivalFacade
             'start_date' => $festival->start_date,
             'end_date' => $festival->end_date,
             'location' => $festival->location,
-            'main_image' => $mainImage ? $mainImage->file_path : 'no_image.jpg', // Výchozí obrázek
+            'main_image' => $mainImage ? $mainImage->file_path : 'no_image.jpg',
         ];
     }
 
     return $result;
 }
+
 public function getTopTrendingFestivals(int $limit = 8): array
 {
     $festivals = $this->database->table('festivals')

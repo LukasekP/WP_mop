@@ -5,6 +5,7 @@ use App\Model\FestivalFacade;
 use App\MailSender\MailSender;
 use Latte\Engine;
 use Nette\Application\UI\Form;
+use Tracy\Debugger;
 
 use Nette;
 final class HomePresenter extends Nette\Application\UI\Presenter
@@ -18,12 +19,13 @@ final class HomePresenter extends Nette\Application\UI\Presenter
 	}
     public function renderDefault(): void
     {
-        $this->template->festivals = $this->festivalFacade->getFestivalsWithMainImage();
-        $this->template->trendingFestivals = $this->festivalFacade->getFestivalsWithMainImage();
-
+        $order = $this->getHttpRequest()->getQuery('order') ?? 'created_at';
+        $festivals = $this->festivalFacade->getFestivalsWithMainImage($order);
+    
+    
+        $this->template->order = $order;
+        $this->template->festivals = $festivals;
         $this->template->trendingFestivals = $this->festivalFacade->getTopTrendingFestivals();
-
-       
     }
     public function createComponentSearchForm(): Form
 {
