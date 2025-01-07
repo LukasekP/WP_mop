@@ -1,0 +1,27 @@
+/* editFestival */
+.form-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.form-section {
+    flex: 1;
+    max-width: 50%;
+    padding-right: 1rem;
+}
+
+.image-section {
+    flex: 1;
+    max-width: 50%;
+    padding-left: 1rem;
+}
+
+.image-container {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.image-actions {
+    margin-top: 0.5rem;
+}
+
