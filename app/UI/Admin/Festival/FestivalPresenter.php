@@ -110,22 +110,19 @@ class FestivalPresenter extends Nette\Application\UI\Presenter
             $this->flashMessage('Festival byl úspěšně aktualizován.', 'success');
             $festivalId = $id;
         } else {
-            // Uložení základních informací o festivalu a získání ID
             $festival = $this->festivalFacade->addFestival((array)$values);
             $this->flashMessage('Festival byl úspěšně přidán.', 'success');
-            $festivalId = $festival->id; // Ujistěte se, že $festivalId je integer
+            $festivalId = $festival->id; 
         }
     
         $hasImages = false;
     
-        // Uložení obrázků s nově získaným festivalId
         if (!empty($images) && $images[0]->isOk()) {
             foreach ($images as $image) {
                 if ($image->isOk()) {
                     $image->move("upload/" . $image->getSanitizedName());
                     $imagePath = "upload/" . $image->getSanitizedName();
                     
-                    // Uložení cesty k obrázku do databáze
                     $this->festivalFacade->addImage($festivalId, $imagePath);
                     $hasImages = true;
                 } else {
@@ -156,10 +153,9 @@ class FestivalPresenter extends Nette\Application\UI\Presenter
         $festivalId = $this->getParameter('id');
         $images = $this->festivalFacade->getFestivalImages($festivalId);
     
-        // Naplňte radio list ID obrázků a jejich cesty
         $imageOptions = [];
         foreach ($images as $image) {
-            $imageOptions[$image->id] = $image->file_path; // Nebo jiný popis obrázku
+            $imageOptions[$image->id] = $image->file_path; 
         }
     
         $form->addHidden('festivalId', $festivalId)

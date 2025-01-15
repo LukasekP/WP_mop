@@ -50,8 +50,6 @@ final class DashboardPresenter extends Nette\Application\UI\Presenter
              ->setRenderer(function($item) {
                 return strip_tags((string) $item->description);
              })
-             
-
              ->setFilterText()
              ->setAttribute('placeholder', 'Vyhledat popisek'); 
 

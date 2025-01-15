@@ -3,9 +3,7 @@
 
 <h1 class="section-title" style="font-weight: bold; font-size: 2rem;">{$festival->name}</h1>
 
-    <!-- Carousel obrázků -->
 <div id="festivalCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
-    <!-- Carousel s nastaveným pozadím po stranách -->
     <div class="carousel-inner" style="border-radius: 10px; overflow: hidden; height: 400px; background-color:rgb(255, 255, 255);">
         {var $first = true}
         {foreach $images as $image}
@@ -18,7 +16,6 @@
             </div>
         {/foreach}
     </div>
-    <!-- Navigační tlačítka -->
     <button class="carousel-control-prev" type="button" data-bs-target="#festivalCarousel" data-bs-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Předchozí</span>
@@ -29,22 +26,15 @@
     </button>
 </div>
 
-
-
-    <!-- Informace o festivalu (datum, místo) -->
 <div class="mb-4">
-    <!-- Datum -->
     <div class="d-flex align-items-center mb-3">
         <i class="bi bi-calendar-event me-3" style="font-size: 1.5rem; color: #006d77;"></i>
         <span style="font-size: 1rem; color: #333;">{$festival['start_date']|date:'j. n.'} - {$festival['end_date']|date:'j. n. Y'}</span>
     </div>
-    <!-- Místo -->
     <div class="d-flex align-items-center mb-3">
         <i class="bi bi-geo-alt me-3" style="font-size: 1.5rem; color: #006d77;"></i>
         <span style="font-size: 1rem; color: #333;">{$festival->location}</span>
-    </div>
-    <!-- Interpreti -->
-   
+    </div>   
 </div>
 
     <!-- Popis festivalu -->

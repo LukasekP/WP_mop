@@ -30,9 +30,8 @@ class BandsFacade
                 'description' => $description
             ]
         );
-        
-
     }
+    
     public function assignBandToStage(int $stageId, int $bandId): void
     {
         $this->database->table('stage_bands')->insert([
@@ -82,7 +81,7 @@ class BandsFacade
                     'band_description' => $band->description,
                     'band_id' => $band->id,
                     'festival_id' => $festivalId,
-                    'festival_name' => $festival->name // Přidání festival_name
+                    'festival_name' => $festival->name 
                 ];
             }
         }
@@ -90,94 +89,98 @@ class BandsFacade
         return $result;
     }
     public function getStageBand(int $stageId, int $bandId)
-{
-    return $this->database->table('stage_bands')
-        ->where('stage_id', $stageId)
-        ->where('band_id', $bandId)
-        ->fetch();
-}
+    {
+        return $this->database->table('stage_bands')
+            ->where('stage_id', $stageId)
+            ->where('band_id', $bandId)
+            ->fetch();
+    }
 
 
-public function deleteBand($stageId, $bandId): void
-{
-    $this->database->table('stage_bands')
-        ->where('stage_id', $stageId)
-        ->where('band_id', $bandId)
-        ->delete();
+    public function deleteBand($stageId, $bandId): void
+    {
+        $this->database->table('stage_bands')
+            ->where('stage_id', $stageId)
+            ->where('band_id', $bandId)
+            ->delete();
 
-}
-public function deleteBandList($id): void
-{
-    $this->database->table('bands')
-        ->where('id', $id)
-        ->delete();
-}
+    }
 
-public function editBand(int $stageId, int $originalBandId, array $data): void
-{
-    $this->database->table('stage_bands')
-        ->where('stage_id', $stageId)
-        ->where('band_id', $originalBandId)
-        ->update([
-            'band_id' => $data['band'],
-            'start_time' => $data['start_time'],
-            'end_time' => $data['end_time'],
-        ]);
-}
-public function editBandList($id, $values){
+    public function deleteBandList($id): void
+    {
+        $this->database->table('bands')
+            ->where('id', $id)
+            ->delete();
+    }
 
-    $this->database->table('bands')
-         ->where('id', $id)
-         ->update((array)$values);
-}
+    public function editBand(int $stageId, int $originalBandId, array $data): void
+    {
+        $this->database->table('stage_bands')
+            ->where('stage_id', $stageId)
+            ->where('band_id', $originalBandId)
+            ->update([
+                'band_id' => $data['band'],
+                'start_time' => $data['start_time'],
+                'end_time' => $data['end_time'],
+            ]);
+    }
+
+    public function editBandList($id, $values)
+    {
+        $this->database->table('bands')
+            ->where('id', $id)
+            ->update((array)$values);
+    }
 
 
-public function getFestivalsByBand(int $bandId): array
-{
-    $stages = $this->database->table('stage_bands')
-        ->where('band_id', $bandId)
-        ->fetchAll();
+    public function getFestivalsByBand(int $bandId): array
+    {
+        $stages = $this->database->table('stage_bands')
+            ->where('band_id', $bandId)
+            ->fetchAll();
 
-    $festivals = [];
-    foreach ($stages as $stage) {
-        // Ensure stage is being properly accessed
-        $stageRecord = $this->database->table('stages')->get($stage->stage_id);
-        if ($stageRecord) {
-            $festival = $this->database->table('festivals')->get($stageRecord->festival_id);
-                $festivals[] = $festival;
-            
+        $festivals = [];
+        foreach ($stages as $stage) {
+            $stageRecord = $this->database->table('stages')->get($stage->stage_id);
+            if ($stageRecord) {
+                $festival = $this->database->table('festivals')->get($stageRecord->festival_id);
+                    $festivals[] = $festival;
+                
+            }
         }
+
+        return $festivals;
     }
 
-    return $festivals;
-}
-public function getPerformanceTimes(int $bandId, int $stageId): ?string
-{
-    $stageBands = $this->database->table('stage_bands')
-        ->where('band_id', $bandId)
-        ->where('stage_id', $stageId)
-        ->fetchAll();
+    public function getPerformanceTimes(int $bandId, int $stageId): ?string
+    {
+        $stageBands = $this->database->table('stage_bands')
+            ->where('band_id', $bandId)
+            ->where('stage_id', $stageId)
+            ->fetchAll();
 
-    if (!empty($stageBands)) {
-        $stageBand = reset($stageBands); // Získáme první záznam
-        return $stageBand->start_time . ' - ' . $stageBand->end_time;
+        if (!empty($stageBands)) {
+            $stageBand = reset($stageBands); 
+            return $stageBand->start_time . ' - ' . $stageBand->end_time;
+        }
+
+        return null;
     }
 
-    return null;
-}
-public function getBandsList(): array
-{
-    return $this->database->table('bands')
-        ->select('id, name') 
-        ->fetchAll(); 
-}
-public function addBandToStage(int $bandId, int $stageId, array $values): void
-{
-    $this->database->table('stage_bands')->insert([
-        'band_id' => $bandId,
-        'stage_id' => $stageId,
-        'start_time' => $values['start_time'],
-        'end_time' => $values['end_time'],
-    ]);
-}
+    public function getBandsList(): array
+    {
+        return $this->database->table('bands')
+            ->select('id, name') 
+            ->fetchAll(); 
+    }
+
+    public function addBandToStage(int $bandId, int $stageId, array $values): void
+    {
+        $this->database->table('stage_bands')->insert([
+            'band_id' => $bandId,
+            'stage_id' => $stageId,
+            'start_time' => $values['start_time'],
+            'end_time' => $values['end_time'],
+        ]);
+    }
 }

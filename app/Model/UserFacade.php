@@ -70,18 +70,18 @@ final class UserFacade implements Nette\Security\Authenticator
         $user->update($values);
     }
 
-public function updateUserImage($userId, $imagePath)
-{
-	$user = $this->database->table('users')->get($userId);
+	public function updateUserImage($userId, $imagePath)
+	{
+		$user = $this->database->table('users')->get($userId);
 
-	if ($user === null) {
-		throw new \Exception("User with ID $userId not found.");
+		if ($user === null) {
+			throw new \Exception("User with ID $userId not found.");
+		}
+
+		$user->update([
+			'image' => $imagePath,
+		]);
 	}
-
-	$user->update([
-		'image' => $imagePath,
-	]);
-}
 	
 
 	/**

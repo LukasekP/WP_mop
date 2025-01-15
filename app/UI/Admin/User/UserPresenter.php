@@ -28,20 +28,19 @@ final class UserPresenter extends Nette\Application\UI\Presenter
     public function renderDetail($id)
     {
         $user = $this->userFacade->getUserById($id); 
-        $this->template->u = $this->userFacade->getUserById($id);
-        $this->template->userData = $this->userFacade->getUserById($id);
-        $this->getComponent('editForm')
-        ->setDefaults($user->toArray()); 
+                $this->template->u = $this->userFacade->getUserById($id);
+                $this->template->userData = $this->userFacade->getUserById($id);
+                $this->getComponent('editForm')
+                    ->setDefaults($user->toArray()); 
     }
+
     public function renderEdit($id)
     {
         $user = $this->userFacade->getUserById($id); 
        
-    
         $this->getComponent('editForm')
              ->setDefaults($user->toArray()); 
     }
-
 
 
     public function createComponentEditForm(): Form
@@ -50,17 +49,22 @@ final class UserPresenter extends Nette\Application\UI\Presenter
         $form->addText('username', 'Uživatelské jméno:')
              ->setHtmlAttribute('class', 'form-control')
              ->setNullable();
+
         $form->addPassword('password', 'Nové Heslo:')
              ->setOption('description', sprintf('Heslo musí mít aspoň %d znaků', $this->userFacade::PasswordMinLength))
              ->setHtmlAttribute('class', 'form-control')
              ->setNullable(); 
+
         $form->addUpload('image', 'Profilový obrázek:')
              ->addRule(Form::IMAGE, 'Obrazek musí být JPEG a PNG')
              ->setHtmlAttribute('class', 'form-control-file')
              ->setNullable();
+
         $form->addSubmit('send', 'Změnit')
              ->setHtmlAttribute('class', 'btn btn-primary');
+
         $form->onSuccess[] = [$this, 'editFormSucceeded'];
+
         return $form;
     }
 
