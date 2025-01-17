@@ -35,16 +35,46 @@
         <li n:if="!$user->isLoggedIn()">
             <a n:href="Sign:in">Přihlásit se</a>
         </li>
-        <li n:if="$user->isLoggedIn()">
-            <a n:href="Sign:out">Odhlásit se</a>
-        </li>
+        
         {if $user->isLoggedIn()}
         <li class="user-info">
             <a>{$user->getIdentity()->firstname} {$user->getIdentity()->lastname}</a>
         </li>
-        <li class="profile-image">
-            <img src="{$basePath}/{$user->identity->image}" alt="Profilový obrázek">
-        </li>
+{if $user->identity->image}
+    <li class="profile-image">
+        <img src="{$basePath}/{$user->identity->image}" alt="Profilový obrázek" class="profile-img">
+        <div class="button-table">
+            <table>
+                <tr>
+                    <td><a n:href="#">Profil</a></td>
+                </tr>
+                <tr>
+                    <td><a n:href="#">Vstupenky</a></td>
+                </tr>
+                <tr>
+                    <td><a n:href="Sign:out">Odhlásit se</a></td>
+                </tr>
+            </table>
+        </div>
+    </li>
+{else}
+    <li class="profile-image">
+        <img src="{$basePath}/no-profile.webp" alt="Profilový obrázek" class="profile-img">
+        <div class="button-table">
+            <table>
+                <tr>
+                    <td><a href="#">Profil</a></td>
+                </tr>
+                <tr>
+                    <td><a href="#">Vstupenky</a></td>
+                </tr>
+                <tr>
+                    <td><a n:href="Sign:out">Odhlásit se</a></td>
+                </tr>
+            </table>
+        </div>
+    </li>
+{/if}
         {/if}
     </ul>
 </nav>
