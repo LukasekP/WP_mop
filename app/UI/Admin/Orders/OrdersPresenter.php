@@ -32,16 +32,13 @@ class OrdersPresenter extends Nette\Application\UI\Presenter
         $grid->addColumnNumber('id', 'ID')
             ->setSortable();
 
-        $grid->addColumnText('user_name', 'User')
-            ->setSortable()
-            ->setTemplateEscaping(false)
-            ->setRenderer(function ($item) {
-                $user = $this->userFacade->getUserById($item->user_id);
-                $link = $this->link('User:detail', ['id' => $user->id]);
-                return '<a href="' . $link . '">' . htmlspecialchars($user->username) . '</a>';
-            })
-            ->setFilterText()
-            ->setAttribute('placeholder', 'Vyhledat uživatele');
+        $grid->addColumnText('firstname', 'Jméno');
+        
+        $grid->addColumnText('lastname', 'Příjmení');
+
+        $grid->addColumnText('email', 'Email');
+
+        $grid->addColumnText('phone', 'Telefon');
     
         $grid->addColumnText('festival_name', 'Festival')
             ->setSortable()
@@ -59,10 +56,31 @@ class OrdersPresenter extends Nette\Application\UI\Presenter
             ->setFilterText()
             ->setAttribute('placeholder', 'Vyhledat symbol');
 
-        $grid->addColumnText('status', 'Status')
+            $grid->addColumnText('status', 'Status')
             ->setSortable()
-            ->setFilterText()
-            ->setAttribute('placeholder', 'Vyhledat status');
+            ->setRenderer(function ($item) {
+                // Zobrazí aktuální stav
+                return ucfirst($item->status);
+            });
+        
+            $grid->addAction('changeStatus', 'Změnit stav', 'changeStatus!')
+            ->setIcon('edit')
+            ->setClass(function ($item) {
+                // Pokud je stav 'paid' nebo 'canceled', přidáme třídu 'disabled'
+                return ($item->status == 'paid' || $item->status == 'canceled') ? 'btn btn-primary disabled' : 'btn btn-primary';
+            });
+
+            $grid->addAction('cancelOrder', 'Zrušit objednávku', 'cancelOrder!')
+    ->setIcon('trash')
+    ->setRenderer(function ($item) {
+        // Pokud je objednávka zrušena, deaktivujeme tlačítko
+        if ($item->status == 'canceled') {
+            return '<span class="btn btn-danger disabled">Objednávka zrušena</span>';
+        }
+        
+        // Tlačítko pro zrušení objednávky
+        return '<a href="' . $this->link('cancelOrder!', ['id' => $item->id]) . '" class="btn btn-danger">Zrušit objednávku</a>';
+    });
 
         $grid->addColumnNumber('total_price', 'Cena')
             ->setSortable()
@@ -90,6 +108,44 @@ class OrdersPresenter extends Nette\Application\UI\Presenter
 
         return $grid;
     }
+    public function handleChangeStatus(int $id): void
+    {
+        // Získání objednávky
+        $order = $this->ordersFacade->getOrderById($id);
+        
+        if (!$order) {
+            $this->error('Objednávka nenalezena.');
+        }
 
+        // Pokud je stav 'paid' nebo 'canceled', změna stavu není možná
+        if ($order->status == 'paid' || $order->status == 'canceled') {
+            $this->flashMessage('Stav objednávky nelze změnit.', 'error');
+        } else {
+            // Změna stavu na nový
+            $newStatus = $order->status == 'unpaid' ? 'paid' : 'unpaid'; // Příklad změny stavu
+            $this->ordersFacade->updateOrderStatus($id, $newStatus);
+            $this->flashMessage('Stav objednávky byl změněn.', 'success');
+        }
+
+        // Přesměrování zpět
+        $this->redirect('this');
+    }
+
+    public function handleCancelOrder(int $id): void
+    {
+        // Získání objednávky
+        $order = $this->ordersFacade->getOrderById($id);
+        
+        if (!$order) {
+            $this->error('Objednávka nenalezena.');
+        }
+
+        // Zrušení objednávky
+        $this->ordersFacade->cancelOrder($id);
+        $this->flashMessage('Objednávka byla zrušena.', 'success');
+
+        // Přesměrování zpět
+        $this->redirect('this');
+    }
 }        
 

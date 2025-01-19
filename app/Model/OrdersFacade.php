@@ -14,14 +14,31 @@ class OrdersFacade
     {
         $this->database = $database;
     }
+
     public function getOrders(): array
     {
     return $this->database->table('orders')->fetchAll();
     }
-    public function updateOrderStatus($id, $newStatus): void
+
+    public function getOrderById(int $id)
     {
-        $this->database->table('orders')
-            ->where('id', $id)
-            ->update(['status' => $newStatus]);
+        return $this->database->table('orders')->get($id);
+    }
+
+    public function updateOrderStatus(int $id, string $status): void
+    {
+        $this->database->table('orders')->where('id', $id)->update(['status' => $status]);
+    }
+    public function cancelOrder(int $id): void
+    {
+        $this->updateOrderStatus($id, 'canceled');
+    }
+
+    public function getOrdersByUserEmail(string $email)
+    {
+        return $this->database->table('orders')
+            ->where('email', $email)
+            ->order('created_at DESC')
+            ->fetchAll();
     }
 }

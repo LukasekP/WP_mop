@@ -1,0 +1,21 @@
+{block content}
+    <h1>Nákup vstupenky na festival: {$festival->name}</h1>
+
+    <p>
+        Cena vstupenky: <strong>{$festival->price} Kč</strong>
+    </p>
+
+    <p>Vyplňte prosím formulář níže pro nákup vstupenky.</p>
+
+    {control ticketPurchaseForm}
+
+    {if $flashes}
+        <ul class="flashes">
+            {foreach $flashes as $flash}
+                <li class="{$flash->type}">
+                    {$flash->message}
+                </li>
+            {/foreach}
+        </ul>
+    {/if}
+{/block}

@@ -9,7 +9,7 @@ use App\Model\FestivalFacade;
 
 use Nette;
 
-class OrdersPresenter extends Nette\Application\UI\Presenter
+class ProfilePresenter extends Nette\Application\UI\Presenter
 {
     public function __construct(private OrdersFacade $ordersFacade, private UserFacade $userFacade, private FestivalFacade $festivalFacade)
     {
@@ -22,7 +22,11 @@ class OrdersPresenter extends Nette\Application\UI\Presenter
     public function renderList(): void
     {
     }
-
+    public function renderTickets(): void
+    {
+        $email = $this->getUser()->getIdentity()->email;
+        $this->template->orders = $this->ordersFacade->getOrdersByUserEmail($email);
+    }
 
 }        
 

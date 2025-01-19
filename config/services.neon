@@ -4,6 +4,8 @@ session:
 services:
 	- App\Core\RouterFactory::createRouter
 	- App\MailSender\MailSender
+	- App\MailSender\PurchaseMailSender
+
 
 search:
 	-	in: %appDir%

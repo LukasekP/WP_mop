@@ -394,21 +394,24 @@ p {
 
 .profile-img {
     cursor: pointer;
+    border-radius: 50%; /* Kulatý obrázek */
+    width: 50px; /* Nastavení velikosti obrázku */
+    height: 50px;
+    object-fit: cover; /* Zajištění správného poměru stran */
 }
 
 .button-table {
     display: none; /* Skryje menu */
     position: absolute;
     top: 100%;
-    left: 0;
-    transform: translateX(-50%); /* Zarovná menu na střed pod obrázkem */
-
+    left: 50%;
+    transform: translateX(-70%); /* Zarovná menu na střed pod obrázkem */
     background-color: #fff;
     border: 1px solid #ccc;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     z-index: 10;
-    width: 120px; /* Nastaví šířku menu */
- 
+    width: 150px; /* Nastaví šířku menu */
+    border-radius: 8px; /* Přidá zaoblení rohů */
 }
 
 .profile-image:hover .button-table {
@@ -417,16 +420,24 @@ p {
 
 .button-table table {
     width: 100%;
+    border-collapse: collapse; /* Odebere mezery mezi buňkami */
 }
 
 .button-table td {
-    display: block; /* Tlačítka budou pod sebou */
+    text-align: center; /* Zarovná text na střed */
 }
 
 .button-table a {
+    display: block;
     padding: 10px; /* Větší mezera mezi odkazy */
     text-decoration: none;
     color: #333;
+    font-size: 14px; /* Nastavení velikosti písma */
+    transition: background-color 0.3s ease; /* Plynulý přechod při hoveru */
+}
+
+.button-table a:hover {
+    background-color: #f0f0f0; /* Zvýraznění odkazu při hoveru */
 }
 
 

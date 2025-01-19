@@ -1,0 +1,89 @@
+{block content}
+<div class="container">
+    <h1>Moje vstupenky</h1>
+
+        {if count($orders)}
+
+        <table class="orders-table">
+            <thead>
+                <tr>
+                    <th>Festival</th>
+                    <th>Datum objednávky</th>
+                    <th>Variabilní symbol</th>
+                    <th>Stav</th>
+                    <th>Cena</th>
+                </tr>
+            </thead>
+            <tbody>
+                {foreach $orders as $order}
+                    <tr>
+                        <td>{$order->ref('festivals', 'festival_id')->name}</td>
+                        <td>{$order->created_at|date:'j. n. Y H:i'}</td>
+                        <td>{$order->variable_symbol}</td>
+                        <td class="status {$order->status|lower}">{$order->status|capitalize}</td>
+                        <td>{number_format($order->total_price, 2, ' ', ',')} Kč</td>
+                    </tr>
+                {/foreach}
+            </tbody>
+        </table>
+    {else}
+        <p>Nemáte žádné objednávky.</p>
+    {/if}
+</div>
+
+<style>
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .orders-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    .orders-table th,
+    .orders-table td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: left;
+    }
+
+    .orders-table th {
+        background-color: #f4f4f4;
+        font-weight: bold;
+    }
+
+    .orders-table tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    .orders-table tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    .status {
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .status.unpaid {
+        color: #e74c3c;
+    }
+
+    .status.paid {
+        color: #2ecc71;
+    }
+
+    .status.canceled {
+        color: #95a5a6;
+    }
+</style>
+{/block}
