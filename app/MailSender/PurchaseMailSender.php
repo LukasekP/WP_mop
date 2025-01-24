@@ -2,26 +2,17 @@
 namespace App\MailSender;
 
 use Nette;
-use Nette\Mail\SmtpMailer;
+use Nette\Mail\Mailer;
 use Latte\Engine;
 class PurchaseMailSender
 {
-    private SmtpMailer $mailer;
 
 	public function __construct(
+        private Mailer $mailer,
 		private Nette\Application\LinkGenerator $linkGenerator,
 		private Nette\Bridges\ApplicationLatte\TemplateFactory $templateFactory,
         
-	) {
-        $this->mailer = new Nette\Mail\SmtpMailer(
-            host: 'smtp.seznam.cz',
-            username: 'festzone@email.cz',
-            password: 'I5XXkHHz',
-            port: 465,
-            encryption: 'ssl',
-         );
-        
-	}
+	) {}
 
 	private function createTemplate(): Nette\Application\UI\Template
 	{

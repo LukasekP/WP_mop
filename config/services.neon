@@ -5,8 +5,7 @@ services:
 	- App\Core\RouterFactory::createRouter
 	- App\MailSender\MailSender
 	- App\MailSender\PurchaseMailSender
-
-
+	- App\MailSender\ConfirmMailSender
 search:
 	-	in: %appDir%
 		classes:

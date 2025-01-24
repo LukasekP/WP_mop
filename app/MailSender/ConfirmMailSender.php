@@ -3,10 +3,8 @@ namespace App\MailSender;
 
 use Nette;
 use Nette\Mail\Mailer;
-use Nette\Mail\Message;
-
 use Latte\Engine;
-class MailSender
+class ConfirmMailSender
 {
 
 	public function __construct(
@@ -14,8 +12,7 @@ class MailSender
 		private Nette\Application\LinkGenerator $linkGenerator,
 		private Nette\Bridges\ApplicationLatte\TemplateFactory $templateFactory,
         
-	) {       
-	}
+	) {}
 
 	private function createTemplate(): Nette\Application\UI\Template
 	{
@@ -27,32 +24,37 @@ class MailSender
 	public function createEmail(): Nette\Mail\Message
 	{
 		$template = $this->createTemplate();
-		$html = $template->renderToString('/path/to/email.latte', $params);
+		$html = $template->renderToString('/path/to/confirmation.latte', $params);
 
 		$mail = new Nette\Mail\Message;
 		$mail->setHtmlBody($html);
 		// ...
 		return $mail;
 	}
-    public function createNotificationEmail( $email, string $firstname, string $lastname): Nette\Mail\Message
+    public function createConfirmEmail(int $id, $email, string $firstname, string $lastname, $festivalName): Nette\Mail\Message
     {
         $latte = new Engine;
         $params = [
-            
+            'id' => $id,
             'firstname' => $firstname,
             'lastname' => $lastname,
+            'festivalName' => $festivalName,
+
+            
         ];
-        $html = $latte->renderToString(__DIR__ . '/email.latte', $params);
+        $html = $latte->renderToString(__DIR__ . '/confirmation.latte', $params);
 
         $mail = new Nette\Mail\Message;
         $mail->setFrom('festzone@email.cz')
             ->addTo($email)
             ->addBcc('festzone@email.cz')
-            ->setSubject('Potvrzení registrace')
+            ->setSubject('Potvrzení platby')
             ->setHtmlBody($html);
         return $mail;
     }
-    public function sendEmail(Nette\Mail\Message $mail): void
+
+
+    public function sendConfirmEmail(Nette\Mail\Message $mail): void
     {
         $this->mailer->send($mail);
     }

@@ -1,6 +1,7 @@
 <?php
 namespace App\UI\Admin\Orders;
 use Ublaboo\DataGrid\DataGrid;
+use App\MailSender\ConfirmMailSender;
 
 use Nette\Application\UI\Form;
 use App\Model\OrdersFacade;
@@ -11,7 +12,11 @@ use Nette;
 
 class OrdersPresenter extends Nette\Application\UI\Presenter
 {
-    public function __construct(private OrdersFacade $ordersFacade, private UserFacade $userFacade, private FestivalFacade $festivalFacade)
+    public function __construct(
+        private OrdersFacade $ordersFacade, 
+        private UserFacade $userFacade,
+        private FestivalFacade $festivalFacade,
+        private ConfirmMailSender $mailSender,)
     {
         $this->ordersFacade = $ordersFacade;
         $this->userFacade = $userFacade;
@@ -112,7 +117,8 @@ class OrdersPresenter extends Nette\Application\UI\Presenter
     {
         // Získání objednávky
         $order = $this->ordersFacade->getOrderById($id);
-        
+        $festivalName = $this->festivalFacade->getFestivalById($order->festival_id)->name;
+        $mail = $this->mailSender->createConfirmEmail($order->id, $order->email, $order->firstname, $order->lastname, $festivalName);
         if (!$order) {
             $this->error('Objednávka nenalezena.');
         }
@@ -124,6 +130,9 @@ class OrdersPresenter extends Nette\Application\UI\Presenter
             // Změna stavu na nový
             $newStatus = $order->status == 'unpaid' ? 'paid' : 'unpaid'; // Příklad změny stavu
             $this->ordersFacade->updateOrderStatus($id, $newStatus);
+
+            $this->mailSender->sendConfirmEmail($mail);
+
             $this->flashMessage('Stav objednávky byl změněn.', 'success');
         }
 
