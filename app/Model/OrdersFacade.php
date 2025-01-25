@@ -41,4 +41,8 @@ class OrdersFacade
             ->order('created_at DESC')
             ->fetchAll();
     }
+    public function createOrder(array $data): void
+    {
+        $this->database->table('orders')->insert($data);
+    }
 }

@@ -5,15 +5,19 @@ use Nette;
 use Nette\Application\UI\Form;
 use Nette\Security\User;
 use App\MailSender\PurchaseMailSender;
-use Nette\Database\Explorer;
+use App\Model\FestivalFacade;
+use App\Model\OrdersFacade;
 
 class TicketPresenter extends Nette\Application\UI\Presenter
 {
     public function __construct(
         private PurchaseMailSender $mailSender,
-        private Explorer $database,
         private User $user,
+        private FestivalFacade $festivalFacade,
+        private OrdersFacade $ordersFacade
     ) {
+        $this->festivalFacade = $festivalFacade;
+        $this->ordersFacade = $ordersFacade;
     }
 
 
@@ -23,7 +27,7 @@ class TicketPresenter extends Nette\Application\UI\Presenter
     public function renderDefault(int $id, int $quantity = 1): void
     {
         // Načtení informací o festivalu z databáze
-        $festival = $this->database->table('festivals')->get($id);
+        $festival = $this->festivalFacade->getFestivalById($id);
     
         if (!$festival) {
             $this->error('Festival nenalezen.');
@@ -81,7 +85,7 @@ class TicketPresenter extends Nette\Application\UI\Presenter
     public function processTicketPurchase(Form $form, \stdClass $values): void
     {
         // Načtení ceny festivalu
-        $festival = $this->database->table('festivals')->get($values->festival_id);
+        $festival = $this->festivalFacade->getFestivalById($values->festival_id);
     
         if (!$festival) {
             $this->error('Festival nenalezen.');
@@ -94,7 +98,7 @@ class TicketPresenter extends Nette\Application\UI\Presenter
         $variableCode = random_int(10000000, 99999999);
     
         // Uložení objednávky do databáze
-        $this->database->table('orders')->insert([
+        $this->ordersFacade->createOrder([
             'firstname' => $values->firstname,
             'lastname' => $values->lastname,
             'email' => $values->email,
