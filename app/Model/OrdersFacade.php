@@ -15,9 +15,9 @@ class OrdersFacade
         $this->database = $database;
     }
 
-    public function getOrders(): array
+    public function getOrders()
     {
-    return $this->database->table('orders')->fetchAll();
+        return $this->database->table('orders');
     }
 
     public function getOrderById(int $id)

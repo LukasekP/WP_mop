@@ -2,20 +2,30 @@
     <h1>Nákup vstupenky na festival: {$festival->name}</h1>
 
     <p>
-        Cena vstupenky: <strong>{$festival->price} Kč</strong>
+        Celková cena: <strong id="total_price">{$festival->price}</strong> Kč
     </p>
 
     <p>Vyplňte prosím formulář níže pro nákup vstupenky.</p>
 
     {control ticketPurchaseForm}
 
-    {if $flashes}
-        <ul class="flashes">
-            {foreach $flashes as $flash}
-                <li class="{$flash->type}">
-                    {$flash->message}
-                </li>
-            {/foreach}
-        </ul>
-    {/if}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var quantityInput = document.querySelector('input[name="quantity"]');
+            var totalPriceElement = document.getElementById('total_price');
+            var pricePerTicket = {$festival->price};
+
+            function updateTotalPrice() {
+                var quantity = parseInt(quantityInput.value) || 1;
+                var totalPrice = quantity * pricePerTicket;
+                totalPriceElement.textContent = totalPrice;
+            }
+
+            // Přepočítat cenu při načtení stránky
+            updateTotalPrice();
+
+            // Přepočítat cenu při změně množství
+            quantityInput.addEventListener('input', updateTotalPrice);
+        });
+    </script>
 {/block}

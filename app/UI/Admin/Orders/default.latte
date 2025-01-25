@@ -1,4 +1,32 @@
 {block content}
 <h1>Objednavky</h1>
-{control ordersGrid}
+
+<div class="dropdown mb-3">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="orderDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+        {if $order === 'unpaid'}
+            Nezaplacené
+        {elseif $order === 'paid'}
+            Zaplacené
+        {elseif $order === 'canceled'}
+            Zrušené
+        {else}
+            Nezaplacené
+        {/if}
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="roleDropdown">
+        <li><a class="dropdown-item" href="{link :default, 'unpaid'}">Nezaplacené</a></li>
+        <li><a class="dropdown-item" href="{link :default, 'paid'}">Zaplacené</a></li>
+        <li><a class="dropdown-item" href="{link :default, 'canceled'}">Zrušené</a></li>
+    </ul>
+</div>
+{if $order === 'unpaid' || !$order}
+    {control unpaidOrdersGrid}
+{elseif $order === 'paid'}
+    {control paidOrdersGrid}
+{elseif $order === 'canceled'}
+    {control canceledOrdersGrid}
+{/if}
+
+
 {/block}
+

@@ -20,43 +20,48 @@ class TicketPresenter extends Nette\Application\UI\Presenter
     /**
      * Formulář pro nákup vstupenky
      */
-    public function renderDefault(int $id): void
+    public function renderDefault(int $id, int $quantity = 1): void
     {
         // Načtení informací o festivalu z databáze
         $festival = $this->database->table('festivals')->get($id);
-
+    
         if (!$festival) {
             $this->error('Festival nenalezen.');
         }
-
+    
         // Předání dat do šablony
         $this->template->festival = $festival;
+        $this->template->quantity = $quantity; // Počet vstupenek
+        $this->template->totalPrice = $festival->price * $quantity; // Celková cena
     }
-
     protected function createComponentTicketPurchaseForm(): Form
     {
         $form = new Form;
-
+    
         $form->addText('firstname', 'Jméno:')
             ->setRequired('Zadejte prosím své jméno.');
-
+    
         $form->addText('lastname', 'Příjmení:')
             ->setRequired('Zadejte prosím své příjmení.');
-
+    
         $form->addEmail('email', 'E-mail:')
             ->setRequired('Zadejte prosím svůj e-mail.');
-
+    
         $form->addText('phone', 'Telefon:')
             ->setRequired('Zadejte prosím svůj telefon.');
-
+    
         $form->addHidden('festival_id', $this->getParameter('id') ?? null)
             ->setRequired('Festival ID chybí.');
-
-        // Přidání ceny festivalu z načtených dat
-
-
+    
+        $form->addInteger('quantity', 'Počet vstupenek:')
+            ->setDefaultValue($this->getParameter('quantity') ?? 1)
+            ->addRule($form::INTEGER, 'Zadejte platný počet vstupenek.')
+            ->addRule($form::MIN, 'Minimální počet vstupenek je 1.', 1)
+            ->addRule($form::MAX, 'Maximální počet vstupenek je 10.', 10)
+            ->setRequired('Zadejte počet vstupenek.');
+    
         $form->addSubmit('submit', 'Koupit vstupenku');
-
+    
         // Předvyplnění formuláře, pokud je uživatel přihlášen
         if ($this->user->isLoggedIn()) {
             $identity = $this->user->getIdentity();
@@ -67,17 +72,27 @@ class TicketPresenter extends Nette\Application\UI\Presenter
                 'phone' => $identity->phone ?? '',
             ]);
         }
-
+    
         $form->onSuccess[] = [$this, 'processTicketPurchase'];
-
+    
         return $form;
     }
-
+    
     public function processTicketPurchase(Form $form, \stdClass $values): void
     {
+        // Načtení ceny festivalu
+        $festival = $this->database->table('festivals')->get($values->festival_id);
+    
+        if (!$festival) {
+            $this->error('Festival nenalezen.');
+        }
+    
+        // Výpočet celkové ceny
+        $totalPrice = $festival->price * $values->quantity;
+    
         // Generování variabilního symbolu
         $variableCode = random_int(10000000, 99999999);
-
+    
         // Uložení objednávky do databáze
         $this->database->table('orders')->insert([
             'firstname' => $values->firstname,
@@ -85,17 +100,24 @@ class TicketPresenter extends Nette\Application\UI\Presenter
             'email' => $values->email,
             'phone' => $values->phone,
             'festival_id' => $values->festival_id,
+            'quantity' => $values->quantity, // Ukládáme počet vstupenek
+            'total_price' => $totalPrice, // Ukládáme celkovou cenu
             'variable_symbol' => $variableCode,
-            'total_price' => 10,
         ]);
-		$mail = $this->mailSender->createPurchaseEmail($values->email, $values->firstname, $values->lastname, $variableCode);
 
-        // Odeslání e-mailu uživateli
-     
-        $this->mailSender->sendPurchaseEmail($mail);
-        // Přesměrování na potvrzovací stránku
-        $this->redirect('Ticket:confirmation');
-    }
+    // Vytvoření a odeslání e-mailu
+    $mail = $this->mailSender->createPurchaseEmail(
+        $values->email,
+        $values->firstname,
+        $values->lastname,
+        $variableCode
+    );
+
+    $this->mailSender->sendPurchaseEmail($mail);
+
+    // Přesměrování na potvrzovací stránku
+    $this->redirect('Ticket:confirmation');
+}
     /**
      * Akce pro potvrzovací stránku
      */

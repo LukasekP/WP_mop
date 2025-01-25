@@ -24,15 +24,33 @@ class OrdersPresenter extends Nette\Application\UI\Presenter
     }
    
 
-    public function renderList(): void
+    public function renderDefault(string $order = 'unpaid')
     {
-    }
-    protected function createComponentOrdersGrid(string $name): DataGrid
-    {
-        $grid = new DataGrid($this, $name);
+        
+        $this->template->order = $order;
 
+    }
+    protected function createComponentUnpaidOrdersGrid(): DataGrid
+    {
+        return $this->createOrdersGrid('unpaid');
+    }
+    protected function createComponentCanceledOrdersGrid(): DataGrid
+    {
+        return $this->createOrdersGrid('canceled');
+    }
+    
+    protected function createComponentPaidOrdersGrid(): DataGrid
+    {
+        return $this->createOrdersGrid('paid');
+    }
+    private function createOrdersGrid($order): DataGrid
+    {
+        $grid = new DataGrid();
+
+        $dataSource = $this->ordersFacade->getOrders()->where('status', $order);
         // Zdrojem dat je tabulka orders
-        $grid->setDataSource($this->ordersFacade->getOrders());
+        $grid->setDataSource($dataSource);
+
         // Sloupce
         $grid->addColumnNumber('id', 'ID')
             ->setSortable();
@@ -101,15 +119,7 @@ class OrdersPresenter extends Nette\Application\UI\Presenter
             ->setSortable()
             ->setFormat('d.m.Y H:i');
 
-        // Akce (např. pro úpravu objednávky)
-        // $grid->addAction('edit', 'Edit', 'editOrder!')
-        //     ->setIcon('pencil-alt')
-        //     ->setClass('btn btn-sm btn-primary');
-
-        // $grid->addAction('delete', 'Delete', 'deleteOrder!')
-        //     ->setIcon('trash')
-        //     ->setClass('btn btn-sm btn-danger')
-        //     ->setConfirmation(new \Ublaboo\DataGrid\Column\Action\Confirmation\StringConfirmation('Are you sure you want to delete order %s?', 'variable_symbol'));
+      
 
         return $grid;
     }

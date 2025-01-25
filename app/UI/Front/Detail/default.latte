@@ -44,11 +44,19 @@
     </div>
 
     <!-- Cena a tlačítko -->
-    <h4 class="section-title">Vstupenky</h4>
-    <div class="d-flex justify-content-between align-items-center py-3 px-4" style="background-color: #eaf4f4; border-radius: 10px;">
-        <p class="m-0" style="font-size: 1.5rem; font-weight: bold; color: #e63946;">Cena: {$festival->price} Kč</p>
-        <a n:href="Ticket:default , $festival->id" class="btn btn-lg btn-success" style="background-color: #0095c3; border: none; padding: 10px 20px;">Koupit vstupenky</a>
-    </div>
+<h4 class="section-title">Vstupenky</h4>
+<div class="d-flex justify-content-between align-items-center py-3 px-4" style="background-color: #eaf4f4; border-radius: 10px;">
+    <p class="m-0" style="font-size: 1.5rem; font-weight: bold; color: #e63946;">
+        Cena za vstupenku: {$festival->price} Kč
+    </p>
+<form method="get" action="{link Ticket:default , $festival->id}">
+    <input type="hidden" name="id" value="{$festival->id}" />
+    <input type="number" name="quantity" value="1" min="1" max="10" class="form-control me-3" style="width: 80px;" />
+    <button type="submit" class="btn btn-lg btn-success" style="background-color: #0095c3; border: none; padding: 10px 20px;">
+        Koupit vstupenky
+    </button>
+</form>
+</div>
 
 
     <!-- Program festivalu -->
