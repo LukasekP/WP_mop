@@ -9,6 +9,8 @@
 	{* Page title with optional prefix from the child template *}
 	<title>{ifset title}{include title|stripHtml} | {/ifset}FestZone</title>
 	<link rel="stylesheet" href="{$basePath}/css/style.css">
+    	<link rel="stylesheet" href="{$basePath}/css/style2.css">
+
 
 	{* Link to the Bootstrap stylesheet for styling *}
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -33,7 +35,7 @@
     </ul>
     <ul class="right-menu">
         <li n:if="!$user->isLoggedIn()">
-            <a n:href="Sign:in">Přihlásit se</a>
+            <a n:href="Sign:in" class="login-link">Přihlásit se</a>
         </li>
         
         {if $user->isLoggedIn()}
@@ -46,7 +48,7 @@
         <div class="button-table">
             <table>
                 <tr>
-                    <td><a href="#">Profil</a></td>
+                    <td><a href="Profile:default">Profil</a></td>
                 </tr>
                 <tr>
                     <td><a n:href="Profile:tickets">Vstupenky</a></td>

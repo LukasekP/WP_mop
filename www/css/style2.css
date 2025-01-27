@@ -25,3 +25,253 @@
     margin-top: 0.5rem;
 }
 
+
+/* Ticket:default */
+/* Obecné styly */
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+}
+
+.page-title {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.price-info {
+    font-size: 1.2rem;
+    color: #333;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.form-instruction {
+    font-size: 1rem;
+    text-align: center;
+    color: #666;
+    margin-bottom: 2rem;
+}
+
+/* Styl pro formulář */
+.form-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-container form div {
+    margin-bottom: 1.5rem;
+}
+
+.form-container label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.form-container input[type="text"],
+.form-container input[type="email"],
+.form-container input[type="tel"],
+.form-container input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.form-container input[type="text"]:focus,
+.form-container input[type="email"]:focus,
+.form-container input[type="tel"]:focus,
+.form-container input[type="number"]:focus {
+    border-color: #0095c3;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 149, 195, 0.5);
+}
+
+.form-container button[type="submit"] {
+    display: inline-block;
+    width: 100%;
+    background-color: #0095c3;
+    color: #fff;
+    padding: 12px 20px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: background-color 0.3s;
+}
+
+.form-container button[type="submit"]:hover {
+    background-color: #007b99;
+}
+ /* Ticket:confirmation */
+
+ .success-container {
+    max-width: 800px;
+    margin: 100px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* Titulek úspěchu */
+.success-title {
+    font-size: 2.5rem;
+    color: #0095c3;
+    margin-bottom: 20px;
+}
+
+/* Text zprávy */
+.success-message {
+    font-size: 1.2rem;
+    color: #555;
+    margin-bottom: 30px;
+}
+
+/* Odkaz zpět */
+.back-link {
+    display: inline-block;
+    font-size: 1.1rem;
+    color: #ffffff;
+    background-color: #0095c3;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.back-link:hover {
+    background-color: #007b99;
+}
+
+/* Sign:out */
+
+.signout-container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* Titulek odhlášení */
+.signout-title {
+    font-size: 2rem;
+    color: #d9534f;
+    margin-bottom: 60px;
+}
+
+/* Text zprávy */
+.signout-message {
+    font-size: 1.2rem;
+    color: #555;
+    margin-top: 10px;
+}
+
+/* Odkaz na přihlášení */
+.signin-link {
+    font-size: 1.1rem;
+    color: #ffffff;
+    background-color: #0095c3;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.signin-link:hover {
+    background-color: #31b0d5;
+}
+
+/* Sign:in */
+
+/* Kontejner přihlášení */
+.signin-container {
+    max-width: 400px;
+    margin: 100px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* Titulek přihlášení */
+.signin-title {
+    font-size: 2rem;
+    color: #0095c3;
+    margin-bottom: 20px;
+}
+
+/* Odkaz na registraci */
+.register-link {
+    font-size: 1rem;
+    color: #5bc0de;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.register-link:hover {
+    color: #0275d8;
+}
+
+/* Tlačítko přihlášení */
+.btn-block {
+    width: 100%;
+    padding: 10px;
+    font-size: 1.2rem;
+    border-radius: 5px;
+}
+
+/* Sign:up */
+
+/* Kontejner registrace */
+.signup-container {
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* Titulek registrace */
+.signup-title {
+    font-size: 2rem;
+    color: #0095c3;
+    margin-bottom: 20px;
+}
+
+/* Odkaz na přihlášení */
+.login-link {
+    font-size: 1rem;
+    color: #0095c3;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.login-link:hover {
+    color: #0c406d;
+}
+
+/* Tlačítko registrace */
+.btn-block {
+    width: 100%;
+    padding: 10px;
+    font-size: 1.2rem;
+    border-radius: 5px;
+}

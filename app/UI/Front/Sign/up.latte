@@ -1,9 +1,13 @@
-{* The sign-up page *}
+{* Stránka registrace *}
 
 {block content}
-<h1 n:block=title>Sign Up</h1>
+<div class="signup-container">
+    <h1 class="signup-title" n:block=title>Registrace</h1>
 
-{include bootstrap-form signUpForm}
+    {include bootstrap-form signUpForm}
 
-
-<p class="text-center"><a n:href="in">Already have an account? Log in.</a></p>
+    <p class="text-center">
+        <a n:href="in" class="login-link">Už máte účet? Přihlaste se.</a>
+    </p>
+</div>
+{/block}

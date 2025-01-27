@@ -7,6 +7,10 @@ use Nette\Security\User;
 use App\MailSender\PurchaseMailSender;
 use App\Model\FestivalFacade;
 use App\Model\OrdersFacade;
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Writer\PngWriter;
+use Nette\Application\LinkGenerator;
+
 
 class TicketPresenter extends Nette\Application\UI\Presenter
 {
@@ -14,10 +18,12 @@ class TicketPresenter extends Nette\Application\UI\Presenter
         private PurchaseMailSender $mailSender,
         private User $user,
         private FestivalFacade $festivalFacade,
-        private OrdersFacade $ordersFacade
+        private OrdersFacade $ordersFacade,
+        private LinkGenerator $linkGenerator
     ) {
         $this->festivalFacade = $festivalFacade;
         $this->ordersFacade = $ordersFacade;
+        $this->linkGenerator = $linkGenerator;
     }
 
 
@@ -93,10 +99,13 @@ class TicketPresenter extends Nette\Application\UI\Presenter
     
         // Výpočet celkové ceny
         $totalPrice = $festival->price * $values->quantity;
-    
+
         // Generování variabilního symbolu
         $variableCode = random_int(10000000, 99999999);
-    
+
+       
+
+
         // Uložení objednávky do databáze
         $this->ordersFacade->createOrder([
             'firstname' => $values->firstname,
@@ -114,7 +123,10 @@ class TicketPresenter extends Nette\Application\UI\Presenter
         $values->email,
         $values->firstname,
         $values->lastname,
-        $variableCode
+        $variableCode,
+        $totalPrice,
+        
+        
     );
 
     $this->mailSender->sendPurchaseEmail($mail);

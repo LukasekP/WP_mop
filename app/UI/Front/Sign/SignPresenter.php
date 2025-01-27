@@ -112,7 +112,9 @@ final class SignPresenter extends Nette\Application\UI\Presenter
 			->setRequired('Prosím, zadejte město.');
 	
 
-		$form->addSubmit('send', 'Sign up');
+		$form->addSubmit('send', 'Sign up')
+		->setHtmlAttribute('class', 'btn btn-primary btn-block');
+
 			
 		
 		// Handle form submission

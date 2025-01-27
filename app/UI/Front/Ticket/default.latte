@@ -1,31 +1,31 @@
 {block content}
-    <h1>Nákup vstupenky na festival: {$festival->name}</h1>
+<h1 class="page-title">Nákup vstupenky na festival: {$festival->name}</h1>
 
-    <p>
-        Celková cena: <strong id="total_price">{$festival->price}</strong> Kč
-    </p>
+<p class="price-info">
+    Celková cena: <strong id="total_price">{$festival->price}</strong> Kč
+</p>
 
-    <p>Vyplňte prosím formulář níže pro nákup vstupenky.</p>
+<p class="form-instruction">Vyplňte prosím formulář níže pro nákup vstupenky.</p>
 
+<div class="form-container">
     {control ticketPurchaseForm}
+</div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var quantityInput = document.querySelector('input[name="quantity"]');
-            var totalPriceElement = document.getElementById('total_price');
-            var pricePerTicket = {$festival->price};
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var quantityInput = document.querySelector('input[name="quantity"]');
+        var totalPriceElement = document.getElementById('total_price');
+        var pricePerTicket = {$festival->price};
 
-            function updateTotalPrice() {
-                var quantity = parseInt(quantityInput.value) || 1;
-                var totalPrice = quantity * pricePerTicket;
-                totalPriceElement.textContent = totalPrice;
-            }
+        function updateTotalPrice() {
+            var quantity = parseInt(quantityInput.value) || 1;
+            var totalPrice = quantity * pricePerTicket;
+            totalPriceElement.textContent = totalPrice;
+        }
 
-            // Přepočítat cenu při načtení stránky
-            updateTotalPrice();
+        updateTotalPrice();
 
-            // Přepočítat cenu při změně množství
-            quantityInput.addEventListener('input', updateTotalPrice);
-        });
-    </script>
+        quantityInput.addEventListener('input', updateTotalPrice);
+    });
+</script>
 {/block}
