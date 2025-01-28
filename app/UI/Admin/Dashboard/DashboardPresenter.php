@@ -22,8 +22,12 @@ final class DashboardPresenter extends Nette\Application\UI\Presenter
     {
         $this->festivalFacade = $festivalFacade;
     }
-	public function renderDefault(): void
+    public function renderDefault(): void
     {
+        if (!$this->getUser()->isInRole('admin') && !$this->getUser()->isInRole('bandManager') && !$this->getUser()->isInRole('festivalManager') && !$this->getUser()->isInRole('accountant')) {
+            $this->redirect(':Front:Home:default');
+        }
+
         $this->template->festivals = $this->festivalFacade->getFestivals();
     }
    
@@ -72,12 +76,14 @@ final class DashboardPresenter extends Nette\Application\UI\Presenter
              ->setAttribute('placeholder', 'Vyhledat cenu');
 
     
+    if ($this->getUser()->isInRole('admin') || $this->getUser()->isInRole('festivalManager')) {
         $grid->addAction('edit', 'Edit', 'edit!')
              ->setIcon('pencil-alt')
              ->setClass('btn btn-xs btn-primary ajax');  
     
         $grid->addAction('deleteFestival', 'Smazat', 'deleteFestival!')
              ->setClass('btn btn-xs btn-danger ajax');
+            }
     
         return $grid;
     }

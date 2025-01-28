@@ -3,9 +3,9 @@
 
 <h1 class="section-title" style="font-weight: bold; font-size: 2rem;">{$festival->name}</h1>
 
-
-<div><a href="{link 'Stage:addStage', $festival->id}" class="btn btn-primary">Přidat stage</a></div>
-
+    {if $user->isInRole('admin') || $user->isInRole('festivalManager')}
+        <div><a href="{link 'Stage:addStage', $festival->id}" class="btn btn-primary">Přidat stage</a></div>
+    {/if}
 
     <!-- Carousel -->
 <div id="festivalCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
@@ -55,13 +55,19 @@
         <thead>
             <tr style="background-color: #caf0f8; color: #023e8a; font-weight: bold;">
                 {foreach $stages as $stage}
-                    <th>
-<button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton-{$stage->id}" data-bs-toggle="dropdown" aria-expanded="false">                            {$stage->name}
-                        </button>
-                        <ul class="dropdown-menu dropup" aria-labelledby="dropdownMenuButton-{$stage->id}">
-                            <li><a class="dropdown-item" href="{link 'Stage:editStage', $festival->id, $stage->id}">Přidat kapely</a></li>
-                            <li><a class="dropdown-item" href="{link deleteStage! $stage->id}">Smazat</a></li>
-                        </ul>
+                   <th>
+                        
+                        {if $user->isInRole('admin') || $user->isInRole('festivalManager')}
+                            <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton-{$stage->id}" data-bs-toggle="dropdown" aria-expanded="false">
+                                {$stage->name}
+                            </button>
+                            <ul class="dropdown-menu dropup" aria-labelledby="dropdownMenuButton-{$stage->id}">
+                                <li><a class="dropdown-item" href="{link 'Stage:editStage', $festival->id, $stage->id}">Přidat kapely</a></li>
+                                <li><a class="dropdown-item" href="{link deleteStage! $stage->id}">Smazat</a></li>
+                            </ul>
+                        {else}
+                            {$stage->name}
+                        {/if}
                     </th>
                 {/foreach}
             </tr>

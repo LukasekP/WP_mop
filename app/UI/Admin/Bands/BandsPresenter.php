@@ -19,11 +19,18 @@ class BandsPresenter extends Nette\Application\UI\Presenter
 
     public function renderList(): void
     {
+        if (!$this->user->isInRole('admin') && !$this->user->isInRole('bandManager')) {
+            $this->redirect(':Front:Home:default');
+        }
+
         $this->template->bands = $this->bandsFacade->getAllBands();
     }
 
     public function renderAddBand(): void
     {
+        if (!$this->user->isInRole('admin') && !$this->user->isInRole('bandManager')) {
+            $this->redirect(':Front:Home:default');
+        }
     }
 
     protected function createComponentAddBandForm(): Form
@@ -55,6 +62,10 @@ class BandsPresenter extends Nette\Application\UI\Presenter
 
     public function renderEditBandOnStage(int $festivalId, int $stageId, int $bandId): void
     {
+        if (!$this->user->isInRole('admin') && !$this->user->isInRole('bandManager')) {
+            $this->redirect(':Front:Home:default');
+        }
+
         $band = $this->bandsFacade->getBandById($bandId);
         $stageBand = $this->bandsFacade->getStageBand($stageId, $bandId);
     
@@ -71,6 +82,10 @@ class BandsPresenter extends Nette\Application\UI\Presenter
 
     public function renderAddBandToStage(int $festivalId, int $stageId): void
     {
+        if (!$this->user->isInRole('admin') && !$this->user->isInRole('bandManager')) {
+            $this->redirect(':Front:Home:default');
+        }
+
         $stage = $this->festivalFacade->getStageById($stageId);
         $this->template->stage = $stage;
 
@@ -211,11 +226,15 @@ class BandsPresenter extends Nette\Application\UI\Presenter
 
     public function renderEditBand(int $id): void
     {
+        if (!$this->user->isInRole('admin') && !$this->user->isInRole('bandManager')) {
+            $this->redirect(':Front:Home:default');
+        }
+
         $band = $this->bandsFacade->getBandById($id);
         $this->getComponent('addBandForm')
              ->setDefaults($band->toArray());
 
         $this->template->band = $band;
-        }
+    }
 }        
 

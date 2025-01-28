@@ -28,19 +28,42 @@
     </div>
     <ul class="left-menu">
  
-		<li>
-		 	<a n:href="Dashboard:default">Admin</a>
-		</li>
-		<li>
-			<a n:href="User:">Tabulka uživatelů</a>
-		</li>
-		<li>
-			<a n:href="Festival:add">Přidat festival</a>
-		<li>
-		<li>
-			<a n:href="Bands:list">Seznam Kapel</a>
-		<li>
+    <li>
+        <a n:href="Dashboard:default">Admin</a>
+    </li>
 
+    {if $user->isInRole('admin')}
+        <li>
+            <a n:href="User:">Tabulka uživatelů</a>
+        </li>
+        <li>
+            <a n:href="Festival:add">Přidat festival</a>
+        </li>
+        <li>
+            <a n:href="Bands:list">Seznam Kapel</a>
+        </li>
+        <li>
+            <a n:href="Orders:default">Objednávky</a>
+        </li>
+    {/if}
+
+    {if $user->isInRole('bandManager')}
+        <li>
+            <a n:href="Bands:list">Seznam Kapel</a>
+        </li>
+    {/if}
+
+    {if $user->isInRole('festivalManager')}
+        <li>
+            <a n:href="Festival:add">Přidat festival</a>
+        </li>
+    {/if}
+
+    {if $user->isInRole('accountant')}
+        <li>
+            <a n:href="Orders:default">Objednávky</a>
+        </li>
+    {/if}
         
 		  <li n:if="$user->isLoggedIn()">
             <a href="{link User:edit, $user->id}">Změnit přihlašovací údaje</a>

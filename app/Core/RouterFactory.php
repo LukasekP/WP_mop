@@ -17,6 +17,11 @@ final class RouterFactory
         $adminRouter->addRoute('admin/<presenter>/<action>[/<id>]', 'Dashboard:default');
         $router->add($adminRouter);
 
+        
+        $bandManagerRouter = new RouteList('BandManager');
+        $bandManagerRouter->addRoute('admin/<presenter>/<action>[/<id>]', 'Dashboard:default');
+        $router->add($bandManagerRouter);
+
         // Front modul
         $frontRouter = new RouteList('Front');
         $frontRouter->addRoute('<presenter>/<action>[/<id>]', 'Home:default');

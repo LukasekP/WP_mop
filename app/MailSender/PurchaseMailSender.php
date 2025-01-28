@@ -49,6 +49,7 @@ class PurchaseMailSender
         
 
         file_put_contents($qrFilePath, $qrImage->getString());
+        $qrFileUrl = "https://vas-server.cz/QRcodes/{$variableCode}.png";
 
 
         // Předání parametrů do šablony

@@ -57,7 +57,7 @@ final class SignPresenter extends Nette\Application\UI\Presenter
 				$this->getUser()->login($data->username, $data->password);
 				$this->restoreRequest($this->backlink);
 				
-				if ($this->getUser()->isInRole('admin')) {
+				if ($this->getUser()->isInRole('admin') || $this->getUser()->isInRole('bandManager') || $this->getUser()->isInRole('festivalManager') || $this->getUser()->isInRole('accountant')) {
 					$this->redirect(':Admin:Dashboard:default');
 
 				} elseif ($this->getUser()->isInRole('user')) {
