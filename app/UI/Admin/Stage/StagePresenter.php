@@ -16,6 +16,9 @@ class StagePresenter extends Nette\Application\UI\Presenter
     }
     public function renderEditStage(int $festivalId, int $stageId): void
     {
+        if (!$this->getUser()->isInRole('admin') && !$this->getUser()->isInRole('festivalManager')) {
+            $this->redirect(':Front:Home:default');
+        }
         $festival = $this->festivalFacade->getFestivalById($festivalId);
         $stage = $this->festivalFacade->getStageById($stageId);
 
@@ -26,6 +29,9 @@ class StagePresenter extends Nette\Application\UI\Presenter
     }
     public function renderAddStage(int $festivalId): void
     {
+        if (!$this->getUser()->isInRole('admin') && !$this->getUser()->isInRole('festivalManager')) {
+            $this->redirect(':Front:Home:default');
+        }
         $festival = $this->festivalFacade->getFestivalById($festivalId);
       
         $this->template->festival = $festival;
@@ -53,7 +59,7 @@ class StagePresenter extends Nette\Application\UI\Presenter
     public function handleDeleteBand(int $stageId, int $bandId): void
     {
         $this->BandsFacade->deleteBand($stageId, $bandId);
-        $this->flashMessage('Kapela byla úspěšně smazána.', 'success');
+        $this->flashMessage('Kapela byla úspěšně smazána.', 'danger');
         $this->redirect('this');
     }
 }

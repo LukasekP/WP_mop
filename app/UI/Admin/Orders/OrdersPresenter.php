@@ -26,7 +26,9 @@ class OrdersPresenter extends Nette\Application\UI\Presenter
 
     public function renderDefault(string $order = 'unpaid')
     {
-        
+        if (!$this->user->isInRole('admin') && !$this->user->isInRole('accountant')) {
+            $this->redirect(':Front:Home:default');
+        }
         $this->template->order = $order;
 
     }
@@ -86,24 +88,24 @@ class OrdersPresenter extends Nette\Application\UI\Presenter
                 return ucfirst($item->status);
             });
         
-            $grid->addAction('changeStatus', 'Změnit stav', 'changeStatus!')
+            $grid->addAction('changeStatus', 'Zaplaceno', 'changeStatus!')
             ->setIcon('edit')
             ->setClass(function ($item) {
                 // Pokud je stav 'paid' nebo 'canceled', přidáme třídu 'disabled'
                 return ($item->status == 'paid' || $item->status == 'canceled') ? 'btn btn-primary disabled' : 'btn btn-primary';
             });
 
-            $grid->addAction('cancelOrder', 'Zrušit objednávku', 'cancelOrder!')
-    ->setIcon('trash')
-    ->setRenderer(function ($item) {
-        // Pokud je objednávka zrušena, deaktivujeme tlačítko
-        if ($item->status == 'canceled') {
-            return '<span class="btn btn-danger disabled">Objednávka zrušena</span>';
-        }
-        
-        // Tlačítko pro zrušení objednávky
-        return '<a href="' . $this->link('cancelOrder!', ['id' => $item->id]) . '" class="btn btn-danger">Zrušit objednávku</a>';
-    });
+            $grid->addAction('cancelOrder', 'Zrušit', 'cancelOrder!')
+                ->setIcon('trash')
+                ->setRenderer(function ($item) {
+                    // Pokud je objednávka zrušena, deaktivujeme tlačítko
+                    if ($item->status == 'canceled') {
+                        return '<span class="btn btn-danger disabled">Objednávka zrušena</span>';
+                    }
+                    
+                    // Tlačítko pro zrušení objednávky
+                    return '<a href="' . $this->link('cancelOrder!', ['id' => $item->id]) . '" class="btn btn-danger">Zrušit</a>';
+                });
 
         $grid->addColumnNumber('total_price', 'Cena')
             ->setSortable()

@@ -17,7 +17,6 @@ final class UserPresenter extends Nette\Application\UI\Presenter
         $user = $this->getUser();
     
         if(!$user->isInRole('admin')){
-            $this->flashMessage('Nemáte dostatečná práva k této strance', 'error');
             $this->redirect(':Front:Home:');
         }
         
@@ -27,6 +26,9 @@ final class UserPresenter extends Nette\Application\UI\Presenter
     }
     public function renderDetail($id)
     {
+        if(!$user->isInRole('admin')){
+            $this->redirect(':Front:Home:');
+        }
         $user = $this->userFacade->getUserById($id); 
                 $this->template->u = $this->userFacade->getUserById($id);
                 $this->template->userData = $this->userFacade->getUserById($id);
@@ -36,6 +38,9 @@ final class UserPresenter extends Nette\Application\UI\Presenter
 
     public function renderEdit($id)
     {
+        if(!$user->isInRole('admin')){
+            $this->redirect(':Front:Home:');
+        }
         $user = $this->userFacade->getUserById($id); 
        
         $this->getComponent('editForm')

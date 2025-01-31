@@ -18,6 +18,13 @@ class FestivalPresenter extends Nette\Application\UI\Presenter
     
 
     // Rendery
+    public function renderAdd(): void
+    {
+        // Kontrola role uživatele
+        if (!$this->getUser()->isInRole('admin') && !$this->getUser()->isInRole('festivalManager')) {
+            $this->redirect(':Front:Home:default');
+        }
+    }
 
     public function renderDetail(int $id): void
     {
@@ -31,6 +38,9 @@ class FestivalPresenter extends Nette\Application\UI\Presenter
     }
     public function renderEditFestival($id): void
     {
+        if (!$this->getUser()->isInRole('admin') && !$this->getUser()->isInRole('festivalManager')) {
+            $this->redirect(':Front:Home:default');
+        }
         $festival = $this->festivalFacade->getFestivalById($id);
         $images = $this->festivalFacade->getFestivalImages($id); 
 
@@ -42,6 +52,9 @@ class FestivalPresenter extends Nette\Application\UI\Presenter
     }
     public function renderMainImage(int $id): void
 {
+    if (!$this->getUser()->isInRole('admin') && !$this->getUser()->isInRole('festivalManager')) {
+        $this->redirect(':Front:Home:default');
+    }
     $festivalImages = $this->festivalFacade->getFestivalImages($id);
 
     Debugger::log("Festival Images: " . json_encode($festivalImages->fetchAll()), 'info');

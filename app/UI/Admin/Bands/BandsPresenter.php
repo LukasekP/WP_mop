@@ -62,7 +62,7 @@ class BandsPresenter extends Nette\Application\UI\Presenter
 
     public function renderEditBandOnStage(int $festivalId, int $stageId, int $bandId): void
     {
-        if (!$this->user->isInRole('admin') && !$this->user->isInRole('bandManager')) {
+        if (!$this->user->isInRole('admin') && !$this->user->isInRole('bandManager') && !$this->user->isInRole('festivalManager')) {
             $this->redirect(':Front:Home:default');
         }
 
@@ -82,7 +82,7 @@ class BandsPresenter extends Nette\Application\UI\Presenter
 
     public function renderAddBandToStage(int $festivalId, int $stageId): void
     {
-        if (!$this->user->isInRole('admin') && !$this->user->isInRole('bandManager')) {
+        if (!$this->user->isInRole('admin') && !$this->user->isInRole('bandManager') && !$this->user->isInRole('festivalManager')) {            
             $this->redirect(':Front:Home:default');
         }
 
