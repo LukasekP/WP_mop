@@ -1,22 +1,20 @@
 {block content}
-<h1>Detail uživatele</h1>
+<div class="user-container">
+    <h1>Detail uživatele</h1>
+    <div class="user-info">
+        <p><strong>Jméno:</strong> {$userData->username}</p>
+        <p><strong>Email:</strong> {$userData->email}</p>
+        <p><strong>Role:</strong> {$userData->role}</p>
+    </div>
 
-<table border="1" style="border-collapse: collapse; width: 100%;">
-    <tr>
-        <th>Jméno</th>
-        <td>{$userData->username}</td>
-    </tr>
-    <tr>
-        <th>Email</th>
-        <td>{$userData->email}</td>
-    </tr>
-    <tr>
-        <th>Role</th>
-        <td>{$userData->role}</td>
-    </tr>
-</table>
-<h2>Upravit uživatele</h2>
-{control editForm}
- <img src="{$basePath}/{$u->image}" alt="Profilový obrázek" class="img-thumbnail" style="width: 150px; height: 150px;">
-    <a n:href="deleteImage! $u->id" class="btn btn-danger">Smazat obrázek</a>
+    <h2>Upravit uživatele</h2>
+    {control editForm}
+
+    <div class="profile-section">
+        {if $u->image}
+            <img src="{$basePath}/{$u->image}" alt="Profilový obrázek" class="profile-img">
+            <a n:href="deleteImage! $u->id" class="btn-delete">Smazat obrázek</a>
+        {/if}
+    </div>
+</div>
 {/block}

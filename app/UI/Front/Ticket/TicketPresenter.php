@@ -70,7 +70,7 @@ class TicketPresenter extends Nette\Application\UI\Presenter
             ->addRule($form::MAX, 'Maximální počet vstupenek je 10.', 10)
             ->setRequired('Zadejte počet vstupenek.');
     
-        $form->addSubmit('submit', 'Koupit vstupenku');
+        $form->addSubmit('submit', 'Koupit');
     
         // Předvyplnění formuláře, pokud je uživatel přihlášen
         if ($this->user->isLoggedIn()) {

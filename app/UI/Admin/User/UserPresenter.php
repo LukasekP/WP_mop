@@ -26,6 +26,7 @@ final class UserPresenter extends Nette\Application\UI\Presenter
     }
     public function renderDetail($id)
     {
+        $user = $this->getUser();
         if(!$user->isInRole('admin')){
             $this->redirect(':Front:Home:');
         }
@@ -38,9 +39,8 @@ final class UserPresenter extends Nette\Application\UI\Presenter
 
     public function renderEdit($id)
     {
-        if(!$user->isInRole('admin')){
-            $this->redirect(':Front:Home:');
-        }
+        $user = $this->getUser();
+        
         $user = $this->userFacade->getUserById($id); 
        
         $this->getComponent('editForm')
@@ -51,42 +51,61 @@ final class UserPresenter extends Nette\Application\UI\Presenter
     public function createComponentEditForm(): Form
     {
         $form = new Form;
+    
         $form->addText('username', 'Uživatelské jméno:')
              ->setHtmlAttribute('class', 'form-control')
              ->setNullable();
-
+    
         $form->addPassword('password', 'Nové Heslo:')
              ->setOption('description', sprintf('Heslo musí mít aspoň %d znaků', $this->userFacade::PasswordMinLength))
              ->setHtmlAttribute('class', 'form-control')
              ->setNullable(); 
-
+    
         $form->addUpload('image', 'Profilový obrázek:')
-             ->addRule(Form::IMAGE, 'Obrazek musí být JPEG a PNG')
+             ->addRule(Form::IMAGE, 'Obrázek musí být JPEG nebo PNG')
              ->setHtmlAttribute('class', 'form-control-file')
              ->setNullable();
-
+    
         $form->addSubmit('send', 'Změnit')
              ->setHtmlAttribute('class', 'btn btn-primary');
-
+    
         $form->onSuccess[] = [$this, 'editFormSucceeded'];
-
+    
         return $form;
     }
-
+    
     public function editFormSucceeded(Form $form, \stdClass $values): void
     {
         $userId = $this->getParameter('id'); 
-
-        if ($values->image->isOk()) {
-            $values->image->move("upload/" . $values->image->getSanitizedName());
-            $this->userFacade->updateUserImage($userId, "upload/" . $values->image->getSanitizedName());
-            $imageChanged = true;
+        $userData = $this->userFacade->getUserById($userId); 
+        $dataToUpdate = [];
+    
+        if (!empty($values->username)) {
+            $dataToUpdate['username'] = $values->username;
         }
-        $this->userFacade->updateUser($userId, (array)$values);
-
-        $this->flashMessage('Údaje změněny', 'success');
-        $this->redirect(':Front:Home:default');
+    
+        if (!empty($values->password)) {
+            $dataToUpdate['password'] = $values->password;
+        }
+    
+        if ($values->image instanceof \Nette\Http\FileUpload && $values->image->isOk() && $values->image->isImage()) {
+            $imagePath = "upload/" . $values->image->getSanitizedName();
+            $values->image->move($imagePath);
+            $dataToUpdate['image'] = $imagePath;
+        } else {
+            $dataToUpdate['image'] = $userData->image; 
+        }
+    
+        if (!empty($dataToUpdate)) {
+            $this->userFacade->updateUser($userId, $dataToUpdate);
+            $this->flashMessage('Údaje změněny', 'success');
+        } else {
+            $this->flashMessage('Žádná změna nebyla provedena.', 'info');
+        }
+    
+        $this->redirect('this');
     }
+    
     public function handleDelete(int $id) {
         $this->userFacade->delete($id);
         $this->redirect('User:default');

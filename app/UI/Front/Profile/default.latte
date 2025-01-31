@@ -1,0 +1,37 @@
+{block content}
+<div class="user-profile-container">
+    <h1>Váš profil</h1>
+
+    <div class="user-profile-card">
+        <div class="user-profile-image">
+            {if $userData->image}
+                <div class="image-wrapper">
+                    <img src="{$basePath}/{$userData->image}" alt="Profilový obrázek">
+                    <div class="overlay">
+                        <a n:href="changeProfile">Změnit profilovou fotku</a>
+                    </div>
+                </div>
+            {else}
+                <div class="image-wrapper">
+                    <img src="{$basePath}/no-profile.webp" alt="Profilový obrázek">
+                    <div class="overlay">
+                        <a n:href="changeProfile">Změnit profilovou fotku</a>
+                    </div>
+                </div>
+            {/if}
+            {if $userData->image}
+                <a n:href="deleteImage! $user->id" class="btn-delete">Smazat obrázek</a>
+            {/if}
+        </div>
+
+        <div class="profile-info">
+            <p><strong>Uživatelské jméno:</strong> {$userData->username}</p>
+            <p><strong>Jméno:</strong> {$userData->firstname}</p>
+            <p><strong>Příjmení:</strong> {$userData->lastname}</p>
+            <p><strong>Datum narození:</strong> {$userData->birthdate|date:'j.n.Y'}</p>
+            <p><strong>Email:</strong> {$userData->email}</p>
+            <p><strong>Telefon:</strong> {$userData->phone}</p>
+        </div>
+    </div>
+</div>
+{/block}

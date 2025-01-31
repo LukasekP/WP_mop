@@ -91,19 +91,16 @@ class OrdersPresenter extends Nette\Application\UI\Presenter
             $grid->addAction('changeStatus', 'Zaplaceno', 'changeStatus!')
             ->setIcon('edit')
             ->setClass(function ($item) {
-                // Pokud je stav 'paid' nebo 'canceled', přidáme třídu 'disabled'
                 return ($item->status == 'paid' || $item->status == 'canceled') ? 'btn btn-primary disabled' : 'btn btn-primary';
             });
 
             $grid->addAction('cancelOrder', 'Zrušit', 'cancelOrder!')
                 ->setIcon('trash')
                 ->setRenderer(function ($item) {
-                    // Pokud je objednávka zrušena, deaktivujeme tlačítko
                     if ($item->status == 'canceled') {
                         return '<span class="btn btn-danger disabled">Objednávka zrušena</span>';
                     }
                     
-                    // Tlačítko pro zrušení objednávky
                     return '<a href="' . $this->link('cancelOrder!', ['id' => $item->id]) . '" class="btn btn-danger">Zrušit</a>';
                 });
 
@@ -127,7 +124,6 @@ class OrdersPresenter extends Nette\Application\UI\Presenter
     }
     public function handleChangeStatus(int $id): void
     {
-        // Získání objednávky
         $order = $this->ordersFacade->getOrderById($id);
         $festivalName = $this->festivalFacade->getFestivalById($order->festival_id)->name;
         $mail = $this->mailSender->createConfirmEmail($order->id, $order->email, $order->firstname, $order->lastname, $festivalName);
@@ -135,12 +131,11 @@ class OrdersPresenter extends Nette\Application\UI\Presenter
             $this->error('Objednávka nenalezena.');
         }
 
-        // Pokud je stav 'paid' nebo 'canceled', změna stavu není možná
         if ($order->status == 'paid' || $order->status == 'canceled') {
             $this->flashMessage('Stav objednávky nelze změnit.', 'error');
         } else {
-            // Změna stavu na nový
-            $newStatus = $order->status == 'unpaid' ? 'paid' : 'unpaid'; // Příklad změny stavu
+           
+            $newStatus = $order->status == 'unpaid' ? 'paid' : 'unpaid'; 
             $this->ordersFacade->updateOrderStatus($id, $newStatus);
 
             $this->mailSender->sendConfirmEmail($mail);
@@ -148,24 +143,21 @@ class OrdersPresenter extends Nette\Application\UI\Presenter
             $this->flashMessage('Stav objednávky byl změněn.', 'success');
         }
 
-        // Přesměrování zpět
+
         $this->redirect('this');
     }
 
     public function handleCancelOrder(int $id): void
     {
-        // Získání objednávky
         $order = $this->ordersFacade->getOrderById($id);
         
         if (!$order) {
             $this->error('Objednávka nenalezena.');
         }
 
-        // Zrušení objednávky
         $this->ordersFacade->cancelOrder($id);
         $this->flashMessage('Objednávka byla zrušena.', 'success');
 
-        // Přesměrování zpět
         $this->redirect('this');
     }
 }        

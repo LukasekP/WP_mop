@@ -1,5 +1,5 @@
 {block content}
-<div class="container">
+<div class="tickets-container">
     <h1>Moje vstupenky</h1>
 
         {if count($orders)}
@@ -31,59 +31,5 @@
     {/if}
 </div>
 
-<style>
-    .container {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 20px;
-    }
 
-    h1 {
-        text-align: center;
-        margin-bottom: 20px;
-    }
-
-    .orders-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-    }
-
-    .orders-table th,
-    .orders-table td {
-        border: 1px solid #ddd;
-        padding: 10px;
-        text-align: left;
-    }
-
-    .orders-table th {
-        background-color: #f4f4f4;
-        font-weight: bold;
-    }
-
-    .orders-table tr:nth-child(even) {
-        background-color: #f9f9f9;
-    }
-
-    .orders-table tr:hover {
-        background-color: #f1f1f1;
-    }
-
-    .status {
-        font-weight: bold;
-        text-align: center;
-    }
-
-    .status.unpaid {
-        color: #e74c3c;
-    }
-
-    .status.paid {
-        color: #2ecc71;
-    }
-
-    .status.canceled {
-        color: #95a5a6;
-    }
-</style>
 {/block}

@@ -18,15 +18,71 @@ class ProfilePresenter extends Nette\Application\UI\Presenter
         $this->festivalFacade = $festivalFacade;
     }
    
-
-    public function renderList(): void
+    public function renderDefault()
     {
+        $id = $this->getUser()->getId();
+        $this->template->userData = $this->userFacade->getUserById($id);
+
     }
+
     public function renderTickets(): void
     {
         $email = $this->getUser()->getIdentity()->email;
         $this->template->orders = $this->ordersFacade->getOrdersByUserEmail($email);
     }
+    public function renderChangeProfile(): void
+    {
+        $userId = $this->getUser()->getId();
+        $userData = $this->userFacade->getUserById($userId);
+        $this->template->userData = $userData;
+    }
 
+    public function handleDeleteImage(int $userId): void
+    {
+        $userData = $this->userFacade->getUserById($userId);
+    
+        if ($userData) {
+            if (!empty($userData->image) && file_exists($userData->image)) {
+                unlink($userData->image);
+            }
+    
+            $this->userFacade->updateUserImage($userId, null);
+    
+            $this->flashMessage('Profilový obrázek byl smazán', 'success');
+        } 
+    
+        $this->redirect('this');
+    }
+
+    protected function createComponentUploadForm(): Form
+    {
+        $form = new Form;
+        $form->addUpload('image', 'Profilová fotka:'); 
+    
+        $form->addSubmit('submit', 'Uložit');
+    
+        $form->onSuccess[] = [$this, 'uploadFormSucceeded'];
+        return $form;
+    }
+    
+    public function uploadFormSucceeded(Form $form, $values): void
+    {
+        $userId = $this->getUser()->getId();
+        $image = $values->image;
+    
+        if ($image->isOk() && $image->isImage()) {
+            $imagePath = 'uploads/profile/' . $userId . '.jpg';
+            $image->move($imagePath);
+            $this->userFacade->updateUserImage($userId, $imagePath);
+            $this->flashMessage('Profilová fotka byla úspěšně změněna.', 'success');
+        } elseif (!$image->isOk()) {
+            $this->redirect('Profile:default');
+            return;
+        } else {
+            $this->flashMessage('Nahrání obrázku se nezdařilo.', 'error');
+        }
+    
+        $this->redirect('this');
+    }
 }        
 

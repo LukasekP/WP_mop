@@ -65,9 +65,9 @@
         </li>
     {/if}
         
-		  <li n:if="$user->isLoggedIn()">
+		 {* <li n:if="$user->isLoggedIn()">
             <a href="{link User:edit, $user->id}">Změnit přihlašovací údaje</a>
-        </li>
+        </li>*}
     </ul>
 
     <ul class="right-menu">
@@ -82,7 +82,7 @@
         <div class="button-table">
             <table>
                 <tr>
-                    <td><a href="#">Profil</a></td>
+                    <td><a n:href=":Front:Profile:default">Profil</a></td>
                 </tr>
                 <tr>
                     <td><a n:href=":Front:Profile:tickets">Vstupenky</a></td>
@@ -99,7 +99,7 @@
         <div class="button-table">
             <table>
                 <tr>
-                    <td><a href="#">Profil</a></td>
+                    <td><a n:href=":Front:Profile:default">Profil</a></td>
                 </tr>
                 <tr>
                     <td><a n:href=":Front:Profile:tickets">Vstupenky</a></td>

@@ -1,0 +1,29 @@
+{block content}
+<div class="profil-foto-container">
+    <h1>Změnit profilovou fotku</h1>
+
+    <div class="profil-foto-card">
+        <div class="profil-foto-obrazek">
+            {if $userData->image}
+                <div class="profil-foto-wrapper">
+                    <img src="{$basePath}/{$userData->image}" alt="Profilový obrázek">
+                </div>
+            {else}
+                <div class="profil-foto-wrapper">
+                    <img src="{$basePath}/no-profile.webp" alt="Profilový obrázek">
+                    <div class="profil-foto-overlay">
+                        <a n:href="changeProfile">Změnit profilovou fotku</a>
+                    </div>
+                </div>
+            {/if}
+        </div>
+
+        <form n:name="uploadForm" class="profil-foto-formular" method="post" enctype="multipart/form-data">
+            <label for="file-input" class="profil-foto-btn-vybrat">Vybrat obrázek</label>
+            <input type="file" id="file-input" name="image" accept="image/*" class="profil-foto-input">
+            <div class="profil-foto-mezera"></div> <!-- Přidání mezery mezi tlačítky -->
+            <button type="submit" class="profil-foto-btn-ulozit">Uložit</button>
+        </form>
+    </div>
+</div>
+{/block}

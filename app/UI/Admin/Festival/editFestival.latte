@@ -7,9 +7,9 @@
 
 <!-- Formulář -->
 <form n:name="addFestivalForm" method="post" enctype="multipart/form-data">
-    <div class="form-container">
+    <div class="festival-form-container">
         <!-- Levá část - Formulář -->
-        <div class="form-section">
+        <div class="festival-form-section">
             <div class="mb-3">
                 <label for="name" class="form-label">Název festivalu:</label>
                 <input type="text" name="name" class="form-control" value="{$festival->name}">
@@ -57,11 +57,11 @@
                 <input type="file" name="images[]" class="form-control" multiple>
             </div>
 
-            <button type="submit" class="btn btn-primary">Odeslat</button>
+            <div class="festival-button"><button type="submit" class="btn btn-primary">Odeslat</button></div>
         </div>
 
         <!-- Pravá část - Obrázky -->
-        <div class="image-section">
+        <div class="festival-image-section">
             {ifset $images}
                 <div class="mb-3">
                     <label class="form-label">Existující obrázky:</label>
