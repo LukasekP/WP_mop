@@ -30,48 +30,53 @@ class PurchaseMailSender
 
 		$mail = new Nette\Mail\Message;
 		$mail->setHtmlBody($html);
-		// ...
-		return $mail;
+
+        return $mail;
 	}
     public function createPurchaseEmail($email, string $firstname, string $lastname, $variableCode, float $totalPrice): Nette\Mail\Message 
     {
         $latte = new Engine;
         
-        $accountNumber = '51-7080060207/0100';
-        $qrData = "SPD*1.0*ACC:$accountNumber*AM:$totalPrice*CC:CZK*X-VS:$variableCode";
+        $accountNumber = 'CZ5101000000517080060207'; 
+
+        $qrData = "SPD*1.0*ACC:$accountNumber*AM:" . number_format($totalPrice, 2, '.', '') . "*CC:CZK*X-VS:$variableCode";
         $qrCode = new QrCode($qrData);
         $writer = new PngWriter();
         $qrImage = $writer->write($qrCode);
 
-        // Uložení QR kódu do souboru
         $qrFilePath = __DIR__ . "/../../www/QRcodes/{$variableCode}.png";
+
+
+        file_put_contents($qrFilePath, $qrImage->getString());
+        $mail = new Nette\Mail\Message;
 
         
 
-        file_put_contents($qrFilePath, $qrImage->getString());
-        $qrFileUrl = "https://vas-server.cz/QRcodes/{$variableCode}.png";
+        $cid = $mail->addEmbeddedFile(
+            "/{$variableCode}.png",
+            file_get_contents($qrFilePath),
+            )->getHeader('Content-ID');
 
-
-        // Předání parametrů do šablony
+        $cid = str_replace(['<', '>'],'', $cid);
+        
         $params = [
             'firstname' => $firstname,
             'lastname' => $lastname,
             'bankAccount' => '51-7080060207/0100',
             'variableCode' => $variableCode,
             'totalPrice' => $totalPrice,
-            'qrFilePath' => $qrFilePath,
+            'cid' => $cid,
         ];
-    
-        // Generování HTML pomocí Latte
         $html = $latte->renderToString(__DIR__ . '/ticket_purchase.latte', $params);
-    
-        // Nastavení e-mailu
-        $mail = new Nette\Mail\Message;
+
         $mail->setFrom('festzone@email.cz')
-            ->addTo($email)
-            ->addBcc('festzone@email.cz')
-            ->setSubject('Pokyny k platbě')
-            ->setHtmlBody($html);
+        ->addTo($email)
+        ->addBcc('festzone@email.cz')
+        ->setSubject('Pokyny k platbě')
+        ->setHtmlBody($html);
+        // Generování HTML pomocí Latte
+    
+ 
     
         return $mail;
     }

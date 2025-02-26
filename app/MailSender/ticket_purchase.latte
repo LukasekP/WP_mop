@@ -6,19 +6,13 @@
     <li>Variabilní symbol: <strong>{$variableCode}</strong></li>
 </ul>
 <p>Pro snadnější platbu můžete použít následující QR kód:</p>
-
 <table style="width: 100%;">
     <tr>
         <td style="vertical-align: top; padding-right: 20px;">
-            <p>1. Pošlete částku: <strong>{$totalPrice}</strong>Kč na náš účet:</p>
-            <ul>
-                <li>Číslo účtu: <strong>{$bankAccount}</strong></li>
-                <li>Variabilní symbol: <strong>{$variableCode}</strong></li>
-            </ul>
+                       <img src="cid:{$cid}" alt="QR kod" style="width: 150px; height: 150px;" />
+
         </td>
-        <td style="vertical-align: top;">
-            <img src="{$qrFilePath}" alt="QR kód pro platbu" style="width: 200px; height: 200px;" />
-        </td>
+       
     </tr>
 </table>
 
