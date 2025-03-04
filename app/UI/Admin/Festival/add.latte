@@ -18,12 +18,12 @@
             <button class="ql-underline"></button>
             <select class="ql-header">
                 <option selected></option>
-                <option value="1">Nadpis 1</option>
                 <option value="2">Nadpis 2</option>
+                <option value="3">Nadpis 3</option>
             </select>
         </div>
         <div id="editor-container" style="height: 200px; border: 1px solid #ccc;"></div>
-<textarea id="description" name="description" style="visibility: hidden; height: 0;" ></textarea>
+        <textarea id="description" name="description" style="visibility: hidden; height: 0;"></textarea>
     </div>
 
     <div class="mb-3">
@@ -55,12 +55,6 @@
 </form>
 
 <script>
-document.querySelector('form').addEventListener('submit', function (e) {
-    const descriptionInput = document.getElementById('description');
-    descriptionInput.value = quill.root.innerHTML;
-    console.log("Odesílání formuláře...", descriptionInput.value); // Debugging
-});
-
     var quill = new Quill('#editor-container', {
         theme: 'snow', // Styl editoru
         modules: {

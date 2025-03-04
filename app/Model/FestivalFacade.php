@@ -156,23 +156,25 @@ class FestivalFacade
             ->where('festival_id', $festivalId);
     }
 
-    public function getFestivalsWithMainImage(string $order = 'created_at'): array
+    public function getFestivalsWithMainImage(string $order = 'created_at', int $limit = 9, int $offset = 0): array
     {
         $validOrders = ['created_at', 'start_date'];
         if (!in_array($order, $validOrders, true)) {
             $order = 'created_at';
         }
-
+    
         $order = $order === 'start_date' ? "CAST(start_date AS DATE)" : $order;
-
-        $festivals = $this->database->table('festivals')->order("$order ASC");
-
+    
+        $festivals = $this->database->table('festivals')
+            ->order("$order ASC")
+            ->limit($limit, $offset);
+    
         $result = [];
         foreach ($festivals as $festival) {
             $mainImage = $festival->related('festival_images')
                 ->where('is_main', 1)
                 ->fetch();
-
+    
             $result[] = [
                 'id' => $festival->id,
                 'name' => $festival->name,
@@ -184,9 +186,14 @@ class FestivalFacade
                 'main_image' => $mainImage ? $mainImage->file_path : 'no_image.jpg',
             ];
         }
-
+    
         return $result;
     }
+    public function getFestivalCount(): int
+{
+    return $this->database->table('festivals')->count('*');
+}
+    
 
     public function getTopTrendingFestivals(int $limit = 8): array
     {
@@ -273,4 +280,5 @@ class FestivalFacade
 
         return $result;
     }
+    
 }

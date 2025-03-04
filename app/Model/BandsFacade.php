@@ -22,11 +22,12 @@ class BandsFacade
     {
         return $this->database->table('bands')->get($id);
     }
-    public function addBand(string $name, $description): void
+    public function addBand(string $name, $genre, $description): void
     {
         $this->database->table('bands')->insert(
             [
                 'name' => $name,
+                'genre' => $genre,
                 'description' => $description
             ]
         );

@@ -14,7 +14,9 @@ class PurchaseMailSender
 		private Nette\Application\LinkGenerator $linkGenerator,
 		private Nette\Bridges\ApplicationLatte\TemplateFactory $templateFactory,
         
-	) {}
+	) {
+        
+    }
 
 	private function createTemplate(): Nette\Application\UI\Template
 	{

@@ -20,10 +20,16 @@
                 <div class="trendy-card-body">
                     <h5 class="trendy-card-title"><a n:href="Detail:default , $festival['id']">{$festival['name']}</a></h5>
                     <p class="trendy-card-text">
-                        {$festival['start_date']|date:'j. n.'} - {$festival['end_date']|date:'j. n. Y'}<br>
-                        {$festival['location']}<br>
+                            
+                        <i class="bi bi-calendar-event me-3" style="font-size: 1rem; color: #006d77;"></i>
+                            {$festival['start_date']|date:'j. n.'} - {$festival['end_date']|date:'j. n. Y'}<br>
+                        
+                        <i class="bi bi-geo-alt me-3" style="font-size: 1rem; color: #006d77;"></i>
+                            {$festival['location']}<br>
+                        
                     </p>
                     <p class="trendy-card-text">
+
                         {$festival['description']|stripTags|truncate:120}
                     </p>
                 </div>
@@ -56,8 +62,11 @@
                 <div class="card-body">
                     <h5 class="card-title"><a n:href="Detail:default , $festival['id']">{$festival['name']}</a></h5>
                     <p class="card-text">
-                        {$festival['start_date']|date:'j. n.'} - {$festival['end_date']|date:'j. n. Y'}<br>
-                        {$festival['location']}<br>
+                        <i class="bi bi-calendar-event me-3" style="font-size: 1rem; color: #006d77;"></i>
+                            {$festival['start_date']|date:'j. n.'} - {$festival['end_date']|date:'j. n. Y'}<br>
+
+                        <i class="bi bi-geo-alt me-3" style="font-size: 1rem; color: #006d77;"></i>
+                            {$festival['location']}<br></i> 
                     </p>
                     <p class="card-text">
                         {$festival['description']|stripTags}
@@ -72,5 +81,23 @@
 </div>
 
 
+</div>
+<div class="pagination d-flex justify-content-center mt-4">
+    <ul class="pagination">
+         <li class="page-item {if $paginator->isFirst()}disabled{/if}">
+            <a n:href="this, page => 1" class="page-link">První</a>
+        </li>
+
+        {for $i = $paginator->getFirstPage(); $i <= $paginator->getLastPage(); $i++}
+            <li class="page-item {if $paginator->page === $i}active{/if}">
+                <a n:href="this, page => $i" class="page-link">{$i}</a>
+            </li>
+        {/for}
+
+        
+        <li class="page-item {if $paginator->isLast()}disabled{/if}">
+            <a n:href="this, page => $paginator->getLastPage()" class="page-link">Poslední</a>
+        </li>
+    </ul>
 </div>
 {/block}

@@ -38,8 +38,13 @@ class BandsPresenter extends Nette\Application\UI\Presenter
         $form = new Form;
         $form->addText('name', 'Název kapely:')
             ->setRequired('Prosím, zadejte název kapely.');
+
+        $form->addText('genre', 'Žánr:')
+            ->setRequired('Prosím, zadejte žánr kapely.');  
+
         $form->addText('description', 'Popis kapely:')
             ->setRequired('Prosím, zadejte popis kapely.');
+
         $form->addSubmit('submit', 'Odeslat');
         $form->onSuccess[] = [$this, 'addBandFormSucceeded'];
         
@@ -54,7 +59,7 @@ class BandsPresenter extends Nette\Application\UI\Presenter
             $this->flashMessage('Kapela byla úspěšně upravena.', 'success');
             $this->redirect('list');
         }else{
-            $this->bandsFacade->addBand($values->name, $values->description);
+            $this->bandsFacade->addBand($values->name, $values->genre, $values->description);
             $this->flashMessage('Kapela byla úspěšně přidána.', 'success');
             $this->redirect('list');
         }
@@ -198,7 +203,10 @@ class BandsPresenter extends Nette\Application\UI\Presenter
                 return '<a href="' . $link . '">' . htmlspecialchars($item->name) . '</a>';})
             ->setFilterText()
             ->setAttribute('placeholder', 'Vyhledat název');
-    
+        $grid->addColumnText('genre', 'Žánr')
+             ->setFilterText()
+             ->setAttribute('placeholder', 'Vyhledat žánr');
+             
         $grid->addColumnText('description', 'Popis')
              ->setRenderer(function($item) {
                 return strip_tags((string) $item->description);});
