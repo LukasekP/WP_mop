@@ -50,12 +50,14 @@ final class DashboardPresenter extends Nette\Application\UI\Presenter
              ->setFilterText()
              ->setAttribute('placeholder', 'Vyhledat název');
     
-        $grid->addColumnText('description', 'Popisek')
+             $grid->addColumnText('description', 'Popisek')
              ->setRenderer(function($item) {
-                return strip_tags((string) $item->description);
+                 $description = strip_tags((string) $item->description);
+                 $description = str_replace('&nbsp;', ' ', $description);
+                 return Nette\Utils\Strings::truncate($description, 150);
              })
              ->setFilterText()
-             ->setAttribute('placeholder', 'Vyhledat popisek'); 
+             ->setAttribute('placeholder', 'Vyhledat popisek');
 
     
         $grid->addColumnText('start_date', 'Od kdy')
