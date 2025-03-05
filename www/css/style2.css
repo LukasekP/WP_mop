@@ -610,3 +610,243 @@ h1, h2 {
 .profil-foto-mezera {
     height: 10px;
 }
+/*Detail:default */
+.custom-table {
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    width: 100%;
+}
+
+/* Hlavička tabulky */
+.custom-table thead tr {
+    background-color: #00b4d8;
+    color: white;
+    font-weight: bold;
+    border-radius: 8px;
+}
+
+/* Styl hlavičky buněk */
+.custom-table th {
+    padding: 12px;
+    border-radius: 8px;
+}
+
+/* Styl pro jednotlivé stage */
+.custom-table td {
+    background: #f1faff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Styl pro každou kapelu */
+.band-info {
+    padding: 8px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Čas vystoupení */
+.band-info span {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+/* Odkazy na kapely */
+.band-link {
+    color: #0077b6;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: 0.3s;
+}
+
+/* Hover efekt na kapely */
+.band-link:hover {
+    color: #023e8a;
+}
+
+
+.festival-container {
+    background-color: #ffffff;
+    border-radius: 10px;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 1.5rem;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.festival-title {
+    font-weight: bold;
+    font-size: 2rem;
+}
+
+.festival-details {
+    margin-bottom: 1rem;
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.detail-icon {
+    font-size: 1.5rem;
+    color: #006d77;
+    margin-right: 0.75rem;
+}
+
+.detail-text {
+    font-size: 1rem;
+    color: #333;
+}
+
+.festival-description {
+    margin-bottom: 1rem;
+}
+
+.description-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.description-text {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: #333;
+}
+
+.tickets-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.ticket-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: #eaf4f4;
+    border-radius: 10px;
+}
+
+.ticket-price {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #e63946;
+    margin: 0;
+}
+
+.ticket-form {
+    display: flex;
+    align-items: center;
+}
+
+.ticket-quantity {
+    width: 80px;
+    margin-right: 1rem;
+}
+
+.ticket-button {
+    background-color: #0095c3;
+    border: none;
+    padding: 10px 20px;
+    color: white;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.ticket-button:hover {
+    background-color: #007aa3;
+}
+
+
+/*Front:Band:default */
+.band-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.band-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+  
+    margin-bottom: 1rem;
+    color: #2c3e50;
+}
+
+.band-info {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+}
+
+.band-genre-title {
+    font-size: 1.5rem;
+    color: #34495e;
+    margin-bottom: 0.5rem;
+}
+
+.band-genre {
+    font-size: 1.2rem;
+    color: #555;
+}
+
+.band-description {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #333;
+    background: #ecf0f1;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+}
+
+.band-performances-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+}
+
+.band-performances-list {
+    list-style: none;
+    padding: 0;
+}
+
+.band-performance-item {
+    background: #eaf4f4;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    border-radius: 6px;
+    font-size: 1.1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.stage-name {
+    font-weight: bold;
+    color: #e63946;
+}
+
+.festival-link {
+    text-decoration: none;
+    color: #0095c3;
+    font-weight: bold;
+}
+
+.festival-link:hover {
+    text-decoration: underline;
+    color: #007aa3;
+}
+
+.performance-time {
+    font-style: italic;
+    color: #555;
+}

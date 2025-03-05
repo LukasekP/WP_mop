@@ -1,18 +1,23 @@
 {block content}
-<h1>{$band->name}</h1>
+<div class="band-container">
+    <h1 class="band-title">{$band->name}</h1>
 
-<h3>Žánr:</h3>
-<p>{$band->genre}</p>
+    <div class="band-info">
+        <h3 class="band-genre-title">Žánr:</h3>
+        <p class="band-genre">{$band->genre}</p>
+    </div>
 
-<div>{$band->description|noescape}</div>
+    <div class="band-description">{$band->description|noescape}</div>
 
-
-
-<h2>Hraje na:</h2>
-<ul>
-    {foreach $performances as $performance}
-        <li>{$performance['stage']} na festivalu 
-            <a href="{link 'Detail:default', $performance['festival_id']}">{$performance['festival_name']}</a> v {$performance['time']}</li>
-    {/foreach}
-</ul>
+    <h2 class="band-performances-title">Hraje na:</h2>
+    <ul class="band-performances-list">
+        {foreach $performances as $performance}
+            <li class="band-performance-item">
+                <span class="stage-name">{$performance['stage']}</span> na festivalu 
+                <a href="{link 'Detail:default', $performance['festival_id']}" class="festival-link">{$performance['festival_name']}</a> v 
+                <span class="performance-time">{$performance['time']}</span>
+            </li>
+        {/foreach}
+    </ul>
+</div>
 {/block}

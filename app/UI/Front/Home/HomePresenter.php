@@ -10,7 +10,6 @@ use Nette\Utils\Paginator;
 use Nette;
 final class HomePresenter extends Nette\Application\UI\Presenter
 {
-    private const ITEMS_PER_PAGE = 9; 
 
     public function __construct(
 		private FestivalFacade $festivalFacade,
@@ -19,26 +18,26 @@ final class HomePresenter extends Nette\Application\UI\Presenter
 	) {
 	}
     
-    public function renderDefault(int $page = 1): void
+    public function renderDefault(int $page = 1, string $order = 'created_at'): void
     {
-        $order = $this->getHttpRequest()->getQuery('order') ?? 'created_at';
-
+        $order = $this->getParameter('order') ?? 'created_at'; // Získání hodnoty z URL
+    
         // Celkový počet festivalů
         $totalFestivals = $this->festivalFacade->getFestivalCount();
-
+    
         // Nastavení paginatoru
         $paginator = new Paginator();
-        $paginator->setItemsPerPage(self::ITEMS_PER_PAGE);
+        $paginator->setItemsPerPage(9);
         $paginator->setPage($page);
         $paginator->setItemCount($totalFestivals);
-
-        // Načtení festivalů s omezením podle paginatoru
+    
+        // Načtení festivalů s omezením podle paginatoru a řazení
         $festivals = $this->festivalFacade->getFestivalsWithMainImage(
             $order, 
             $paginator->getLength(), 
             $paginator->getOffset()
         );
-
+    
         // Předání do šablony
         $this->template->order = $order;
         $this->template->festivals = $festivals;

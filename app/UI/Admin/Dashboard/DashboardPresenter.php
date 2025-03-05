@@ -54,7 +54,7 @@ final class DashboardPresenter extends Nette\Application\UI\Presenter
              ->setRenderer(function($item) {
                  $description = strip_tags((string) $item->description);
                  $description = str_replace('&nbsp;', ' ', $description);
-                 return Nette\Utils\Strings::truncate($description, 150);
+                 return Nette\Utils\Strings::truncate($description, 200);
              })
              ->setFilterText()
              ->setAttribute('placeholder', 'Vyhledat popisek');
