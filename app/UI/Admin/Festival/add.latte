@@ -56,15 +56,13 @@
 
 <script>
     var quill = new Quill('#editor-container', {
-        theme: 'snow', // Styl editoru
+        theme: 'snow', 
         modules: {
-            toolbar: '#toolbar' // Nástroje
+            toolbar: '#toolbar' 
         }
     });
 
-    // Synchronizace obsahu Quill s textarea při odeslání formuláře
     document.querySelector('form').addEventListener('submit', function (e) {
-        // Najde textarea a vloží do ní obsah z Quill editoru
         const descriptionInput = document.getElementById('description');
         descriptionInput.value = quill.root.innerHTML;
     });

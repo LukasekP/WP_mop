@@ -16,12 +16,15 @@ class FestivalPresenter extends Nette\Application\UI\Presenter
         $this->BandsFacade = $BandsFacade;
     }
     
-
-    // Rendery
-    public function renderAdd(): void
+    public function actionAdd(): void
     {
-        // Kontrola role uživatele
         if (!$this->getUser()->isInRole('admin') && !$this->getUser()->isInRole('festivalManager')) {
+            $this->redirect(':Front:Home:default');
+        }
+    }
+    public function actionDetail(int $id): void
+    {
+        if (!$this->getUser()->isInRole('admin') && !$this->getUser()->isInRole('bandManager') && !$this->getUser()->isInRole('festivalManager') && !$this->getUser()->isInRole('accountant')) {
             $this->redirect(':Front:Home:default');
         }
     }
@@ -36,25 +39,31 @@ class FestivalPresenter extends Nette\Application\UI\Presenter
         $this->template->stages = $this->festivalFacade->getStagesWithBands($id);
         $this->template->bands = $this->BandsFacade->getBandsByFestivalWithTimes($id);
     }
-    public function renderEditFestival($id): void
+    public function actionEditFestival(int $id): void
     {
         if (!$this->getUser()->isInRole('admin') && !$this->getUser()->isInRole('festivalManager')) {
             $this->redirect(':Front:Home:default');
         }
+    }
+    public function renderEditFestival($id): void
+    {
         $festival = $this->festivalFacade->getFestivalById($id);
         $images = $this->festivalFacade->getFestivalImages($id); 
-
 
         $this->template->festival = $festival;
         $this->template->images = $images; 
         $this->getComponent('addFestivalForm')
             ->setDefaults($festival->toArray());
     }
-    public function renderMainImage(int $id): void
-{
-    if (!$this->getUser()->isInRole('admin') && !$this->getUser()->isInRole('festivalManager')) {
-        $this->redirect(':Front:Home:default');
+    public function actionMainImage(int $id): void
+    {
+        if (!$this->getUser()->isInRole('admin') && !$this->getUser()->isInRole('festivalManager')) {
+            $this->redirect(':Front:Home:default');
+        }
     }
+    public function renderMainImage(int $id): void
+    {
+
     $festivalImages = $this->festivalFacade->getFestivalImages($id);
 
     Debugger::log("Festival Images: " . json_encode($festivalImages->fetchAll()), 'info');
@@ -62,7 +71,7 @@ class FestivalPresenter extends Nette\Application\UI\Presenter
 
     $this->template->images = $festivalImages;
     $this->template->festivalId = $id;
-}
+    }
 
 
     protected function createComponentAddFestivalForm(): Form
@@ -195,23 +204,23 @@ class FestivalPresenter extends Nette\Application\UI\Presenter
         $this->redirect('Dashboard:default');
     }
     public function handleDeleteImage($imageId): void
-{
-    $this->festivalFacade->deleteImage($imageId);
-    $this->flashMessage('Obrázek byl úspěšně smazán.', 'success');
-    $this->redirect('this');
-}
-public function handleMainImage($imageId): void
-{
-    $festivalId = $this->getParameter('id');
-    $this->festivalFacade->setMainImage($festivalId, $imageId);
-    $this->flashMessage('Hlavní obrázek byl úspěšně nastaven.', 'success');
-    $this->redirect('this');
-}
-public function handleDeleteStage(int $stageId): void
-{
-    $this->festivalFacade->deleteStage($stageId);
-    $this->flashMessage('Stage byla úspěšně smazána.', 'success');
-    $this->redirect('this');
-}
+    {
+        $this->festivalFacade->deleteImage($imageId);
+        $this->flashMessage('Obrázek byl úspěšně smazán.', 'success');
+        $this->redirect('this');
+    }
+    public function handleMainImage($imageId): void
+    {
+        $festivalId = $this->getParameter('id');
+        $this->festivalFacade->setMainImage($festivalId, $imageId);
+        $this->flashMessage('Hlavní obrázek byl úspěšně nastaven.', 'success');
+        $this->redirect('this');
+    }
+    public function handleDeleteStage(int $stageId): void
+    {
+        $this->festivalFacade->deleteStage($stageId);
+        $this->flashMessage('Stage byla úspěšně smazána.', 'success');
+        $this->redirect('this');
+    }
 }
 ?>

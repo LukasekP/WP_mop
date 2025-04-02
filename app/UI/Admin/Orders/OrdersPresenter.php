@@ -23,15 +23,17 @@ class OrdersPresenter extends Nette\Application\UI\Presenter
         $this->festivalFacade = $festivalFacade;
     }
    
-
-    public function renderDefault(string $order = 'unpaid')
+    public function actionDefault(string $order = 'unpaid'): void
     {
         if (!$this->user->isInRole('admin') && !$this->user->isInRole('accountant')) {
             $this->redirect(':Front:Home:default');
         }
-        $this->template->order = $order;
-
     }
+    public function renderDefault(string $order = 'unpaid')
+    {
+        $this->template->order = $order;
+    }
+    
     protected function createComponentUnpaidOrdersGrid(): DataGrid
     {
         return $this->createOrdersGrid('unpaid');

@@ -49,10 +49,7 @@ class PurchaseMailSender
         $qrFilePath = __DIR__ . "/../../www/QRcodes/{$variableCode}.png";
 
 
-        file_put_contents($qrFilePath, $qrImage->getString());
         $mail = new Nette\Mail\Message;
-
-        
 
         $cid = $mail->addEmbeddedFile(
             "/{$variableCode}.png",
@@ -76,7 +73,6 @@ class PurchaseMailSender
         ->addBcc('festzone@email.cz')
         ->setSubject('Pokyny k platbě')
         ->setHtmlBody($html);
-        // Generování HTML pomocí Latte
     
  
     

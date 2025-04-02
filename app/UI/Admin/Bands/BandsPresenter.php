@@ -16,6 +16,12 @@ class BandsPresenter extends Nette\Application\UI\Presenter
         $this->bandsFacade = $bandsFacade;
         $this->festivalFacade = $festivalFacade;
     }
+    public function actionList(): void
+    {
+        if (!$this->user->isInRole('admin') && !$this->user->isInRole('bandManager')) {
+            $this->redirect(':Front:Home:default');
+        }
+    }
 
     public function renderList(): void
     {
@@ -25,13 +31,13 @@ class BandsPresenter extends Nette\Application\UI\Presenter
 
         $this->template->bands = $this->bandsFacade->getAllBands();
     }
-
-    public function renderAddBand(): void
+    public function actionAddBand(): void
     {
         if (!$this->user->isInRole('admin') && !$this->user->isInRole('bandManager')) {
             $this->redirect(':Front:Home:default');
         }
     }
+
 
     protected function createComponentAddBandForm(): Form
     {
@@ -64,12 +70,15 @@ class BandsPresenter extends Nette\Application\UI\Presenter
             $this->redirect('list');
         }
     }
-
-    public function renderEditBandOnStage(int $festivalId, int $stageId, int $bandId): void
+    public function actionEditBandOnStage(int $festivalId, int $stageId, int $bandId): void
     {
         if (!$this->user->isInRole('admin') && !$this->user->isInRole('bandManager') && !$this->user->isInRole('festivalManager')) {
             $this->redirect(':Front:Home:default');
         }
+    }
+
+    public function renderEditBandOnStage(int $festivalId, int $stageId, int $bandId): void
+    {
 
         $band = $this->bandsFacade->getBandById($bandId);
         $stageBand = $this->bandsFacade->getStageBand($stageId, $bandId);
@@ -84,12 +93,14 @@ class BandsPresenter extends Nette\Application\UI\Presenter
         $this->template->stageId = $stageId;
         $this->template->bandId = $bandId;
     }
-
-    public function renderAddBandToStage(int $festivalId, int $stageId): void
+    public function actionAddBandToStage(int $festivalId, int $stageId): void
     {
         if (!$this->user->isInRole('admin') && !$this->user->isInRole('bandManager') && !$this->user->isInRole('festivalManager')) {            
             $this->redirect(':Front:Home:default');
         }
+    }
+    public function renderAddBandToStage(int $festivalId, int $stageId): void
+    {
 
         $stage = $this->festivalFacade->getStageById($stageId);
         $this->template->stage = $stage;
@@ -232,12 +243,14 @@ class BandsPresenter extends Nette\Application\UI\Presenter
         $this->redirect('this');
     }
 
-    public function renderEditBand(int $id): void
+    public function actionEditBand(int $id): void
     {
         if (!$this->user->isInRole('admin') && !$this->user->isInRole('bandManager')) {
             $this->redirect(':Front:Home:default');
         }
-
+    }
+    public function renderEditBand(int $id): void
+    {
         $band = $this->bandsFacade->getBandById($id);
         $this->getComponent('addBandForm')
              ->setDefaults($band->toArray());

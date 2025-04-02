@@ -14,11 +14,14 @@ class StagePresenter extends Nette\Application\UI\Presenter
         $this->festivalFacade = $festivalFacade;
         $this->BandsFacade = $BandsFacade;
     }
-    public function renderEditStage(int $festivalId, int $stageId): void
+    public function actionEditStage(int $festivalId, int $stageId): void
     {
         if (!$this->getUser()->isInRole('admin') && !$this->getUser()->isInRole('festivalManager')) {
             $this->redirect(':Front:Home:default');
         }
+    }
+    public function renderEditStage(int $festivalId, int $stageId): void
+    {
         $festival = $this->festivalFacade->getFestivalById($festivalId);
         $stage = $this->festivalFacade->getStageById($stageId);
 
@@ -27,11 +30,14 @@ class StagePresenter extends Nette\Application\UI\Presenter
         $this->template->bands = $this->BandsFacade->getBandsByStageWithTimes($stageId);
         $this->template->festival = $festival;
     }
-    public function renderAddStage(int $festivalId): void
+    public function actionAddStage(int $festivalId): void
     {
         if (!$this->getUser()->isInRole('admin') && !$this->getUser()->isInRole('festivalManager')) {
             $this->redirect(':Front:Home:default');
         }
+    }
+    public function renderAddStage(int $festivalId): void
+    {
         $festival = $this->festivalFacade->getFestivalById($festivalId);
       
         $this->template->festival = $festival;

@@ -22,12 +22,14 @@ final class DashboardPresenter extends Nette\Application\UI\Presenter
     {
         $this->festivalFacade = $festivalFacade;
     }
-    public function renderDefault(): void
+    public function actionDefault(): void
     {
         if (!$this->getUser()->isInRole('admin') && !$this->getUser()->isInRole('bandManager') && !$this->getUser()->isInRole('festivalManager') && !$this->getUser()->isInRole('accountant')) {
             $this->redirect(':Front:Home:default');
         }
-
+    }
+    public function renderDefault(): void
+    {
         $this->template->festivals = $this->festivalFacade->getFestivals();
     }
    

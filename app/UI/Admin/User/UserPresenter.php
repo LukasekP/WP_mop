@@ -12,31 +12,45 @@ final class UserPresenter extends Nette\Application\UI\Presenter
         $this->userFacade = $userFacade;
      
     }
+    public function actionDefault(string $role = 'user'): void
+    {
+        if(!$this->getUser()->isInRole('admin')){
+            $this->redirect(':Front:Home:');
+        }
+    }
     public function renderDefault(string $role = 'user')
     {
         $user = $this->getUser();
-    
-        if(!$user->isInRole('admin')){
-            $this->redirect(':Front:Home:');
-        }
         
         $this->template->users = $this->userFacade->getUsers();
         $this->template->role = $role;
 
     }
-    public function renderDetail($id)
+    public function actionDetail($id): void
     {
         $user = $this->getUser();
         if(!$user->isInRole('admin')){
             $this->redirect(':Front:Home:');
         }
+    }
+    
+    public function renderDetail($id)
+    {
+        $user = $this->getUser();
+       
         $user = $this->userFacade->getUserById($id); 
                 $this->template->u = $this->userFacade->getUserById($id);
                 $this->template->userData = $this->userFacade->getUserById($id);
                 $this->getComponent('editForm')
                     ->setDefaults($user->toArray()); 
     }
-
+    public function actionEdit($id): void
+    {
+        $user = $this->getUser();
+        if(!$user->isInRole('admin')){
+            $this->redirect(':Front:Home:');
+        }
+    }
     public function renderEdit($id)
     {
         $user = $this->getUser();
