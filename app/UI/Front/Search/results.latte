@@ -13,7 +13,7 @@
                         {$festival['location']}<br>
                     </p>
                     <p class="card-text">
-                        {$festival['description']|stripTags}
+                        {$festival['description']|stripTags|truncate:120|replace:'&nbsp;',' '}
                     </p>
                 </div>
                 <div class="card-footer d-flex justify-content-between align-items-center">
