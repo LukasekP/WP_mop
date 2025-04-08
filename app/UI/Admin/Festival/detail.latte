@@ -5,28 +5,30 @@
 
 
     <!-- Carousel -->
-<div id="festivalCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
-    <div class="carousel-inner" style="border-radius: 10px; overflow: hidden; height: 400px; background-color:rgb(255, 255, 255);">
-        {var $first = true}
-        {foreach $images as $image}
-            <div class="carousel-item{if $first} active{/if}">
-                <div class="carousel-image-container">
-                    <img src="{$basePath}/{$image->file_path}" class="d-block carousel-image" 
-                         alt="Obrázek festivalu {$festival->name}">
+{if count($images) > 0}
+    <div id="festivalCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
+        <div class="carousel-inner" style="border-radius: 10px; overflow: hidden; height: 400px; background-color:rgb(255, 255, 255);">
+            {var $first = true}
+            {foreach $images as $image}
+                <div class="carousel-item{if $first} active{/if}">
+                    <div class="carousel-image-container">
+                        <img src="{$basePath}/{$image->file_path}" class="d-block carousel-image" 
+                             alt="Obrázek festivalu {$festival->name}">
+                    </div>
+                    {var $first = false}
                 </div>
-                {var $first = false}
-            </div>
-        {/foreach}
+            {/foreach}
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#festivalCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Předchozí</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#festivalCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Další</span>
+        </button>
     </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#festivalCarousel" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Předchozí</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#festivalCarousel" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Další</span>
-    </button>
-    </div>   
+{/if}  
     <div class="festival-details">
             <div class="detail-item">
                 <i class="bi bi-calendar-event detail-icon"></i>
