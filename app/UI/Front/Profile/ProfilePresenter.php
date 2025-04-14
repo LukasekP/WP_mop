@@ -75,10 +75,12 @@ class ProfilePresenter extends Nette\Application\UI\Presenter
             $image->move($imagePath);
             $this->userFacade->updateUserImage($userId, $imagePath);
             $this->flashMessage('Profilová fotka byla úspěšně změněna.', 'success');
-        } elseif (!$image->isOk()) {
             $this->redirect('Profile:default');
-            return;
         } else {
+            if (!$image->isOk()) {
+                $this->redirect('Profile:default');
+                return;
+            }
             $this->flashMessage('Nahrání obrázku se nezdařilo.', 'error');
         }
     

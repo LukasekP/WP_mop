@@ -137,7 +137,7 @@ final class UserFacade implements Nette\Security\Authenticator
         		self::ColumnBirthdate => $birthdate,
         		self::ColumnAddress => $address,
         		self::ColumnCity => $city,
-				
+				'created_at' => new \DateTimeImmutable(),
 			]);
 		} catch (Nette\Database\UniqueConstraintViolationException $e) {
 			throw new DuplicateNameException;

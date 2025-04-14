@@ -287,19 +287,14 @@ p {
     overflow-x: auto; /* Povolení horizontálního scrollování */
 }
 
-.trendy-card-img-top {
-    width: 100%; /* Zajištění, že obrázek bude mít plnou šířku karty */
-    height: 100%; /* Nastavení pevné výšky obrázku */
-    object-fit: cover; /* Zajištění, že obrázek bude pokrývat celý prostor */
-    margin: 0; /* Odstranění mezery mezi rámečkem karty a obrázkem */
-}
+
 .btn-primary {
     background-color: #00b5e2;
     border: none;
     border-radius: 20px;
     padding: 0.5rem 1.5rem;
     font-size: 0.875rem;
-    text-transform: uppercase;
+    text-transform: uppercase; 
     font-weight: bold;
 }
 
@@ -411,7 +406,6 @@ p {
     justify-content: center;
     align-items: center;
     background-color: #e0dfdf;
-    
 }
 
 .carousel-image {
@@ -419,8 +413,6 @@ p {
     max-width: 85%;
     object-fit: contain;
 }
-
-
 
 .profile-image {
     position: relative;
