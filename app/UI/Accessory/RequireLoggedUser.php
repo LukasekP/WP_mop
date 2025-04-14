@@ -23,7 +23,7 @@ trait RequireLoggedUser
 			if ($user->isLoggedIn()) {
 				return;
 			} elseif ($user->getLogoutReason() === $user::LogoutInactivity) {
-				$this->flashMessage('You have been signed out due to inactivity. Please sign in again.');
+				$this->flashMessage('Byli jste odhlášeni z důvodu nečinnosti. Přihlaste se prosím znovu.');
 				$this->redirect(':Front:Sign:in', ['backlink' => $this->storeRequest()]);
 			} else {
 				$this->redirect(':Front:Sign:in');
