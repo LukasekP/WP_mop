@@ -81,14 +81,16 @@ final class DashboardPresenter extends Nette\Application\UI\Presenter
 
     
     if ($this->getUser()->isInRole('admin') || $this->getUser()->isInRole('festivalManager')) {
-        $grid->addAction('edit', 'Edit', 'edit!')
-             ->setIcon('pencil-alt')
+        $grid->addAction('edit', 'Upravit', 'edit!')
              ->setClass('btn btn-xs btn-primary ajax');  
     
         $grid->addAction('deleteFestival', 'Smazat', 'deleteFestival!')
              ->setClass('btn btn-xs btn-danger ajax');
-            }
-    
+            
+            $grid->setTranslator(new \Ublaboo\DataGrid\Localization\SimpleTranslator([
+                'ublaboo_datagrid.action' => 'Akce', // Překlad názvu sloupce akcí
+            ]));
+        }
         return $grid;
     }
     public function handleDeleteFestival(int $id): void

@@ -50,10 +50,8 @@ final class SignPresenter extends Nette\Application\UI\Presenter
 
 		$form->addSubmit('send', 'Přihlásit se');
 
-		// Handle form submission
 		$form->onSuccess[] = function (Form $form, \stdClass $data): void {
 			try {
-				// Attempt to login user
 				$this->getUser()->login($data->username, $data->password);
 				$this->restoreRequest($this->backlink);
 				

@@ -221,12 +221,18 @@ class BandsPresenter extends Nette\Application\UI\Presenter
         $grid->addColumnText('description', 'Popis')
              ->setRenderer(function($item) {
                 return strip_tags((string) $item->description);});
-        $grid->addAction('edit', 'Edit', 'edit!')
+        
+        
+        $grid->addAction('edit', 'Upravit', 'edit!')
                 ->setIcon('pencil-alt')
                 ->setClass('btn btn-xs btn-primary ajax');  
 
         $grid->addAction('deleteBand', 'Smazat', 'deleteBand!')
                 ->setClass('btn btn-xs btn-danger ajax');
+
+        $grid->setTranslator(new \Ublaboo\DataGrid\Localization\SimpleTranslator([
+            'ublaboo_datagrid.action' => 'Akce', 
+        ]));
     
         return $grid;
     }

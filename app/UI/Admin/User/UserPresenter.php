@@ -199,7 +199,11 @@ final class UserPresenter extends Nette\Application\UI\Presenter
     
         $grid->addAction('delete', 'Smazat', 'delete!')
              ->setClass('btn btn-xs btn-danger ajax');
-    
+
+        $grid->setTranslator(new \Ublaboo\DataGrid\Localization\SimpleTranslator([
+            'ublaboo_datagrid.action' => 'Akce', 
+        ]));
+
         return $grid;
     }
 }

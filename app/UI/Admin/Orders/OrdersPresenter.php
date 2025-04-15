@@ -78,33 +78,42 @@ class OrdersPresenter extends Nette\Application\UI\Presenter
             ->setFilterText()
             ->setAttribute('placeholder', 'Vyhledat festival');
 
-        $grid->addColumnText('variable_symbol', 'Variable Symbol')
+        $grid->addColumnText('variable_symbol', 'Vyriabilní symbol')
             ->setSortable()
             ->setFilterText()
             ->setAttribute('placeholder', 'Vyhledat symbol');
 
-            $grid->addColumnText('status', 'Status')
+            $grid->addColumnText('status', 'Stav')
             ->setSortable()
             ->setRenderer(function ($item) {
-                // Zobrazí aktuální stav
-                return ucfirst($item->status);
+                // Mapování stavů na české názvy
+                $statusMap = [
+                    'unpaid' => 'Nezaplaceno',
+                    'paid' => 'Zaplaceno',
+                    'canceled' => 'Zrušeno',
+                ];
+        
+                // Vrátí český název stavu, pokud existuje, jinak vrátí původní stav
+                return $statusMap[$item->status] ?? ucfirst($item->status);
             });
         
             $grid->addAction('changeStatus', 'Zaplaceno', 'changeStatus!')
             ->setIcon('edit')
-            ->setClass(function ($item) {
-                return ($item->status == 'paid' || $item->status == 'canceled') ? 'btn btn-primary disabled' : 'btn btn-primary';
+            ->setRenderer(function ($item) {
+                if ($item->status == 'paid' || $item->status == 'canceled') {
+                    return ''; // Tlačítko se nevykreslí
+                }
+                return '<a href="' . $this->link('changeStatus!', ['id' => $item->id]) . '" class="btn btn-primary">Zaplaceno</a>';
             });
-
+        
             $grid->addAction('cancelOrder', 'Zrušit', 'cancelOrder!')
-                ->setIcon('trash')
-                ->setRenderer(function ($item) {
-                    if ($item->status == 'canceled') {
-                        return '<span class="btn btn-danger disabled">Objednávka zrušena</span>';
-                    }
-                    
-                    return '<a href="' . $this->link('cancelOrder!', ['id' => $item->id]) . '" class="btn btn-danger">Zrušit</a>';
-                });
+            ->setIcon('trash')
+            ->setRenderer(function ($item) {
+                if ($item->status == 'canceled') {
+                    return ''; // Tlačítko se nevykreslí
+                }
+                return '<a href="' . $this->link('cancelOrder!', ['id' => $item->id]) . '" class="btn btn-danger">Zrušit</a>';
+            });
 
         $grid->addColumnNumber('total_price', 'Cena')
             ->setSortable()
@@ -112,15 +121,17 @@ class OrdersPresenter extends Nette\Application\UI\Presenter
                 return number_format($item->total_price, 2) . ' CZK';
             });
 
-        $grid->addColumnDateTime('created_at', 'Created At')
+        $grid->addColumnDateTime('created_at', 'Vytvořeno')
             ->setSortable()
             ->setFormat('d.m.Y H:i');
 
-        $grid->addColumnDateTime('updated_at', 'Updated At')
+        $grid->addColumnDateTime('updated_at', 'Aktualizováno')
             ->setSortable()
             ->setFormat('d.m.Y H:i');
 
-      
+            $grid->setTranslator(new \Ublaboo\DataGrid\Localization\SimpleTranslator([
+                'ublaboo_datagrid.action' => 'Akce', // Překlad názvu sloupce akcí
+            ]));
 
         return $grid;
     }
