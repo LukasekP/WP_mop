@@ -52,10 +52,9 @@ class OrdersPresenter extends Nette\Application\UI\Presenter
         $grid = new DataGrid();
 
         $dataSource = $this->ordersFacade->getOrders()->where('status', $order);
-        // Zdrojem dat je tabulka orders
+
         $grid->setDataSource($dataSource);
 
-        // Sloupce
         $grid->addColumnNumber('id', 'ID')
             ->setSortable();
 
@@ -86,14 +85,12 @@ class OrdersPresenter extends Nette\Application\UI\Presenter
             $grid->addColumnText('status', 'Stav')
             ->setSortable()
             ->setRenderer(function ($item) {
-                // Mapování stavů na české názvy
                 $statusMap = [
                     'unpaid' => 'Nezaplaceno',
                     'paid' => 'Zaplaceno',
                     'canceled' => 'Zrušeno',
                 ];
         
-                // Vrátí český název stavu, pokud existuje, jinak vrátí původní stav
                 return $statusMap[$item->status] ?? ucfirst($item->status);
             });
         
@@ -101,7 +98,7 @@ class OrdersPresenter extends Nette\Application\UI\Presenter
             ->setIcon('edit')
             ->setRenderer(function ($item) {
                 if ($item->status == 'paid' || $item->status == 'canceled') {
-                    return ''; // Tlačítko se nevykreslí
+                    return ''; 
                 }
                 return '<a href="' . $this->link('changeStatus!', ['id' => $item->id]) . '" class="btn btn-primary">Zaplaceno</a>';
             });
@@ -110,7 +107,7 @@ class OrdersPresenter extends Nette\Application\UI\Presenter
             ->setIcon('trash')
             ->setRenderer(function ($item) {
                 if ($item->status == 'canceled') {
-                    return ''; // Tlačítko se nevykreslí
+                    return ''; 
                 }
                 return '<a href="' . $this->link('cancelOrder!', ['id' => $item->id]) . '" class="btn btn-danger">Zrušit</a>';
             });
@@ -130,7 +127,7 @@ class OrdersPresenter extends Nette\Application\UI\Presenter
             ->setFormat('d.m.Y H:i');
 
             $grid->setTranslator(new \Ublaboo\DataGrid\Localization\SimpleTranslator([
-                'ublaboo_datagrid.action' => 'Akce', // Překlad názvu sloupce akcí
+                'ublaboo_datagrid.action' => 'Akce', 
             ]));
 
         return $grid;
