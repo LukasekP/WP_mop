@@ -17,7 +17,14 @@
             <tbody>
                 {foreach $orders as $order}
                     <tr>
-                        <td>{$order->ref('festivals', 'festival_id')->name}</td>
+                        <td>
+                            {var $festival = $order->ref('festivals', 'festival_id')}
+                            {if $festival !== null}
+                                {$festival->name}
+                            {else}
+                             <span class="festival-name-ticket">Festival již neexistuje</span>
+                            {/if}
+                        </td>
                         <td>{$order->created_at|date:'j. n. Y H:i'}</td>
                         <td>{$order->variable_symbol}</td>
                         <td class="status {$order->status|lower}">{$order->status|capitalize}</td>

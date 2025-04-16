@@ -29,10 +29,6 @@
         <li n:if="$user->isInRole('admin') || $user->isInRole('festivalManager') || $user->isInRole('bandManager') || $user->isInRole('accountant')">
             <a n:href=":Admin:Dashboard:default">Admin</a>
         </li>
-      {* <li n:if="$user->isLoggedIn()">
-            <a href="{link :Admin:User:edit, $user->id}">Změnit přihlašovací údaje</a>
-        </li>
-      *}
     </ul>
     <ul class="right-menu">
         <li n:if="!$user->isLoggedIn()">
