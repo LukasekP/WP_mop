@@ -84,19 +84,16 @@
 
 <div class="pagination d-flex justify-content-center mt-4">
     <ul class="pagination">
-        <!-- První stránka -->
         <li class="page-item {if $paginator->isFirst()}disabled{/if}">
             <a n:href="this, page => 1, order => $order" class="page-link">První</a>
         </li>
 
-        <!-- Čísla stránek -->
         {for $i = $paginator->getFirstPage(); $i <= $paginator->getLastPage(); $i++}
             <li class="page-item {if $paginator->page === $i}active{/if}">
                 <a n:href="this, page => $i, order => $order" class="page-link">{$i}</a>
             </li>
         {/for}
 
-        <!-- Poslední stránka -->
         <li class="page-item {if $paginator->isLast()}disabled{/if}">
             <a n:href="this, page => $paginator->getLastPage(), order => $order" class="page-link">Poslední</a>
         </li>

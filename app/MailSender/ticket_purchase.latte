@@ -1,20 +1,37 @@
 <p>Dobrý den, {$firstname} {$lastname},</p>
-<p>děkujeme za váš zájem o vstupenku. Pro dokončení platby proveďte následující kroky:</p>
-<p>1. Pošlete částku: <strong>{$totalPrice}</strong>Kč na náš účet:</p>
+
+<p>
+    děkujeme za váš zájem o vstupenku. Pro dokončení platby prosím proveďte následující kroky:
+</p>
+
+<p>
+    <strong>1. Pošlete částku:</strong> {$totalPrice} Kč na náš účet:
+</p>
+
 <ul>
-    <li>Číslo účtu: <strong>{$bankAccount}</strong></li>
-    <li>Variabilní symbol: <strong>{$variableCode}</strong></li>
+    <li><strong>Číslo účtu:</strong> {$bankAccount}</li>
+    <li><strong>Variabilní symbol:</strong> {$variableCode}</li>
 </ul>
-<p>Pro snadnější platbu můžete použít následující QR kód:</p>
-<table style="width: 100%;">
+
+<p>
+    Pro snadnější platbu můžete využít následující QR kód:
+</p>
+
+<table style="width: 100%; margin-bottom: 20px;">
     <tr>
         <td style="vertical-align: top; padding-right: 20px;">
-                       <img src="cid:{$cid}" alt="QR kod" style="width: 150px; height: 150px;" />
-
+            <img src="cid:{$cid}" alt="QR kód" style="width: 150px; height: 150px;" />
         </td>
-       
     </tr>
 </table>
 
-<p>Po přijetí platby vám zašleme potvrzení.</p>
-<p>Děkujeme, tým FestZone</p>
+<p>
+    Jakmile platbu obdržíme, zašleme vám potvrzení.
+</p>
+
+<p>S pozdravem,<br>
+Tým <strong>FestZone</strong></p>
+
+<p style="font-size:12px; color:#6c757d;">
+    Tento e-mail byl automaticky generován. Prosím, neodpovídejte na něj.
+</p>

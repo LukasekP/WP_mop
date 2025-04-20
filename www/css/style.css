@@ -21,7 +21,7 @@ body {
     top: 0; /* Vzdálenost od vrcholu */
     left: 0;
     width: 100%; /* Šířka menu, aby pokrylo celou obrazovku */
-    height: 3.35em; /* Nastavení výšky menu */
+    height: 3.4em; /* Nastavení výšky menu */
 
     z-index: 1000; /* Zajistí, že menu bude nad ostatními prvky */
 }

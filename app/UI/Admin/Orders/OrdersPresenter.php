@@ -34,15 +34,15 @@ class OrdersPresenter extends Nette\Application\UI\Presenter
         $this->template->order = $order;
     }
     
-    protected function createComponentUnpaidOrdersGrid(): DataGrid
-    {
-        return $this->createOrdersGrid('unpaid');
-    }
+
     protected function createComponentCanceledOrdersGrid(): DataGrid
     {
         return $this->createOrdersGrid('canceled');
     }
-    
+    protected function createComponentUnpaidOrdersGrid(): DataGrid
+    {
+        return $this->createOrdersGrid('unpaid');
+    }
     protected function createComponentPaidOrdersGrid(): DataGrid
     {
         return $this->createOrdersGrid('paid');
@@ -67,23 +67,24 @@ class OrdersPresenter extends Nette\Application\UI\Presenter
         $grid->addColumnText('phone', 'Telefon');
     
         $grid->addColumnText('festival_name', 'Festival')
-            ->setSortable()
-            ->setTemplateEscaping(false)
-            ->setRenderer(function ($item) {
-                $festival = $this->festivalFacade->getFestivalById($item->festival_id);
-                $link = $this->link('Festival:detail', ['id' => $festival->id]);
-                return '<a href="' . $link . '">' . htmlspecialchars($festival->name) . '</a>';
-            })
-            ->setFilterText()
-            ->setAttribute('placeholder', 'Vyhledat festival');
+        ->setTemplateEscaping(false)
+        ->setRenderer(function ($item) {
+            if ($item->festival_id === null) {
+                return 'Festival již neexistuje'; 
+            }
+    
+            $festival = $this->festivalFacade->getFestivalById($item->festival_id);
+            $link = $this->link('Festival:detail', ['id' => $festival->id]);
+            return '<a href="' . $link . '">' . htmlspecialchars($festival->name) . '</a>';
+        })
+        ->setFilterText()
+        ->setAttribute('placeholder', 'Vyhledat festival');
 
         $grid->addColumnText('variable_symbol', 'Vyriabilní symbol')
-            ->setSortable()
             ->setFilterText()
             ->setAttribute('placeholder', 'Vyhledat symbol');
 
             $grid->addColumnText('status', 'Stav')
-            ->setSortable()
             ->setRenderer(function ($item) {
                 $statusMap = [
                     'unpaid' => 'Nezaplaceno',
@@ -113,17 +114,14 @@ class OrdersPresenter extends Nette\Application\UI\Presenter
             });
 
         $grid->addColumnNumber('total_price', 'Cena')
-            ->setSortable()
             ->setRenderer(function ($item) {
                 return number_format($item->total_price, 2) . ' CZK';
             });
 
         $grid->addColumnDateTime('created_at', 'Vytvořeno')
-            ->setSortable()
             ->setFormat('d.m.Y H:i');
 
         $grid->addColumnDateTime('updated_at', 'Aktualizováno')
-            ->setSortable()
             ->setFormat('d.m.Y H:i');
 
             $grid->setTranslator(new \Ublaboo\DataGrid\Localization\SimpleTranslator([

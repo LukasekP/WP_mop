@@ -70,7 +70,6 @@ class PurchaseMailSender
 
         $mail->setFrom('festzone@email.cz')
         ->addTo($email)
-        ->addBcc('festzone@email.cz')
         ->setSubject('Pokyny k platbě')
         ->setHtmlBody($html);
     
