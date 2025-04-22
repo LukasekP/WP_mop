@@ -9,7 +9,7 @@ body {
     margin: 0; /* Odstraní případné mezery kolem stránky */
     padding-top: 60px; /* Rezerva, aby obsah nezačínal pod fixním menu */
 }
-.top-menu-admin{
+.top-menu-admin{ 
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -508,4 +508,6 @@ p {
     background-color: #f0f0f0; /* Zvýraznění odkazu při hoveru */
 }
 
-
+footer{
+    margin-top: 4em;
+}

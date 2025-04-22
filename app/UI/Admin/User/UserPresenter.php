@@ -37,12 +37,13 @@ final class UserPresenter extends Nette\Application\UI\Presenter
     public function renderDetail($id)
     {
         $user = $this->getUser();
-       
         $user = $this->userFacade->getUserById($id); 
                 $this->template->u = $this->userFacade->getUserById($id);
                 $this->template->userData = $this->userFacade->getUserById($id);
                 $this->getComponent('editForm')
                     ->setDefaults($user->toArray()); 
+                    $this->template->userId = $id; 
+
     }
     public function actionEdit($id): void
     {
@@ -205,5 +206,59 @@ final class UserPresenter extends Nette\Application\UI\Presenter
         ]));
 
         return $grid;
+    }
+
+
+    public function handleChangeRoleToUser(int $userId): void
+    {
+        $userRole = $this->userFacade->getUserById($userId);
+    
+        if (!$userRole) {
+            $this->flashMessage('Uživatel nebyl nalezen.', 'error');
+            $this->redirect('this');
+        }
+    
+        $this->userFacade->updateUserRole($userId, 'user');
+        $this->flashMessage('Role uživatele byla úspěšně změněna na Uživatele.', 'success');
+        $this->redirect('this');
+    }
+    public function handleChangeRoleToFestivalManager(int $userId): void
+    {
+        $userRole = $this->userFacade->getUserById($userId);
+    
+        if (!$userRole) {
+            $this->flashMessage('Uživatel nebyl nalezen.', 'error');
+            $this->redirect('this');
+        }
+    
+        $this->userFacade->updateUserRole($userId, 'festivalManager');
+        $this->flashMessage('Role uživatele byla úspěšně změněna na Manažer festivalů.', 'success');
+        $this->redirect('this');
+    }
+    public function handleChangeRoleToAccountant(int $userId): void
+    {
+        $userRole = $this->userFacade->getUserById($userId);
+    
+        if (!$userRole) {
+            $this->flashMessage('Uživatel nebyl nalezen.', 'error');
+            $this->redirect('this');
+        }
+    
+        $this->userFacade->updateUserRole($userId, 'accountant');
+        $this->flashMessage('Role uživatele byla úspěšně změněna na Učetní.', 'success');
+        $this->redirect('this');
+    }
+    public function handleChangeRoleToBandManager(int $userId): void
+    {
+        $userRole = $this->userFacade->getUserById($userId);
+    
+        if (!$userRole) {
+            $this->flashMessage('Uživatel nebyl nalezen.', 'error');
+            $this->redirect('this');
+        }
+    
+        $this->userFacade->updateUserRole($userId, 'bandManager');
+        $this->flashMessage('Role uživatele byla úspěšně změněna na Manažer kapel.', 'success');
+        $this->redirect('this');
     }
 }

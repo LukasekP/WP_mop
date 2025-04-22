@@ -4,7 +4,16 @@
     <div class="user-info">
         <p><strong>Jméno:</strong> {$userData->username}</p>
         <p><strong>Email:</strong> {$userData->email}</p>
+        <p><strong>Telefon:</strong> {$userData->phone}</p>
         <p><strong>Role:</strong> {$userData->role}</p>
+        <p><strong>Změnit roli:</strong></p>
+
+        <div class="btn-group" role="group" aria-label="Změna role">
+            <a n:href="changeRoleToUser! $userId" class="btn btn-outline-primary">Uživatel</a>
+            <a n:href="changeRoleToFestivalManager! $userId" class="btn btn-outline-secondary">Manažer festivalů</a>
+            <a n:href="changeRoleToAccountant! $userId" class="btn btn-outline-success">Účetní</a>
+            <a n:href="changeRoleToBandManager! $userId" class="btn btn-outline-warning">Manažer kapel</a>
+        </div>
     </div>
 
     <h2>Upravit uživatele</h2>
@@ -17,4 +26,15 @@
         {/if}
     </div>
 </div>
+<script>
+    function changeRole(role) {
+        const input = document.querySelector('input[name="role"]');
+        if (input) {
+            input.value = role;
+            input.form.submit();
+        } else {
+            alert("Role nelze změnit – input nenalezen.");
+        }
+    }
+</script>
 {/block}

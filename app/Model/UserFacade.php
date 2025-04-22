@@ -82,7 +82,16 @@ final class UserFacade implements Nette\Security\Authenticator
 			'image' => $imagePath,
 		]);
 	}
-	
+	public function updateUserRole($userId, $role)
+	{
+
+		
+
+		$this->database->table('users')->where('id', $userId)->update([
+			'role' => $role,
+		]);
+	}
+
 
 	/**
 	 * Authenticate a user based on provided credentials.
