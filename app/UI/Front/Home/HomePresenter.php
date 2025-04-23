@@ -59,7 +59,14 @@ final class HomePresenter extends Nette\Application\UI\Presenter
     
     public function searchFormSucceeded(Form $form, array $values): void
     {
-        $this->redirect('Search:results', $values['search']);
+        $keyword = $values['search'] ?? null;
+    
+        if ($keyword === null || $keyword === '') {
+            $this->flashMessage('Zadejte slovo pro vyhledávání.', 'warning');
+            $this->redirect('this');
+        }
+    
+        $this->redirect('Search:results', ['keyword' => $keyword]);
     }
 
 }
